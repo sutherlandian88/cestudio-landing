@@ -131,6 +131,9 @@ nav { display:flex; justify-content:space-between; align-items:center; padding:1
 .contact-textarea { min-height:90px; resize:vertical; }
 .btn-send { font-size:9px; letter-spacing:2px; text-transform:uppercase; border:0.5px solid rgba(255,255,255,0.35); padding:11px 26px; cursor:pointer; background:transparent; color:#f0ece5; font-family:'Jost',sans-serif; }
 footer { background:#322f2c; border-top:0.5px solid rgba(255,255,255,0.07); padding:18px 40px; display:flex; justify-content:space-between; color:#5a5450; font-size:9px; letter-spacing:1px; }
+.hero-cta { display:inline-block; margin-top:28px; font-size:9px; letter-spacing:2.5px; text-transform:uppercase; color:#3a3632; text-decoration:none; border-bottom:0.5px solid #3a3632; padding-bottom:2px; font-family:'Jost',sans-serif; transition:opacity 0.2s; }
+.hero-cta:hover { opacity:0.6; }
+.contact-form { display:flex; flex-direction:column; gap:12px; }
 .whatsapp-float { position:fixed; bottom:28px; right:28px; z-index:1000; width:56px; height:56px; background:#25d366; border-radius:50%; display:flex; align-items:center; justify-content:center; box-shadow:0 4px 16px rgba(0,0,0,0.22); transition:transform 0.2s,box-shadow 0.2s; text-decoration:none; }
 .whatsapp-float:hover { transform:scale(1.08); box-shadow:0 6px 20px rgba(0,0,0,0.28); }
 .whatsapp-float svg { width:32px; height:32px; fill:#fff; }
@@ -209,6 +212,7 @@ footer { background:#322f2c; border-top:0.5px solid rgba(255,255,255,0.07); padd
     <div class="hero-inner">
       <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQ2LjMiIGhlaWdodD0iOTUuOCIgdmlld0JveD0iMTE2LjUgNDAuMCAyNDYuMyA5NS44IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgogIDxyZWN0IHdpZHRoPSI0MDAiIGhlaWdodD0iMjAwIiBmaWxsPSIjZjVmM2VmIi8+CiAgPHJlY3QgeD0iMTk4IiB5PSI0OCIgd2lkdGg9IjIiIGhlaWdodD0iODAiIGZpbGw9IiMyQzJDMkEiIHJ4PSIxIi8+CiAgPHRleHQgeD0iMTgyIiB5PSIxMjYiIHRleHQtYW5jaG9yPSJlbmQiCiAgICBmb250LWZhbWlseT0iR2VvcmdpYSwnVGltZXMgTmV3IFJvbWFuJyxzZXJpZiIgZm9udC1zaXplPSI4OCIgZm9udC13ZWlnaHQ9IjQwMCIgZmlsbD0iIzJDMkMyQSI+QzwvdGV4dD4KICA8dGV4dCB4PSIyMDgiIHk9IjgwIiB0ZXh0LWFuY2hvcj0ic3RhcnQiCiAgICBmb250LWZhbWlseT0iQXJpYWwsSGVsdmV0aWNhLHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTMiIGZvbnQtd2VpZ2h0PSI0MDAiIGxldHRlci1zcGFjaW5nPSI3IiBmaWxsPSIjMkMyQzJBIj5FU1RVRElPPC90ZXh0PgogIDxsaW5lIHgxPSIyMDgiIHkxPSI5MSIgeDI9IjM1NSIgeTI9IjkxIiBzdHJva2U9IiNEM0QxQzciIHN0cm9rZS13aWR0aD0iMC43NSIvPgogIDx0ZXh0IHg9IjIwOCIgeT0iMTA4IiB0ZXh0LWFuY2hvcj0ic3RhcnQiCiAgICBmb250LWZhbWlseT0iQXJpYWwsSGVsdmV0aWNhLHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTEiIGZvbnQtd2VpZ2h0PSI0MDAiIGxldHRlci1zcGFjaW5nPSI1IiBmaWxsPSIjODg4NzgwIj5BUlFVSVRFQ1RVUkE8L3RleHQ+Cjwvc3ZnPg==" alt="C Estudio"/>
       <p class="hero-tagline">Diseño que se siente, gestión que se nota.</p>
+      <a href="#contacto" class="hero-cta">Hablemos de tu proyecto →</a>
     </div>
   </div>
   <div class="hero-right"></div>
@@ -293,10 +297,13 @@ footer { background:#322f2c; border-top:0.5px solid rgba(255,255,255,0.07); padd
     </div>
   </div>
   <div class="contact-right">
-    <input class="contact-input" type="text" placeholder="Tu nombre"/>
-    <input class="contact-input" type="email" placeholder="Tu correo"/>
-    <textarea class="contact-input contact-textarea" placeholder="Cuéntame sobre tu proyecto..."></textarea>
-    <button class="btn-send">Enviar mensaje</button>
+    <form action="https://formspree.io/f/mlgzzyjz" method="POST" class="contact-form" id="contact-form">
+      <input class="contact-input" type="text" name="nombre" placeholder="Tu nombre" required/>
+      <input class="contact-input" type="email" name="email" placeholder="Tu correo" required/>
+      <textarea class="contact-input contact-textarea" name="mensaje" placeholder="Cuéntame sobre tu proyecto..." required></textarea>
+      <button class="btn-send" type="submit">Enviar mensaje</button>
+    </form>
+    <p class="form-success" id="form-success" style="display:none;color:#a8d5b5;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;margin-top:12px;">✓ Mensaje enviado, te contactamos pronto.</p>
   </div>
 </section>
 <footer>
@@ -369,6 +376,30 @@ footer { background:#322f2c; border-top:0.5px solid rgba(255,255,255,0.07); padd
       _isaIdx = (_isaIdx - 1 + _isa.length) % _isa.length;
       document.getElementById('car-isa').src = _isa[_isaIdx];
     }
+  // Formspree AJAX submit
+  const form = document.getElementById('contact-form');
+  if(form) {
+    form.addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const btn = form.querySelector('.btn-send');
+      btn.textContent = 'Enviando...';
+      btn.disabled = true;
+      try {
+        const res = await fetch(form.action, { method:'POST', body: new FormData(form), headers:{'Accept':'application/json'} });
+        if(res.ok) {
+          form.reset();
+          form.style.display = 'none';
+          document.getElementById('form-success').style.display = 'block';
+        } else {
+          btn.textContent = 'Error, intenta de nuevo';
+          btn.disabled = false;
+        }
+      } catch(err) {
+        btn.textContent = 'Error, intenta de nuevo';
+        btn.disabled = false;
+      }
+    });
+  }
 </script>
 <a href="https://wa.me/56998182936" class="whatsapp-float" target="_blank" rel="noopener" aria-label="Contactar por WhatsApp">
   <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><path d="M16 0C7.163 0 0 7.163 0 16c0 2.822.736 5.469 2.027 7.77L0 32l8.469-2.004A15.938 15.938 0 0016 32c8.837 0 16-7.163 16-16S24.837 0 16 0zm0 29.333a13.27 13.27 0 01-6.771-1.854l-.485-.29-5.025 1.189 1.214-4.896-.318-.503A13.267 13.267 0 012.667 16C2.667 8.636 8.636 2.667 16 2.667S29.333 8.636 29.333 16 23.364 29.333 16 29.333zm7.261-9.928c-.398-.199-2.356-1.162-2.72-1.295-.364-.133-.629-.199-.894.199-.265.398-1.029 1.295-1.261 1.561-.232.265-.465.298-.863.1-.398-.199-1.681-.619-3.202-1.976-1.183-1.056-1.981-2.36-2.214-2.758-.232-.398-.025-.614.175-.812.179-.178.398-.465.597-.697.199-.232.265-.398.398-.664.133-.265.067-.497-.033-.696-.1-.199-.894-2.155-1.225-2.95-.322-.775-.649-.67-.894-.682l-.762-.013c-.265 0-.696.1-1.061.497-.364.398-1.393 1.362-1.393 3.318s1.427 3.847 1.626 4.113c.199.265 2.807 4.285 6.801 5.998.951.41 1.693.655 2.271.839.954.304 1.823.261 2.509.158.766-.114 2.356-.963 2.688-1.893.332-.93.332-1.727.232-1.893-.099-.166-.364-.265-.762-.464z"/></svg>
