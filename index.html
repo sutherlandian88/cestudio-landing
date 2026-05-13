@@ -134,6 +134,64 @@ footer { background:#322f2c; border-top:0.5px solid rgba(255,255,255,0.07); padd
 .whatsapp-float { position:fixed; bottom:28px; right:28px; z-index:1000; width:56px; height:56px; background:#25d366; border-radius:50%; display:flex; align-items:center; justify-content:center; box-shadow:0 4px 16px rgba(0,0,0,0.22); transition:transform 0.2s,box-shadow 0.2s; text-decoration:none; }
 .whatsapp-float:hover { transform:scale(1.08); box-shadow:0 6px 20px rgba(0,0,0,0.28); }
 .whatsapp-float svg { width:32px; height:32px; fill:#fff; }
+
+/* ── TABLET (≤1024px) ── */
+@media (max-width:1024px) {
+  .services-strip { grid-template-columns:repeat(2,1fr); }
+  .projects-grid { grid-template-columns:repeat(2,1fr); }
+  .banner-title { font-size:52px; }
+}
+
+/* ── MOBILE (≤768px) ── */
+@media (max-width:768px) {
+  /* Nav */
+  nav { padding:16px 20px; }
+  .nav-links { gap:16px; }
+  .nav-links a { font-size:9px; letter-spacing:1.5px; }
+
+  /* Hero */
+  .hero { grid-template-columns:1fr; min-height:auto; }
+  .hero-left { padding:32px 20px; }
+  .hero-inner { min-height:280px; }
+  .hero-right { display:none; }
+
+  /* Numbers */
+  .numbers-strip { grid-template-columns:1fr; }
+  .numbers-left { padding:32px 20px; border-right:none; border-bottom:0.5px solid #d8d4cc; }
+  .numbers-headline { font-size:28px; }
+  .numbers-grid { padding:24px 20px; gap:0; }
+  .number-item { padding:24px 16px; }
+
+  /* Banner & Services */
+  .banner-section { padding:40px 20px 32px; }
+  .banner-title { font-size:36px; }
+  .services-strip { grid-template-columns:1fr; }
+  .service-item { padding:20px; border-right:none !important; border-bottom:0.5px solid #d8d4cc; }
+  .service-item:last-child { border-bottom:none; }
+
+  /* About */
+  .about { grid-template-columns:1fr; }
+  .about-img { min-height:240px; }
+  .about-text { padding:36px 20px; }
+  .about-heading { font-size:26px; }
+
+  /* Projects */
+  .projects { padding:36px 20px; }
+  .projects-grid { grid-template-columns:1fr; }
+
+  /* Contact */
+  .contact { grid-template-columns:1fr; }
+  .contact-left { padding:36px 20px; border-right:none; border-bottom:0.5px solid rgba(255,255,255,0.1); }
+  .contact-right { padding:28px 20px 36px; }
+  .contact-heading { font-size:26px; }
+
+  /* Footer */
+  footer { flex-direction:column; gap:6px; padding:16px 20px; text-align:center; }
+
+  /* WhatsApp */
+  .whatsapp-float { bottom:20px; right:16px; width:50px; height:50px; }
+  .whatsapp-float svg { width:28px; height:28px; }
+}
 </style>
 </head>
 <body>
