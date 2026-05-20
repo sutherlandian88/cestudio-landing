@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Cómo funciona — GarageBids Chile</title>
+<meta name="description" content="Cómo funciona GarageBids Chile. El proceso de subasta para vendedores y compradores de autos especiales."/>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏁</text></svg>"/>
+<link rel="stylesheet" href="css/styles.css"/>
+<style>
+.how-block { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center; margin-bottom: 80px; }
+.how-block.reverse { direction: rtl; }
+.how-block.reverse > * { direction: ltr; }
+.how-num { font-family: var(--font-serif); font-size: 6rem; font-weight: 400; color: var(--border); line-height: 1; margin-bottom: 16px; }
+.how-title { font-size: 1.5rem; font-weight: 700; margin-bottom: 12px; }
+.how-text { font-size: 15px; color: var(--graphite-3); line-height: 1.7; }
+.how-visual { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 28px; }
+.faq-item { border-bottom: 1px solid var(--border); }
+.faq-question { width: 100%; text-align: left; padding: 18px 0; font-size: 15px; font-weight: 600; color: var(--graphite); display: flex; justify-content: space-between; align-items: center; cursor: pointer; background: none; border: none; }
+.faq-answer { font-size: 14px; color: var(--graphite-3); line-height: 1.65; padding-bottom: 18px; display: none; }
+.faq-answer.open { display: block; }
+.faq-arrow { transition: transform var(--t); flex-shrink: 0; }
+.faq-arrow.open { transform: rotate(180deg); }
+@media (max-width: 768px) {
+  .how-block { grid-template-columns: 1fr; }
+  .how-block.reverse { direction: ltr; }
+  .how-num { font-size: 4rem; }
+}
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="container">
+    <div class="header-inner">
+      <a href="index.html" class="logo">
+        <span class="logo-g">G</span>arageBids
+        <span class="logo-dot"></span>
+        <span style="color:var(--graphite-4);font-size:.9rem;font-family:var(--font-sans)">Chile</span>
+      </a>
+      <nav class="nav">
+        <a href="subastas.html">Subastas</a>
+        <a href="vendidos.html">Vendidos</a>
+        <a href="como-funciona.html">Cómo funciona</a>
+        <a href="editorial.html">Editorial</a>
+        <a href="pricing.html">Pricing</a>
+        <a href="vender.html">Vender</a>
+      </nav>
+      <a href="vender.html" class="header-cta">Postular mi auto →</a>
+      <button class="hamburger" id="hamburger" aria-label="Menú">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+  <nav class="mobile-nav" id="mobile-nav">
+    <a href="subastas.html">Subastas</a>
+    <a href="vendidos.html">Vendidos</a>
+    <a href="como-funciona.html">Cómo funciona</a>
+    <a href="editorial.html">Editorial</a>
+    <a href="pricing.html">Pricing</a>
+    <a href="vender.html">Vender</a>
+    <a href="vender.html" class="mobile-cta">Postular mi auto →</a>
+  </nav>
+</header>
+
+<section class="page-hero">
+  <div class="container">
+    <div class="page-hero-eyebrow">Cómo funciona</div>
+    <h1 class="page-hero-title">Simple, transparente y curado.</h1>
+    <p class="page-hero-lead">GarageBids es una plataforma de subastas para autos especiales en Chile. El proceso tiene dos lados: vendedores y compradores.</p>
+  </div>
+</section>
+
+<!-- TABS: VENDEDORES / COMPRADORES -->
+<div style="background:var(--white);border-bottom:1px solid var(--border);position:sticky;top:64px;z-index:800">
+  <div class="container">
+    <div style="display:flex;gap:0">
+      <button onclick="showRole('vendedores',this)" id="tab-vendedores" style="padding:16px 24px;font-size:15px;font-weight:700;border:none;background:none;cursor:pointer;border-bottom:2px solid var(--graphite);color:var(--graphite)">Para vendedores</button>
+      <button onclick="showRole('compradores',this)" id="tab-compradores" style="padding:16px 24px;font-size:15px;font-weight:700;border:none;background:none;cursor:pointer;border-bottom:2px solid transparent;color:var(--graphite-4)">Para compradores</button>
+    </div>
+  </div>
+</div>
+
+<!-- VENDEDORES -->
+<div id="role-vendedores">
+  <section class="section">
+    <div class="container">
+
+      <div class="how-block">
+        <div>
+          <div class="how-num">01</div>
+          <h2 class="how-title">Postulas tu auto gratis</h2>
+          <p class="how-text">Completas nuestro formulario con los datos del auto, fotos iniciales y contexto. No hay costo. No hay exclusividad. Si el auto no califica, te lo decimos en 48h y listo.</p>
+          <div style="display:flex;flex-direction:column;gap:8px;margin-top:20px">
+            <div style="display:flex;gap:8px;font-size:13.5px;color:var(--graphite-3)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#166534" stroke-width="2.5" style="margin-top:2px;flex-shrink:0"><polyline points="20 6 9 17 4 12"/></svg>100% gratis postular</div>
+            <div style="display:flex;gap:8px;font-size:13.5px;color:var(--graphite-3)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#166534" stroke-width="2.5" style="margin-top:2px;flex-shrink:0"><polyline points="20 6 9 17 4 12"/></svg>Respuesta en 48 horas</div>
+            <div style="display:flex;gap:8px;font-size:13.5px;color:var(--graphite-3)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#166534" stroke-width="2.5" style="margin-top:2px;flex-shrink:0"><polyline points="20 6 9 17 4 12"/></svg>Sin compromiso ni exclusividad</div>
+          </div>
+        </div>
+        <div class="how-visual">
+          <div style="font-size:13px;font-weight:700;margin-bottom:16px;color:var(--graphite-4);text-transform:uppercase;letter-spacing:.07em">Qué necesitas tener listo</div>
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <div style="display:flex;gap:10px;align-items:flex-start;font-size:14px">📸 <span>Fotos decentes del exterior e interior (celular sirve)</span></div>
+            <div style="display:flex;gap:10px;align-items:flex-start;font-size:14px">📋 <span>Historial de mantenciones (aunque sea resumido)</span></div>
+            <div style="display:flex;gap:10px;align-items:flex-start;font-size:14px">⚠️ <span>Lista honesta de defectos conocidos</span></div>
+            <div style="display:flex;gap:10px;align-items:flex-start;font-size:14px">📖 <span>Historia del auto y contexto de uso</span></div>
+            <div style="display:flex;gap:10px;align-items:flex-start;font-size:14px">💰 <span>Precio estimado de reserva (o decidir ir sin reserva)</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="how-block reverse">
+        <div>
+          <div class="how-num">02</div>
+          <h2 class="how-title">Nosotros creamos la ficha editorial</h2>
+          <p class="how-text">Si el auto califica, nuestro equipo prepara la ficha editorial completa: highlights, quirks, known flaws, historial de mantenciones y la narrativa del auto. Es el diferenciador de GarageBids.</p>
+          <div style="margin-top:20px;padding:16px;background:var(--bg-2);border-radius:var(--radius);border-left:3px solid var(--accent);font-size:14px;color:var(--graphite-2);font-style:italic">
+            "La ficha editorial es lo que convierte un aviso en un auto que genera deseo."
+          </div>
+        </div>
+        <div class="how-visual">
+          <div style="font-size:13px;font-weight:700;margin-bottom:14px;color:var(--graphite-4);text-transform:uppercase;letter-spacing:.07em">Qué incluye la ficha</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:13.5px">
+            <div style="padding:10px;background:var(--bg-2);border-radius:var(--radius-sm)">✅ Highlights</div>
+            <div style="padding:10px;background:var(--bg-2);border-radius:var(--radius-sm)">⚠️ Known Flaws</div>
+            <div style="padding:10px;background:var(--bg-2);border-radius:var(--radius-sm)">💬 Quirks & Detalles</div>
+            <div style="padding:10px;background:var(--bg-2);border-radius:var(--radius-sm)">🔧 Mantenciones</div>
+            <div style="padding:10px;background:var(--bg-2);border-radius:var(--radius-sm)">📖 Historia del auto</div>
+            <div style="padding:10px;background:var(--bg-2);border-radius:var(--radius-sm)">❤️ Por qué nos gusta</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="how-block">
+        <div>
+          <div class="how-num">03</div>
+          <h2 class="how-title">7 días de subasta transparente</h2>
+          <p class="how-text">La subasta dura 7 días. Compradores reales pujan públicamente. Las preguntas se responden en público. El historial de pujas es visible para todos. Sin opacidad, sin regateo privado.</p>
+          <div style="display:flex;flex-direction:column;gap:8px;margin-top:20px">
+            <div style="display:flex;gap:8px;font-size:13.5px;color:var(--graphite-3)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#166534" stroke-width="2.5" style="margin-top:2px;flex-shrink:0"><polyline points="20 6 9 17 4 12"/></svg>Pujas en tiempo real</div>
+            <div style="display:flex;gap:8px;font-size:13.5px;color:var(--graphite-3)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#166534" stroke-width="2.5" style="margin-top:2px;flex-shrink:0"><polyline points="20 6 9 17 4 12"/></svg>Preguntas públicas con respuesta del vendedor</div>
+            <div style="display:flex;gap:8px;font-size:13.5px;color:var(--graphite-3)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#166534" stroke-width="2.5" style="margin-top:2px;flex-shrink:0"><polyline points="20 6 9 17 4 12"/></svg>Urgencia real — cuenta regresiva pública</div>
+            <div style="display:flex;gap:8px;font-size:13.5px;color:var(--graphite-3)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#166534" stroke-width="2.5" style="margin-top:2px;flex-shrink:0"><polyline points="20 6 9 17 4 12"/></svg>Sin regateo privado eterno</div>
+          </div>
+        </div>
+        <div class="how-visual">
+          <div style="font-size:13px;font-weight:700;margin-bottom:14px;color:var(--graphite-4);text-transform:uppercase;letter-spacing:.07em">Por qué subastar ayuda al vendedor</div>
+          <div style="display:flex;flex-direction:column;gap:10px;font-size:14px;color:var(--graphite-2)">
+            <div>🎯 <strong>Descubres el precio real</strong> — el mercado decide, no tú solo</div>
+            <div>⏱️ <strong>Urgencia real</strong> — los compradores saben que tienen 7 días</div>
+            <div>🚫 <strong>Sin regateo interminable</strong> — el proceso tiene fin claro</div>
+            <div>👥 <strong>Múltiples compradores compitiendo</strong> — concentra la demanda dispersa</div>
+            <div>📣 <strong>Visibilidad editorial</strong> — el auto se ve como merece</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="how-block reverse">
+        <div>
+          <div class="how-num">04</div>
+          <h2 class="how-title">Cierre y transferencia</h2>
+          <p class="how-text">Al terminar la subasta, conectamos vendedor y comprador ganador. El proceso de revisión final, acuerdo y transferencia es entre las partes. Nosotros facilitamos y acompañamos.</p>
+          <div style="margin-top:20px;background:var(--warning-bg);border:1px solid #FEF3C7;border-radius:var(--radius);padding:14px;font-size:13.5px;color:var(--graphite-3)">
+            El vendedor <strong>no paga comisión</strong>. El fee del 3% lo paga el comprador ganador.
+          </div>
+        </div>
+        <div class="how-visual">
+          <div style="font-size:13px;font-weight:700;margin-bottom:14px;color:var(--graphite-4);text-transform:uppercase;letter-spacing:.07em">Fee estructura</div>
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border);font-size:14px"><span>Fee comprador</span><strong>3% del precio final</strong></div>
+            <div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border);font-size:14px"><span>Fee mínimo</span><strong>$150.000 CLP</strong></div>
+            <div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border);font-size:14px"><span>Fee máximo</span><strong>$1.500.000 CLP</strong></div>
+            <div style="display:flex;justify-content:space-between;padding:10px 0;font-size:14px"><span>Fee vendedor</span><strong style="color:var(--success)">$0 — gratis</strong></div>
+          </div>
+          <a href="pricing.html" class="btn btn-ghost btn-sm btn-full" style="margin-top:16px">Calculadora de fee →</a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+</div>
+
+<!-- COMPRADORES -->
+<div id="role-compradores" style="display:none">
+  <section class="section">
+    <div class="container">
+
+      <div class="how-block">
+        <div>
+          <div class="how-num">01</div>
+          <h2 class="how-title">Explora subastas curadas</h2>
+          <p class="how-text">Cada auto en GarageBids pasó por revisión editorial. No hay avisos aleatorios. Cada publicación tiene contexto real, historia y defectos declarados. Puedes filtrar por categoría, transmisión, tracción y más.</p>
+        </div>
+        <div class="how-visual">
+          <div style="font-size:13px;font-weight:700;margin-bottom:14px;color:var(--graphite-4);text-transform:uppercase;letter-spacing:.07em">Qué encuentras en cada ficha</div>
+          <div style="display:flex;flex-direction:column;gap:8px;font-size:14px;color:var(--graphite-2)">
+            <div>📖 Historia completa del auto</div>
+            <div>✅ Highlights — lo mejor del auto</div>
+            <div>⚠️ Known Flaws — defectos declarados por el vendedor</div>
+            <div>💬 Quirks — detalles que solo el dueño conoce</div>
+            <div>🔧 Timeline de mantenciones</div>
+            <div>❓ Preguntas y respuestas públicas</div>
+            <div>📊 Historial de pujas transparente</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="how-block reverse">
+        <div>
+          <div class="how-num">02</div>
+          <h2 class="how-title">Guarda y pregunta antes de pujar</h2>
+          <p class="how-text">Puedes guardar cualquier auto para seguirlo. Hacer preguntas públicas al vendedor que todos pueden ver. Y revisar el historial de pujas en tiempo real. Sin presión, con información.</p>
+        </div>
+        <div class="how-visual">
+          <div style="font-size:13px;font-weight:700;margin-bottom:14px;color:var(--graphite-4);text-transform:uppercase;letter-spacing:.07em">Antes de pujar</div>
+          <div style="display:flex;flex-direction:column;gap:10px;font-size:14px;color:var(--graphite-2)">
+            <div>❤️ Guarda el auto para seguir la subasta</div>
+            <div>❓ Haz preguntas públicas — el vendedor responde</div>
+            <div>🔍 Lee todos los known flaws antes de pujar</div>
+            <div>📊 Revisa el historial de pujas de otros compradores</div>
+            <div>💰 Calcula tu fee estimado en nuestra calculadora</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="how-block">
+        <div>
+          <div class="how-num">03</div>
+          <h2 class="how-title">Puja y gana</h2>
+          <p class="how-text">Las pujas son públicas. Todos ven el historial. Cuando ganas, te contactamos para coordinar la revisión final y la transferencia. El fee del 3% se paga al cierre — mínimo $150k, máximo $1,5M.</p>
+          <div style="margin-top:20px;background:var(--bg-2);border-radius:var(--radius);padding:14px;font-size:13.5px;color:var(--graphite-3)">
+            ⚠️ Recomendamos revisar el auto con un mecánico de confianza antes del pago final. GarageBids facilita la conexión pero no es parte del contrato.
+          </div>
+        </div>
+        <div class="how-visual">
+          <div style="font-size:13px;font-weight:700;margin-bottom:14px;color:var(--graphite-4);text-transform:uppercase;letter-spacing:.07em">Ejemplo de fee</div>
+          <div style="display:flex;flex-direction:column;gap:10px;font-size:14px">
+            <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border)"><span>Auto: BMW M3 E92</span></div>
+            <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border)"><span>Puja ganadora</span><strong>$28.500.000</strong></div>
+            <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border)"><span>Fee (3%)</span><strong>$855.000</strong></div>
+            <div style="display:flex;justify-content:space-between;padding:8px 0;font-weight:700"><span>Total pagado</span><strong>$29.355.000</strong></div>
+          </div>
+          <a href="pricing.html" class="btn btn-ghost btn-sm btn-full" style="margin-top:16px">Calculadora de fee →</a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+</div>
+
+<!-- FAQ -->
+<section class="section" style="background:var(--bg-2)">
+  <div class="container-sm">
+    <div class="section-header" style="text-align:center;max-width:520px;margin:0 auto 40px">
+      <div class="section-eyebrow">Preguntas frecuentes</div>
+      <h2 class="section-title">Lo que más nos preguntan</h2>
+    </div>
+    <div id="faq-list">
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggleFaq(this)">¿Cuánto cuesta publicar mi auto? <svg class="faq-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></button>
+        <div class="faq-answer">Publicar es 100% gratis. No hay ningún costo para el vendedor. El único fee es del 3% que paga el comprador ganador sobre el precio final.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggleFaq(this)">¿Qué pasa si no se vende el auto? <svg class="faq-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></button>
+        <div class="faq-answer">Si el auto no alcanza la reserva o no recibe pujas, no hay obligación de venta ni costo alguno. El vendedor puede decidir bajar la reserva o volver a subastar.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggleFaq(this)">¿Cómo sé que las pujas son reales? <svg class="faq-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></button>
+        <div class="faq-answer">El historial de pujas es público y visible para todos. En esta fase MVP las pujas son referenciales y coordinamos el proceso final manualmente. No tenemos incentivo en inflar precios ya que cobramos un porcentaje fijo al comprador real.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggleFaq(this)">¿Puedo poner precio de reserva? <svg class="faq-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></button>
+        <div class="faq-answer">Sí. Puedes poner una reserva mínima que no se muestra públicamente. La plataforma solo indica si la reserva fue alcanzada o no. También puedes ir sin reserva — el auto se va al mejor postor.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggleFaq(this)">¿Cómo funciona la revisión del auto? <svg class="faq-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></button>
+        <div class="faq-answer">En esta fase MVP coordinamos la revisión directamente con el vendedor. El comprador puede solicitar una inspección mecánica independiente antes del cierre. Recomendamos siempre hacerlo.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggleFaq(this)">¿GarageBids hace escrow o custodia del dinero? <svg class="faq-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></button>
+        <div class="faq-answer">En esta fase MVP no manejamos escrow. Coordinamos la conexión entre comprador y vendedor. El pago y la transferencia legal son entre las partes. Estamos desarrollando mecanismos de custodia para fases futuras.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggleFaq(this)">¿Qué autos no aceptan? <svg class="faq-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></button>
+        <div class="faq-answer">No aceptamos autos de uso masivo sin carácter especial, autos con siniestros estructurales, flotas de concesionaria, modificaciones sin documentación, o autos con problemas legales. Ver la página de Vender para la lista completa.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="section">
+  <div class="container">
+    <div class="quote-block">
+      <p class="quote-text">"Menos regateo.<br>Más compradores reales."</p>
+      <div class="quote-cta">
+        <a href="vender.html" class="btn btn-accent btn-lg">Postular mi auto gratis</a>
+        <a href="subastas.html" class="btn btn-ghost btn-lg" style="color:var(--white);border-color:rgba(255,255,255,.3)">Ver subastas activas</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="logo" style="margin-bottom:12px;color:var(--white)"><span class="logo-g">G</span>arageBids <span class="logo-dot"></span> <span style="color:rgba(255,255,255,.4);font-size:.9rem;font-family:var(--font-sans)">Chile</span></div>
+        <p class="footer-tagline">"Autos especiales merecen una venta especial."</p>
+      </div>
+      <div><div class="footer-col-title">Subastas</div><a href="subastas.html" class="footer-link">Activas</a><a href="vendidos.html" class="footer-link">Vendidos</a></div>
+      <div><div class="footer-col-title">Plataforma</div><a href="como-funciona.html" class="footer-link">Cómo funciona</a><a href="pricing.html" class="footer-link">Pricing</a><a href="vender.html" class="footer-link">Postular</a></div>
+      <div><div class="footer-col-title">Contacto</div><a href="mailto:hola@garagebids.cl" class="footer-link">hola@garagebids.cl</a></div>
+    </div>
+    <p class="footer-disclaimer">GarageBids no es dueño de los vehículos publicados. La plataforma conecta compradores y vendedores. La revisión mecánica, legal y la transferencia final deben ser verificadas por las partes antes del cierre.</p>
+    <div class="footer-bottom"><span>© 2025 GarageBids Chile.</span><span style="color:rgba(255,255,255,.3)">MVP — Operación manual</span></div>
+  </div>
+</footer>
+
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
+<script>
+function showRole(role, btn) {
+  document.getElementById('role-vendedores').style.display = role === 'vendedores' ? '' : 'none';
+  document.getElementById('role-compradores').style.display = role === 'compradores' ? '' : 'none';
+  document.getElementById('tab-vendedores').style.borderBottomColor = role === 'vendedores' ? 'var(--graphite)' : 'transparent';
+  document.getElementById('tab-vendedores').style.color = role === 'vendedores' ? 'var(--graphite)' : 'var(--graphite-4)';
+  document.getElementById('tab-compradores').style.borderBottomColor = role === 'compradores' ? 'var(--graphite)' : 'transparent';
+  document.getElementById('tab-compradores').style.color = role === 'compradores' ? 'var(--graphite)' : 'var(--graphite-4)';
+}
+function toggleFaq(btn) {
+  const answer = btn.nextElementSibling;
+  const arrow = btn.querySelector('.faq-arrow');
+  const isOpen = answer.classList.contains('open');
+  document.querySelectorAll('.faq-answer').forEach(a => a.classList.remove('open'));
+  document.querySelectorAll('.faq-arrow').forEach(a => a.classList.remove('open'));
+  if (!isOpen) { answer.classList.add('open'); arrow.classList.add('open'); }
+}
+</script>
+</body>
+</html>

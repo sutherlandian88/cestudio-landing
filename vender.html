@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Postula tu auto — GarageBids Chile</title>
+<meta name="description" content="Postula tu auto especial gratuitamente. Deportivos, 4x4, clásicos modernos y premium usados. Publicar es gratis."/>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏁</text></svg>"/>
+<link rel="stylesheet" href="css/styles.css"/>
+</head>
+<body>
+
+<header class="header">
+  <div class="container">
+    <div class="header-inner">
+      <a href="index.html" class="logo">
+        <span class="logo-g">G</span>arageBids
+        <span class="logo-dot"></span>
+        <span style="color:var(--graphite-4);font-size:.9rem;font-family:var(--font-sans)">Chile</span>
+      </a>
+      <nav class="nav">
+        <a href="subastas.html">Subastas</a>
+        <a href="vendidos.html">Vendidos</a>
+        <a href="como-funciona.html">Cómo funciona</a>
+        <a href="editorial.html">Editorial</a>
+        <a href="pricing.html">Pricing</a>
+        <a href="vender.html">Vender</a>
+      </nav>
+      <a href="vender.html" class="header-cta">Postular mi auto →</a>
+      <button class="hamburger" id="hamburger" aria-label="Menú">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+  <nav class="mobile-nav" id="mobile-nav">
+    <a href="subastas.html">Subastas</a>
+    <a href="vendidos.html">Vendidos</a>
+    <a href="como-funciona.html">Cómo funciona</a>
+    <a href="editorial.html">Editorial</a>
+    <a href="pricing.html">Pricing</a>
+    <a href="vender.html">Vender</a>
+    <a href="vender.html" class="mobile-cta">Postular mi auto →</a>
+  </nav>
+</header>
+
+<!-- PAGE HERO -->
+<section class="page-hero">
+  <div class="container">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center">
+      <div>
+        <div class="page-hero-eyebrow">Postula tu auto</div>
+        <h1 class="page-hero-title">Tu auto merece una venta especial.</h1>
+        <p class="page-hero-lead">Publicar en GarageBids es <strong>gratis</strong>. Si tu auto califica, creamos la ficha editorial y lo subastamos por 7 días.</p>
+        <div style="display:flex;gap:20px;margin-top:28px;flex-wrap:wrap">
+          <div style="display:flex;align-items:center;gap:8px;font-size:13.5px;color:var(--graphite-3)">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#166534" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            Postulación 100% gratis
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;font-size:13.5px;color:var(--graphite-3)">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#166534" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            Respuesta en 48h
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;font-size:13.5px;color:var(--graphite-3)">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#166534" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            Sin exclusividad
+          </div>
+        </div>
+      </div>
+      <div>
+        <div style="background:var(--white);border:1px solid var(--border);border-radius:var(--radius-lg);padding:24px">
+          <div style="font-size:13px;font-weight:700;margin-bottom:16px;color:var(--graphite-2)">Qué pasa cuando postulas</div>
+          <div style="display:flex;flex-direction:column;gap:12px">
+            <div style="display:flex;gap:12px;align-items:flex-start">
+              <div style="width:28px;height:28px;border-radius:50%;background:var(--graphite);color:var(--white);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0">1</div>
+              <div style="font-size:13.5px;color:var(--graphite-3);padding-top:4px">Recibes un acuse en menos de 24h</div>
+            </div>
+            <div style="display:flex;gap:12px;align-items:flex-start">
+              <div style="width:28px;height:28px;border-radius:50%;background:var(--graphite);color:var(--white);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0">2</div>
+              <div style="font-size:13.5px;color:var(--graphite-3);padding-top:4px">Nuestro equipo evalúa y responde en 48h</div>
+            </div>
+            <div style="display:flex;gap:12px;align-items:flex-start">
+              <div style="width:28px;height:28px;border-radius:50%;background:var(--accent);color:var(--white);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0">3</div>
+              <div style="font-size:13.5px;color:var(--graphite-3);padding-top:4px">Si califica, coordinamos fotos y ficha editorial</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section-sm" style="background:var(--bg-2)">
+  <div class="container">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:32px">
+      <!-- LO QUE ACEPTAMOS -->
+      <div style="background:var(--white);border:1px solid var(--border);border-radius:var(--radius-lg);padding:28px">
+        <div style="font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--success);margin-bottom:16px">✅ Lo que aceptamos</div>
+        <div style="display:flex;flex-direction:column;gap:9px">
+          <div style="display:flex;gap:8px;font-size:14px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#166534" stroke-width="2.5" style="margin-top:3px;flex-shrink:0"><polyline points="20 6 9 17 4 12"/></svg>Deportivos con carácter — BMW M, Porsche, STI, Evo, RX-7</div>
+          <div style="display:flex;gap:8px;font-size:14px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#166534" stroke-width="2.5" style="margin-top:3px;flex-shrink:0"><polyline points="20 6 9 17 4 12"/></svg>4x4 icónicos — FJ Cruiser, Defender, Wrangler, G-Class, Patrol</div>
+          <div style="display:flex;gap:8px;font-size:14px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#166534" stroke-width="2.5" style="margin-top:3px;flex-shrink:0"><polyline points="20 6 9 17 4 12"/></svg>Clásicos modernos de los 80s–90s con historia</div>
+          <div style="display:flex;gap:8px;font-size:14px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#166534" stroke-width="2.5" style="margin-top:3px;flex-shrink:0"><polyline points="20 6 9 17 4 12"/></svg>Premium usados documentados — Mercedes, BMW, Audi, Alfa</div>
+          <div style="display:flex;gap:8px;font-size:14px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#166534" stroke-width="2.5" style="margin-top:3px;flex-shrink:0"><polyline points="20 6 9 17 4 12"/></svg>Modificaciones bien ejecutadas — con factura y propósito</div>
+          <div style="display:flex;gap:8px;font-size:14px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#166534" stroke-width="2.5" style="margin-top:3px;flex-shrink:0"><polyline points="20 6 9 17 4 12"/></svg>Ediciones limitadas o versiones raras en Chile</div>
+        </div>
+      </div>
+      <!-- LO QUE NO ACEPTAMOS -->
+      <div style="background:var(--white);border:1px solid var(--border);border-radius:var(--radius-lg);padding:28px">
+        <div style="font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--hot);margin-bottom:16px">✗ Lo que no aceptamos</div>
+        <div style="display:flex;flex-direction:column;gap:9px">
+          <div style="display:flex;gap:8px;font-size:14px;color:var(--graphite-3)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#DC2626" stroke-width="2.5" style="margin-top:3px;flex-shrink:0"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>Autos de uso masivo sin carácter especial</div>
+          <div style="display:flex;gap:8px;font-size:14px;color:var(--graphite-3)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#DC2626" stroke-width="2.5" style="margin-top:3px;flex-shrink:0"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>Autos con siniestros totales o daños estructurales</div>
+          <div style="display:flex;gap:8px;font-size:14px;color:var(--graphite-3)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#DC2626" stroke-width="2.5" style="margin-top:3px;flex-shrink:0"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>Flotas de concesionaria o fleet vehicles</div>
+          <div style="display:flex;gap:8px;font-size:14px;color:var(--graphite-3)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#DC2626" stroke-width="2.5" style="margin-top:3px;flex-shrink:0"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>Modificaciones sin documentación o de baja calidad</div>
+          <div style="display:flex;gap:8px;font-size:14px;color:var(--graphite-3)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#DC2626" stroke-width="2.5" style="margin-top:3px;flex-shrink:0"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>Autos con problemas legales pendientes</div>
+          <div style="display:flex;gap:8px;font-size:14px;color:var(--graphite-3)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#DC2626" stroke-width="2.5" style="margin-top:3px;flex-shrink:0"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>Precio aspiracional no respaldado por el mercado</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FORM -->
+<section class="section">
+  <div class="container-sm">
+
+    <div id="sell-success" style="display:none;text-align:center;padding:64px 24px">
+      <div style="font-size:4rem;margin-bottom:20px">🏁</div>
+      <h2 style="margin-bottom:12px">¡Postulación recibida!</h2>
+      <p style="color:var(--graphite-4);font-size:16px;max-width:440px;margin:0 auto 24px">Nuestro equipo revisará tu auto y te responderemos en las próximas 48 horas. Si califica, te contactamos para coordinar fotos y la ficha editorial.</p>
+      <div style="background:var(--bg-2);border-radius:var(--radius-lg);padding:24px;max-width:400px;margin:0 auto 24px;text-align:left">
+        <div style="font-size:13px;font-weight:700;margin-bottom:12px">Qué pasa ahora</div>
+        <div style="display:flex;flex-direction:column;gap:8px;font-size:13.5px;color:var(--graphite-3)">
+          <div>✉️ Acuse de recibo en menos de 24h</div>
+          <div>🔍 Evaluación en 48h hábiles</div>
+          <div>📸 Coordinación de fotos si califica</div>
+          <div>📋 Creación de ficha editorial</div>
+          <div>🔨 Subasta de 7 días activa</div>
+        </div>
+      </div>
+      <a href="subastas.html" class="btn btn-primary">Ver subastas activas</a>
+    </div>
+
+    <form id="sell-form" class="sell-form">
+      <h2 style="margin-bottom:8px;font-family:var(--font-serif)">Postula tu auto especial</h2>
+      <p style="color:var(--graphite-4);margin-bottom:32px;font-size:15px">Publicar es <strong>100% gratis</strong>. Solo pagamos fee si el auto se vende. El comprador paga 3%.</p>
+
+      <!-- DATOS DEL AUTO -->
+      <div class="form-section-title">1. El auto</div>
+      <div class="sell-form-grid">
+        <div class="form-group">
+          <label class="form-label">Marca *</label>
+          <input type="text" class="form-input" placeholder="BMW, Porsche, Toyota..." required/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Modelo *</label>
+          <input type="text" class="form-input" placeholder="M3, 911, FJ Cruiser..." required/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Año *</label>
+          <input type="number" class="form-input" placeholder="2008" min="1960" max="2025" required/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Versión / Trim</label>
+          <input type="text" class="form-input" placeholder="E92 Coupé, Carrera S, Trail Teams..."/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Kilometraje *</label>
+          <input type="number" class="form-input" placeholder="88000" required/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Transmisión *</label>
+          <select class="form-input" required>
+            <option value="">Seleccionar</option>
+            <option>Manual</option>
+            <option>Automático</option>
+            <option>PDK / DSG</option>
+            <option>Otro</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Motor</label>
+          <input type="text" class="form-input" placeholder="V8 4.0L, Flat-6 3.8L..."/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Tracción</label>
+          <select class="form-input">
+            <option value="">Seleccionar</option>
+            <option>Tracción Trasera</option>
+            <option>Tracción Delantera</option>
+            <option>AWD / 4WD</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Color</label>
+          <input type="text" class="form-input" placeholder="Highland Green, Obsidian Black..."/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Ubicación *</label>
+          <input type="text" class="form-input" placeholder="Las Condes, Santiago" required/>
+        </div>
+        <div class="form-group sell-form-full">
+          <label class="form-label">Categoría que mejor describe el auto *</label>
+          <select class="form-input" required>
+            <option value="">Seleccionar categoría</option>
+            <option>Deportivo</option>
+            <option>4x4 Icónico</option>
+            <option>Clásico Moderno</option>
+            <option>Premium Usado</option>
+            <option>Modificado Bien Hecho</option>
+            <option>Rare Spec / Edición Limitada</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- HISTORIA -->
+      <div class="form-section-title" style="margin-top:24px">2. La historia</div>
+      <div class="sell-form-grid">
+        <div class="form-group sell-form-full">
+          <label class="form-label">¿Por qué tu auto es especial? *</label>
+          <textarea class="form-input" rows="4" placeholder="Cuéntanos la historia del auto. ¿Qué lo hace distinto? ¿Por qué lo compraste? ¿Cómo fue tu experiencia con él?" required></textarea>
+        </div>
+        <div class="form-group sell-form-full">
+          <label class="form-label">Historial de mantenciones (resumido)</label>
+          <textarea class="form-input" rows="3" placeholder="Ej: Service BMW Santiago hasta 2020, luego taller especializado M Works. Distribución a 80.000 km. Frenos a 72.000 km."></textarea>
+        </div>
+        <div class="form-group sell-form-full">
+          <label class="form-label">Defectos conocidos (honest listing) *</label>
+          <textarea class="form-input" rows="3" placeholder="Sé honesto. ¿Raspones, ruidos, cosas por reparar? Esto genera confianza y es obligatorio en GarageBids." required></textarea>
+        </div>
+        <div class="form-group sell-form-full">
+          <label class="form-label">Modificaciones</label>
+          <textarea class="form-input" rows="2" placeholder="Escape Akrapovic, Stage 2, suspensión... o escribe 'Ninguna — completamente original'"></textarea>
+        </div>
+      </div>
+
+      <!-- PRECIO -->
+      <div class="form-section-title" style="margin-top:24px">3. Precio esperado</div>
+      <div class="sell-form-grid">
+        <div class="form-group">
+          <label class="form-label">Precio de reserva estimado (CLP)</label>
+          <input type="number" class="form-input" placeholder="25000000" step="500000"/>
+          <div style="font-size:12px;color:var(--graphite-5);margin-top:5px">No es obligatorio. También puedes ir sin reserva.</div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">¿Irías sin reserva?</label>
+          <select class="form-input">
+            <option value="">Por definir con el equipo</option>
+            <option>Sí, sin reserva</option>
+            <option>No, quiero precio mínimo</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- CONTACTO -->
+      <div class="form-section-title" style="margin-top:24px">4. Tu contacto</div>
+      <div class="sell-form-grid">
+        <div class="form-group">
+          <label class="form-label">Nombre *</label>
+          <input type="text" class="form-input" placeholder="Tu nombre" required/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Email *</label>
+          <input type="email" class="form-input" placeholder="tu@email.com" required/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">WhatsApp</label>
+          <input type="tel" class="form-input" placeholder="+56 9 XXXX XXXX"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">¿Cómo nos encontraste?</label>
+          <select class="form-input">
+            <option value="">Seleccionar</option>
+            <option>Instagram</option>
+            <option>WhatsApp / amigo</option>
+            <option>Google</option>
+            <option>Facebook</option>
+            <option>Otro</option>
+          </select>
+        </div>
+        <div class="form-group sell-form-full">
+          <label class="form-label">¿Algo más que quieras agregar?</label>
+          <textarea class="form-input" rows="2" placeholder="Cualquier contexto adicional que creas relevante..."></textarea>
+        </div>
+      </div>
+
+      <div style="background:var(--bg-2);border-radius:var(--radius);padding:16px;margin:24px 0;font-size:13.5px;color:var(--graphite-3)">
+        <strong>Nota:</strong> Al postular, entiendes que GarageBids revisará tu auto y se reserva el derecho de no publicarlo si no cumple nuestros criterios. No hay ningún compromiso ni exclusividad de tu parte.
+      </div>
+
+      <button type="submit" class="btn btn-accent btn-lg btn-full">
+        Postular mi auto gratis →
+      </button>
+    </form>
+  </div>
+</section>
+
+<!-- TESTIMONIAL / QUOTE -->
+<section style="background:var(--bg-2);padding:56px 0">
+  <div class="container">
+    <div style="max-width:720px;margin:0 auto;text-align:center">
+      <div style="font-size:2rem;margin-bottom:12px">🏁</div>
+      <blockquote style="font-family:var(--font-serif);font-style:italic;font-size:1.4rem;color:var(--graphite);line-height:1.4;margin-bottom:16px">
+        "Del grupo de WhatsApp a una subasta transparente."
+      </blockquote>
+      <p style="font-size:14px;color:var(--graphite-4)">Menos regateo. Más compradores reales. Autos especiales merecen una venta especial.</p>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="logo" style="margin-bottom:12px;color:var(--white)">
+          <span class="logo-g">G</span>arageBids
+          <span class="logo-dot"></span>
+          <span style="color:rgba(255,255,255,.4);font-size:.9rem;font-family:var(--font-sans)">Chile</span>
+        </div>
+        <p class="footer-tagline">"Autos especiales merecen una venta especial."</p>
+      </div>
+      <div>
+        <div class="footer-col-title">Subastas</div>
+        <a href="subastas.html" class="footer-link">Activas</a>
+        <a href="vendidos.html" class="footer-link">Vendidos</a>
+      </div>
+      <div>
+        <div class="footer-col-title">Plataforma</div>
+        <a href="como-funciona.html" class="footer-link">Cómo funciona</a>
+        <a href="pricing.html" class="footer-link">Pricing</a>
+      </div>
+      <div>
+        <div class="footer-col-title">Contacto</div>
+        <a href="mailto:hola@garagebids.cl" class="footer-link">hola@garagebids.cl</a>
+      </div>
+    </div>
+    <p class="footer-disclaimer">GarageBids no es dueño de los vehículos publicados. La plataforma conecta compradores y vendedores. La revisión mecánica, legal y la transferencia final deben ser verificadas por las partes.</p>
+    <div class="footer-bottom">
+      <span>© 2025 GarageBids Chile.</span>
+      <span style="color:rgba(255,255,255,.3)">MVP — Operación manual</span>
+    </div>
+  </div>
+</footer>
+
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

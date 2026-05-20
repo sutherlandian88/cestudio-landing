@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Editorial — GarageBids Chile</title>
+<meta name="description" content="Lecturas para entusiastas. Guías, análisis y opiniones sobre autos especiales en Chile."/>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏁</text></svg>"/>
+<link rel="stylesheet" href="css/styles.css"/>
+<style>
+.article-hero {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 0;
+  border: 1px solid var(--border); border-radius: var(--radius-lg);
+  overflow: hidden; margin-bottom: 40px;
+  background: var(--white); min-height: 380px;
+}
+.article-hero-img { overflow: hidden; }
+.article-hero-img img { width: 100%; height: 100%; object-fit: cover; }
+.article-hero-body { padding: 48px; display: flex; flex-direction: column; justify-content: center; }
+.article-tag-lg { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; color: var(--accent); margin-bottom: 14px; }
+.article-title-lg { font-family: var(--font-serif); font-size: 1.8rem; line-height: 1.2; margin-bottom: 16px; letter-spacing: -.02em; }
+.article-lead-lg { font-size: 15px; color: var(--graphite-3); line-height: 1.65; margin-bottom: 24px; }
+.article-meta { font-size: 12.5px; color: var(--graphite-5); display: flex; gap: 12px; flex-wrap: wrap; }
+
+.article-full { max-width: 720px; margin: 0 auto; }
+.article-full h2 { font-size: 1.4rem; margin: 32px 0 14px; }
+.article-full p { font-size: 15.5px; color: var(--graphite-2); line-height: 1.75; margin-bottom: 18px; }
+.article-full blockquote { border-left: 3px solid var(--accent); padding: 4px 20px; margin: 24px 0; font-style: italic; color: var(--graphite-3); font-size: 16px; line-height: 1.6; }
+.article-full ul { padding-left: 20px; margin-bottom: 18px; }
+.article-full ul li { font-size: 15.5px; color: var(--graphite-2); line-height: 1.75; margin-bottom: 8px; }
+
+@media (max-width: 768px) {
+  .article-hero { grid-template-columns: 1fr; }
+  .article-hero-img { height: 220px; }
+  .article-hero-body { padding: 28px 24px; }
+  .article-title-lg { font-size: 1.4rem; }
+}
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="container">
+    <div class="header-inner">
+      <a href="index.html" class="logo">
+        <span class="logo-g">G</span>arageBids
+        <span class="logo-dot"></span>
+        <span style="color:var(--graphite-4);font-size:.9rem;font-family:var(--font-sans)">Chile</span>
+      </a>
+      <nav class="nav">
+        <a href="subastas.html">Subastas</a>
+        <a href="vendidos.html">Vendidos</a>
+        <a href="como-funciona.html">Cómo funciona</a>
+        <a href="editorial.html">Editorial</a>
+        <a href="pricing.html">Pricing</a>
+        <a href="vender.html">Vender</a>
+      </nav>
+      <a href="vender.html" class="header-cta">Postular mi auto →</a>
+      <button class="hamburger" id="hamburger" aria-label="Menú">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+  <nav class="mobile-nav" id="mobile-nav">
+    <a href="subastas.html">Subastas</a>
+    <a href="vendidos.html">Vendidos</a>
+    <a href="como-funciona.html">Cómo funciona</a>
+    <a href="editorial.html">Editorial</a>
+    <a href="pricing.html">Pricing</a>
+    <a href="vender.html">Vender</a>
+    <a href="vender.html" class="mobile-cta">Postular mi auto →</a>
+  </nav>
+</header>
+
+<section class="page-hero">
+  <div class="container">
+    <div class="page-hero-eyebrow">Editorial</div>
+    <h1 class="page-hero-title">Lecturas para entusiastas.</h1>
+    <p class="page-hero-lead">Cada auto publicado tiene una razón para estar acá. Y cada artículo tiene algo que decir para quien lo entiende.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+
+    <!-- FEATURED ARTICLE -->
+    <div class="article-hero">
+      <div class="article-hero-img">
+        <img src="https://images.unsplash.com/photo-1555215695-3004980ad54e?w=900&q=85&auto=format" alt="BMW M3 E92" loading="lazy"/>
+      </div>
+      <div class="article-hero-body">
+        <div class="article-tag-lg">Opinión · Destacado</div>
+        <h2 class="article-title-lg">Por qué un auto especial no debería venderse como un auto normal</h2>
+        <p class="article-lead-lg">Publicar un M3 en Chileautos al lado de un Sail 2019 no tiene ningún sentido. La información, el proceso y el comprador son completamente distintos.</p>
+        <div class="article-meta">
+          <span>Equipo GarageBids</span>
+          <span>·</span>
+          <span>12 mayo 2025</span>
+          <span>·</span>
+          <span>5 min lectura</span>
+        </div>
+        <a href="#articulo-1" class="btn btn-primary" style="margin-top:20px;align-self:flex-start">Leer artículo →</a>
+      </div>
+    </div>
+
+    <!-- GRID -->
+    <div class="section-header">
+      <div class="section-eyebrow">Más artículos</div>
+      <h2 class="section-title">Todo el editorial</h2>
+    </div>
+    <div class="grid-3" style="margin-bottom:64px">
+      <div class="editorial-card">
+        <div class="editorial-card-img">
+          <img src="https://images.unsplash.com/photo-1494905998402-395d579af36f?w=700&q=80&auto=format" alt="RX-7" loading="lazy"/>
+        </div>
+        <div class="editorial-card-body">
+          <div class="editorial-tag">Editorial</div>
+          <div class="editorial-card-title">Los 7 autos que van a seguir subiendo de precio en Chile</div>
+          <div class="editorial-card-lead">Del FJ Cruiser al RX-7, hay autos que el mercado chileno todavía no termina de valorar. Por ahora.</div>
+          <div class="editorial-meta">Equipo GarageBids · 28 abril 2025 · 6 min</div>
+        </div>
+      </div>
+      <div class="editorial-card">
+        <div class="editorial-card-img">
+          <img src="https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?w=700&q=80&auto=format" alt="Auto deportivo" loading="lazy"/>
+        </div>
+        <div class="editorial-card-body">
+          <div class="editorial-tag">Guía</div>
+          <div class="editorial-card-title">Guía para comprar tu primer auto deportivo en Chile sin arrepentirte</div>
+          <div class="editorial-card-lead">Presupuesto, mantención, seguros, repuestos. Lo que nadie te dice antes de comprar un auto que te emociona.</div>
+          <div class="editorial-meta">Equipo GarageBids · 5 mayo 2025 · 8 min</div>
+        </div>
+      </div>
+      <div class="editorial-card">
+        <div class="editorial-card-img">
+          <img src="https://images.unsplash.com/photo-1519641471654-76ce0107ad1b?w=700&q=80&auto=format" alt="FJ Cruiser" loading="lazy"/>
+        </div>
+        <div class="editorial-card-body">
+          <div class="editorial-tag">Mercado</div>
+          <div class="editorial-card-title">El FJ Cruiser en Chile: por qué su precio sigue subiendo y seguirá</div>
+          <div class="editorial-card-lead">Producción terminada en 2014. Demanda en aumento. Stock disponible en caída. La ecuación es obvia.</div>
+          <div class="editorial-meta">Equipo GarageBids · 19 abril 2025 · 4 min</div>
+        </div>
+      </div>
+      <div class="editorial-card">
+        <div class="editorial-card-img">
+          <img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=700&q=80&auto=format" alt="STI" loading="lazy"/>
+        </div>
+        <div class="editorial-card-body">
+          <div class="editorial-tag">Historia</div>
+          <div class="editorial-card-title">El 4G63: el motor que ganó el WRC y vive en los autos más buscados de Chile</div>
+          <div class="editorial-card-lead">Mitsubishi no fabrica el Lancer Evo hace más de 10 años. El 4G63 todavía se paga como nuevo.</div>
+          <div class="editorial-meta">Equipo GarageBids · 10 abril 2025 · 5 min</div>
+        </div>
+      </div>
+      <div class="editorial-card">
+        <div class="editorial-card-img">
+          <img src="https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=700&q=80&auto=format" alt="Mustang" loading="lazy"/>
+        </div>
+        <div class="editorial-card-body">
+          <div class="editorial-tag">Clásicos</div>
+          <div class="editorial-card-title">Comprar un Mustang clásico en Chile: lo que nadie te cuenta antes</div>
+          <div class="editorial-card-lead">Repuestos, talleres especializados, Marti Report, y por qué el Fastback vale el doble que el Coupe.</div>
+          <div class="editorial-meta">Equipo GarageBids · 2 abril 2025 · 7 min</div>
+        </div>
+      </div>
+      <div class="editorial-card">
+        <div class="editorial-card-img">
+          <img src="https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?w=700&q=80&auto=format" alt="AMG" loading="lazy"/>
+        </div>
+        <div class="editorial-card-body">
+          <div class="editorial-tag">Análisis</div>
+          <div class="editorial-card-title">AMG antes del turbo: por qué el C63 W204 es el último de su tipo</div>
+          <div class="editorial-card-lead">El M156 V8 6.2L de AMG es irrepetible. Mercedes no volverá a construir nada parecido.</div>
+          <div class="editorial-meta">Equipo GarageBids · 25 marzo 2025 · 6 min</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FULL ARTICLE -->
+    <div id="articulo-1" style="scroll-margin-top:80px;padding:64px 0;border-top:1px solid var(--border)">
+      <div class="article-full">
+        <div style="margin-bottom:32px">
+          <div class="article-tag-lg">Opinión</div>
+          <h1 style="font-family:var(--font-serif);font-size:clamp(1.8rem,4vw,2.6rem);line-height:1.15;letter-spacing:-.025em;margin-bottom:16px">Por qué un auto especial no debería venderse como un auto normal</h1>
+          <p style="font-size:16px;color:var(--graphite-3);line-height:1.65;margin-bottom:20px">Publicar un M3 en Chileautos al lado de un Sail 2019 no tiene ningún sentido. La información, el proceso y el comprador son completamente distintos.</p>
+          <div class="article-meta" style="padding-bottom:24px;border-bottom:1px solid var(--border)">
+            <span>Equipo GarageBids</span>
+            <span>·</span>
+            <span>12 mayo 2025</span>
+            <span>·</span>
+            <span>5 min lectura</span>
+          </div>
+        </div>
+
+        <img src="https://images.unsplash.com/photo-1555215695-3004980ad54e?w=900&q=85&auto=format" alt="BMW M3 E92" style="width:100%;border-radius:var(--radius-lg);margin-bottom:32px;aspect-ratio:16/9;object-fit:cover"/>
+
+        <p>Cuando alguien publica un BMW M3 E92 en Chileautos, pasa algo extraño. El aviso queda entre un Kia Picanto 2018 y un Chevrolet Optra con 280.000 km. Tres fotos. Precio fijo. Número de WhatsApp.</p>
+
+        <p>El comprador llega sin contexto. ¿Cuándo fue la última distribución? ¿Tiene el ILS fix del E92? ¿El V8 fue abierto alguna vez? Nadie lo sabe porque nadie lo contó. El vendedor tampoco sabe cómo responder bien. La conversación termina en regateo o silencio.</p>
+
+        <blockquote>
+          "El problema no es el auto. El problema es que el proceso no fue diseñado para ese auto."
+        </blockquote>
+
+        <h2>El comprador correcto no está en Chileautos</h2>
+
+        <p>El comprador de un M3 E92 con V8 S65 no busca en Chileautos. Está en foros, en grupos de WhatsApp, en Instagram. Lo sigue buscando porque sabe exactamente lo que quiere y no lo ha encontrado bien presentado en ningún lado.</p>
+
+        <p>Cuando ese comprador aparece y encuentra un aviso sin información, sin historia, sin fotos serias, lo descarta. No porque no le interese. Sino porque no puede tomar una decisión informada. Y un auto de esa categoría no se compra sin información.</p>
+
+        <h2>La información cambia el precio</h2>
+
+        <p>Un M3 E92 con mantenciones documentadas, revisión de motor registrada y known flaws declarados vale más que el mismo auto presentado como tres fotos y un precio. No es subjetivo. El mercado lo refleja.</p>
+
+        <p>La información reduce la percepción de riesgo del comprador. Y cuando el riesgo percibido baja, el precio que está dispuesto a pagar sube. Es así de simple.</p>
+
+        <ul>
+          <li>Historial de mantenciones documentado → comprador confía → paga más</li>
+          <li>Defectos conocidos declarados → comprador no descuenta por incertidumbre → paga justo</li>
+          <li>Preguntas respondidas en público → compradores compiten con información → precio sube</li>
+        </ul>
+
+        <h2>La subasta descubre el precio real</h2>
+
+        <p>En una negociación privada, el precio lo pone el vendedor y el comprador negocia hacia abajo. En una subasta, el precio lo construyen los compradores compitiendo. Son mecanismos opuestos con resultados distintos.</p>
+
+        <p>Para autos especiales con demanda concentrada — donde hay 10 compradores serios en Chile pero están dispersos — la subasta concentra esa demanda. Pone a esos 10 en el mismo lugar, al mismo tiempo, con la misma información.</p>
+
+        <blockquote>
+          "Del grupo de WhatsApp a una subasta transparente. No es un slogan. Es la diferencia real."
+        </blockquote>
+
+        <h2>Lo que estamos construyendo</h2>
+
+        <p>GarageBids no es un portal. No es un clasificado. Es una plataforma curada que entiende que los autos especiales necesitan un proceso distinto: mejor información, compradores correctos, y un mecanismo de precio que funciona a favor del vendedor, no en contra.</p>
+
+        <p>Si tienes un auto que merece algo mejor que tres fotos y un WhatsApp, ya sabes dónde postularlo.</p>
+
+        <div style="margin-top:40px;padding:28px;background:var(--bg-2);border-radius:var(--radius-lg);display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap">
+          <div>
+            <div style="font-size:15px;font-weight:700;margin-bottom:4px">¿Tienes un auto especial?</div>
+            <div style="font-size:14px;color:var(--graphite-4)">Postular es gratis. Respondemos en 48h.</div>
+          </div>
+          <a href="vender.html" class="btn btn-accent">Postular mi auto →</a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- NEWSLETTER -->
+<section style="background:var(--graphite);padding:64px 0;color:var(--white)">
+  <div class="container">
+    <div style="max-width:520px;margin:0 auto;text-align:center">
+      <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);margin-bottom:12px">Comunidad</div>
+      <h2 style="font-family:var(--font-serif);font-size:2rem;margin-bottom:12px">Lecturas para entusiastas</h2>
+      <p style="color:rgba(255,255,255,.6);font-size:15px;margin-bottom:28px">Artículos editoriales, análisis de mercado y nuevas subastas. Sin spam.</p>
+      <div style="display:flex;gap:10px;max-width:400px;margin:0 auto">
+        <input type="email" placeholder="tu@email.com" style="flex:1;padding:12px 16px;border-radius:var(--radius-sm);border:1.5px solid rgba(255,255,255,.2);background:rgba(255,255,255,.08);color:var(--white);font-size:14px;font-family:var(--font-sans)" onclick="this.style.borderColor='rgba(255,255,255,.5)'"/>
+        <button onclick="this.textContent='✓ Suscrito';this.disabled=true;this.style.background='#166534'" class="btn btn-accent" style="white-space:nowrap;flex-shrink:0">Suscribirme</button>
+      </div>
+      <p style="color:rgba(255,255,255,.3);font-size:12px;margin-top:12px">Sin spam. Solo lo que vale la pena leer.</p>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="logo" style="margin-bottom:12px;color:var(--white)"><span class="logo-g">G</span>arageBids <span class="logo-dot"></span> <span style="color:rgba(255,255,255,.4);font-size:.9rem;font-family:var(--font-sans)">Chile</span></div>
+        <p class="footer-tagline">"Autos especiales merecen una venta especial."</p>
+      </div>
+      <div><div class="footer-col-title">Subastas</div><a href="subastas.html" class="footer-link">Activas</a><a href="vendidos.html" class="footer-link">Vendidos</a></div>
+      <div><div class="footer-col-title">Plataforma</div><a href="como-funciona.html" class="footer-link">Cómo funciona</a><a href="pricing.html" class="footer-link">Pricing</a><a href="vender.html" class="footer-link">Postular</a></div>
+      <div><div class="footer-col-title">Contacto</div><a href="mailto:hola@garagebids.cl" class="footer-link">hola@garagebids.cl</a><a href="#" class="footer-link">Instagram</a></div>
+    </div>
+    <p class="footer-disclaimer">GarageBids no es dueño de los vehículos publicados. La plataforma conecta compradores y vendedores. La revisión mecánica, legal y la transferencia final deben ser verificadas por las partes antes del cierre.</p>
+    <div class="footer-bottom"><span>© 2025 GarageBids Chile.</span><span style="color:rgba(255,255,255,.3)">MVP — Operación manual</span></div>
+  </div>
+</footer>
+
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

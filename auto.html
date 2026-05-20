@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Detalle de auto — GarageBids Chile</title>
+<meta name="description" content="Ficha editorial completa del auto en subasta."/>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏁</text></svg>"/>
+<link rel="stylesheet" href="css/styles.css"/>
+<style>
+.breadcrumb { font-size: 13px; color: var(--graphite-5); padding: 16px 0; display: flex; align-items: center; gap: 6px; }
+.breadcrumb a { color: var(--graphite-4); }
+.breadcrumb a:hover { color: var(--graphite); }
+
+.activity-box { background: var(--white); border: 1.5px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; margin-top: 12px; }
+.activity-box-header { padding: 14px 18px; background: var(--bg); border-bottom: 1px solid var(--border); font-size: 13px; font-weight: 700; display: flex; align-items: center; gap: 8px; }
+.activity-box-body { padding: 12px 18px; }
+.live-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--hot); animation: blink 1.2s ease infinite; }
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:.3} }
+
+.related-section { padding: 64px 0; border-top: 1px solid var(--border); }
+
+.share-row { display: flex; gap: 8px; }
+.share-btn { display: flex; align-items: center; gap: 6px; padding: 8px 14px; border-radius: var(--radius-sm); font-size: 13px; font-weight: 600; border: 1.5px solid var(--border); cursor: pointer; transition: all var(--t); background: var(--white); }
+.share-btn:hover { border-color: var(--graphite-3); }
+.share-btn.whatsapp { color: #25D366; border-color: #25D366; }
+.share-btn.whatsapp:hover { background: #F0FDF4; }
+
+.seller-box { background: var(--bg-2); border-radius: var(--radius); padding: 16px; margin-top: 12px; }
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="container">
+    <div class="header-inner">
+      <a href="index.html" class="logo">
+        <span class="logo-g">G</span>arageBids
+        <span class="logo-dot"></span>
+        <span style="color:var(--graphite-4);font-size:.9rem;font-family:var(--font-sans)">Chile</span>
+      </a>
+      <nav class="nav">
+        <a href="subastas.html">Subastas</a>
+        <a href="vendidos.html">Vendidos</a>
+        <a href="como-funciona.html">Cómo funciona</a>
+        <a href="editorial.html">Editorial</a>
+        <a href="pricing.html">Pricing</a>
+        <a href="vender.html">Vender</a>
+      </nav>
+      <a href="vender.html" class="header-cta">Postular mi auto →</a>
+      <button class="hamburger" id="hamburger" aria-label="Menú">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+  <nav class="mobile-nav" id="mobile-nav">
+    <a href="subastas.html">Subastas</a>
+    <a href="vendidos.html">Vendidos</a>
+    <a href="como-funciona.html">Cómo funciona</a>
+    <a href="editorial.html">Editorial</a>
+    <a href="pricing.html">Pricing</a>
+    <a href="vender.html">Vender</a>
+    <a href="vender.html" class="mobile-cta">Postular mi auto →</a>
+  </nav>
+</header>
+
+<!-- MAIN DETAIL ROOT -->
+<div id="car-detail-root">
+  <div class="container">
+    <div class="breadcrumb">
+      <a href="index.html">Inicio</a> /
+      <a href="subastas.html">Subastas</a> /
+      <span id="breadcrumb-title" style="color:var(--graphite-2)">Cargando...</span>
+    </div>
+  </div>
+
+  <section style="padding-bottom: 80px;">
+    <div class="container">
+      <div class="detail-layout">
+
+        <!-- MAIN COLUMN -->
+        <div class="detail-main">
+
+          <!-- GALLERY -->
+          <div class="gallery-main">
+            <img id="gallery-main-img" src="" alt="Foto principal" style="width:100%;height:100%;object-fit:cover"/>
+            <div class="gallery-count" id="gallery-count">— fotos</div>
+          </div>
+          <div class="gallery-thumbs" id="gallery-thumbs" style="margin-bottom:24px"></div>
+
+          <!-- TITLE -->
+          <div class="detail-title-row">
+            <div class="detail-badges" id="detail-badges"></div>
+            <h1 class="detail-title" id="detail-title">Cargando...</h1>
+            <div class="detail-quickfacts" id="detail-quickfacts"></div>
+          </div>
+
+          <!-- SHARE ROW -->
+          <div class="share-row" style="margin-bottom:28px">
+            <button class="share-btn whatsapp" data-whatsapp="Mira este auto en subasta en GarageBids Chile">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+              Compartir
+            </button>
+            <button class="share-btn" onclick="navigator.clipboard?.writeText(window.location.href);showToast('Link copiado al portapapeles')">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+              Copiar link
+            </button>
+          </div>
+
+          <!-- WHY WE LIKE IT -->
+          <div class="detail-section">
+            <div class="detail-section-title">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+              Por qué nos gusta
+            </div>
+            <div class="why-box" id="why-we-like-it"></div>
+          </div>
+
+          <!-- HIGHLIGHTS -->
+          <div class="detail-section">
+            <div class="detail-section-title">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+              Highlights
+            </div>
+            <div class="highlights-grid" id="highlights-list"></div>
+          </div>
+
+          <!-- QUIRKS -->
+          <div class="detail-section">
+            <div class="detail-section-title">💬 Quirks &amp; Detalles</div>
+            <div id="quirks-list"></div>
+          </div>
+
+          <!-- KNOWN FLAWS -->
+          <div class="detail-section">
+            <div class="detail-section-title">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#B45309" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+              Known Flaws — declarados por el vendedor
+            </div>
+            <div class="flaws-list" id="flaws-list"></div>
+            <p style="font-size:12.5px;color:var(--graphite-5);margin-top:12px">GarageBids exige la declaración de defectos conocidos. Esta sección es obligatoria para publicar.</p>
+          </div>
+
+          <!-- MANTENCIONES -->
+          <div class="detail-section">
+            <div class="detail-section-title">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 1 0 0 14.14"/></svg>
+              Historial de mantenciones
+            </div>
+            <div class="maintenance-timeline" id="maintenance-timeline"></div>
+          </div>
+
+          <!-- MODIFICACIONES -->
+          <div class="detail-section">
+            <div class="detail-section-title">🔧 Modificaciones</div>
+            <div class="flaws-list" id="mods-list"></div>
+          </div>
+
+          <!-- EQUIPAMIENTO -->
+          <div class="detail-section">
+            <div class="detail-section-title">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="9" y1="9" x2="15" y2="9"/><line x1="9" y1="12" x2="15" y2="12"/><line x1="9" y1="15" x2="13" y2="15"/></svg>
+              Equipamiento
+            </div>
+            <div style="display:flex;flex-wrap:wrap;gap:6px" id="equipment-list"></div>
+          </div>
+
+          <!-- NOTAS VENDEDOR -->
+          <div class="detail-section">
+            <div class="detail-section-title">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              Palabras del vendedor
+            </div>
+            <div class="seller-box">
+              <p style="font-size:14px;color:var(--graphite-2);line-height:1.65;font-style:italic" id="seller-notes"></p>
+            </div>
+          </div>
+
+          <!-- PREGUNTAS PÚBLICAS -->
+          <div class="detail-section">
+            <div class="detail-section-title" style="justify-content:space-between">
+              <span style="display:flex;align-items:center;gap:8px">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                Preguntas públicas
+              </span>
+              <button class="btn btn-ghost btn-sm" data-open-question>Hacer pregunta</button>
+            </div>
+            <div class="qa-list" id="qa-list"></div>
+          </div>
+
+          <!-- HISTORIAL PUJAS -->
+          <div class="detail-section">
+            <div class="detail-section-title">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+              Historial de pujas
+            </div>
+            <table class="bid-history" style="width:100%">
+              <thead>
+                <tr>
+                  <th>Comprador</th>
+                  <th>Monto</th>
+                  <th>Cuándo</th>
+                </tr>
+              </thead>
+              <tbody id="bid-history-tbody"></tbody>
+            </table>
+          </div>
+
+          <!-- TERMS -->
+          <div class="detail-section" style="background:var(--bg-2);border-radius:var(--radius);padding:20px;border:none">
+            <div style="font-size:13px;font-weight:700;margin-bottom:8px">Términos de esta subasta</div>
+            <ul style="font-size:13px;color:var(--graphite-4);line-height:1.8;padding-left:16px;list-style:disc">
+              <li>El ganador paga un fee del <strong>3%</strong> del precio final (mín $150.000 — máx $1.500.000 CLP)</li>
+              <li>El vendedor no paga comisión</li>
+              <li>Las pujas son referenciales en esta fase MVP</li>
+              <li>Verificación de vehículo previa a cierre de trato — responsabilidad del comprador</li>
+              <li>GarageBids conecta las partes pero no es parte del contrato de compraventa</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- SIDEBAR -->
+        <aside class="detail-sidebar">
+
+          <!-- BID PANEL -->
+          <div class="bid-panel">
+            <div class="bid-panel-header">
+              <div class="bid-amount-label">Puja actual</div>
+              <div class="bid-amount" id="bid-current-amount">$0</div>
+              <div style="margin-top:10px">
+                <div style="font-size:11px;color:var(--graphite-5);text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px">Termina en</div>
+                <div class="timer-value" id="bid-countdown" style="font-size:1.4rem;font-weight:700;font-variant-numeric:tabular-nums">—</div>
+              </div>
+            </div>
+            <div class="bid-panel-body">
+              <div class="bid-panel-stats" id="bid-panel-stats"></div>
+
+              <button class="btn btn-accent btn-full btn-lg" data-open-bid="0">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                Pujar ahora
+              </button>
+              <button class="btn btn-ghost btn-full" data-open-question>
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                Hacer pregunta
+              </button>
+
+              <!-- Activity feed -->
+              <div class="activity-box">
+                <div class="activity-box-header">
+                  <span class="live-dot"></span>
+                  Actividad reciente
+                </div>
+                <div class="activity-box-body">
+                  <div class="activity-feed">
+                    <div class="activity-item"><span class="activity-dot activity-bid"></span><span class="activity-text"><strong>Driver***84</strong> pujó — hace 12 min</span></div>
+                    <div class="activity-item"><span class="activity-dot activity-question"></span><span class="activity-text"><strong>GoldenKey***</strong> preguntó — hace 1h</span></div>
+                    <div class="activity-item"><span class="activity-dot activity-watch"></span><span class="activity-text">3 personas guardaron — hoy</span></div>
+                    <div class="activity-item"><span class="activity-dot activity-bid"></span><span class="activity-text"><strong>Peti***23</strong> pujó — hace 3h</span></div>
+                  </div>
+                </div>
+              </div>
+
+              <div style="font-size:12px;color:var(--graphite-4);line-height:1.5">
+                <strong>Fee estimado:</strong> 3% del precio final<br>
+                Mín $150.000 · Máx $1.500.000 CLP<br>
+                <a href="pricing.html" style="color:var(--accent)">Calcular mi fee →</a>
+              </div>
+            </div>
+            <div class="bid-panel-disclaimer">⚠️ Las pujas son referenciales en esta fase MVP</div>
+          </div>
+
+          <!-- SELLER INFO -->
+          <div style="margin-top:16px;background:var(--white);border:1px solid var(--border);border-radius:var(--radius-lg);padding:18px">
+            <div style="font-size:13px;font-weight:700;margin-bottom:10px">Sobre el vendedor</div>
+            <div style="display:flex;flex-direction:column;gap:6px;font-size:13px;color:var(--graphite-3)">
+              <div>📍 <span id="seller-location">—</span></div>
+              <div>💬 Responsividad: <span id="seller-responsiveness" style="color:var(--success);font-weight:600">—</span></div>
+              <div>📋 Documentación: <span id="seller-docs" style="font-weight:600">—</span></div>
+            </div>
+          </div>
+
+          <!-- TRUST BADGES -->
+          <div style="margin-top:16px;background:var(--bg-2);border-radius:var(--radius);padding:16px">
+            <div style="font-size:12px;font-weight:700;margin-bottom:10px;color:var(--graphite-4);text-transform:uppercase;letter-spacing:.05em">Protección GarageBids</div>
+            <div style="display:flex;flex-direction:column;gap:8px;font-size:13px;color:var(--graphite-3)">
+              <div style="display:flex;gap:8px;align-items:flex-start"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#166534" stroke-width="2.5" style="flex-shrink:0;margin-top:2px"><polyline points="20 6 9 17 4 12"/></svg>Ficha editorial verificada</div>
+              <div style="display:flex;gap:8px;align-items:flex-start"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#166534" stroke-width="2.5" style="flex-shrink:0;margin-top:2px"><polyline points="20 6 9 17 4 12"/></svg>Known Flaws declarados</div>
+              <div style="display:flex;gap:8px;align-items:flex-start"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#166534" stroke-width="2.5" style="flex-shrink:0;margin-top:2px"><polyline points="20 6 9 17 4 12"/></svg>Preguntas públicas abiertas</div>
+              <div style="display:flex;gap:8px;align-items:flex-start"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#166534" stroke-width="2.5" style="flex-shrink:0;margin-top:2px"><polyline points="20 6 9 17 4 12"/></svg>Historial de pujas visible</div>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <!-- RELATED CARS -->
+  <section class="related-section">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-eyebrow">Más subastas</div>
+        <h2 class="section-title" style="font-size:1.5rem">También te puede interesar</h2>
+      </div>
+      <div class="grid-3" id="related-cars"></div>
+    </div>
+  </section>
+</div>
+
+<!-- BID MODAL -->
+<div class="modal-overlay" id="bid-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">Registrar puja</div>
+      <button class="modal-close" data-close-modal>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label class="form-label">Tu puja (CLP)</label>
+        <input type="number" class="form-input" id="bid-amount-input" placeholder="Ej: 29000000" step="100000"/>
+        <div style="font-size:12px;color:var(--graphite-5);margin-top:6px">Puja mínima: <strong id="bid-min">—</strong></div>
+      </div>
+      <div class="fee-calc">
+        <div class="fee-row"><span class="fee-label">Tu puja</span><span class="fee-value" id="bid-amount-display">—</span></div>
+        <div class="fee-row"><span class="fee-label">Fee GarageBids (3%)</span><span class="fee-value" id="bid-fee">—</span></div>
+        <div class="fee-row"><span class="fee-label">Total estimado si ganas</span><span class="fee-value" id="bid-total">—</span></div>
+      </div>
+      <div style="font-size:12px;color:var(--graphite-5);margin-top:12px;padding:10px;background:var(--warning-bg);border-radius:var(--radius-sm);border:1px solid #FEF3C7">
+        ⚠️ Esta puja es referencial en el MVP. El equipo GarageBids te contactará para coordinar el proceso real.
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" data-close-modal>Cancelar</button>
+      <button class="btn btn-accent" id="bid-submit">Registrar puja</button>
+    </div>
+  </div>
+</div>
+
+<!-- QUESTION MODAL -->
+<div class="modal-overlay" id="question-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">Hacer pregunta pública</div>
+      <button class="modal-close" data-close-question>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label class="form-label">Tu pregunta</label>
+        <textarea class="form-input" id="question-text" placeholder="¿Cuándo fue la última distribución? ¿El turbo es original?..."></textarea>
+      </div>
+      <div style="font-size:12.5px;color:var(--graphite-5);padding:10px;background:var(--bg-2);border-radius:var(--radius-sm)">
+        💡 Las preguntas son visibles públicamente. El vendedor responde en el mismo hilo. Eso genera confianza para todos los compradores.
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" data-close-question>Cancelar</button>
+      <button class="btn btn-primary" id="question-submit">Enviar pregunta</button>
+    </div>
+  </div>
+</div>
+
+<!-- STICKY BID BAR (mobile) -->
+<div class="sticky-bid-bar" id="sticky-bid-bar">
+  <div class="sticky-bid-bar-inner">
+    <div>
+      <div style="font-size:12px;color:var(--graphite-5)">Puja actual</div>
+      <div style="font-size:1.1rem;font-weight:700" id="sticky-bid">—</div>
+      <div style="font-size:11px;color:var(--graphite-5);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:180px" id="sticky-title">—</div>
+    </div>
+    <button class="btn btn-accent" data-open-bid="0">Pujar ahora</button>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="logo" style="margin-bottom:12px;color:var(--white)">
+          <span class="logo-g">G</span>arageBids
+          <span class="logo-dot"></span>
+          <span style="color:rgba(255,255,255,.4);font-size:.9rem;font-family:var(--font-sans)">Chile</span>
+        </div>
+        <p class="footer-tagline">"Autos especiales merecen una venta especial."</p>
+      </div>
+      <div>
+        <div class="footer-col-title">Subastas</div>
+        <a href="subastas.html" class="footer-link">Activas</a>
+        <a href="vendidos.html" class="footer-link">Vendidos</a>
+      </div>
+      <div>
+        <div class="footer-col-title">Plataforma</div>
+        <a href="como-funciona.html" class="footer-link">Cómo funciona</a>
+        <a href="pricing.html" class="footer-link">Pricing</a>
+        <a href="vender.html" class="footer-link">Postular auto</a>
+      </div>
+      <div>
+        <div class="footer-col-title">Contacto</div>
+        <a href="mailto:hola@garagebids.cl" class="footer-link">hola@garagebids.cl</a>
+      </div>
+    </div>
+    <p class="footer-disclaimer">GarageBids no es dueño de los vehículos publicados. La plataforma conecta compradores y vendedores. La revisión mecánica, legal y la transferencia final deben ser verificadas por las partes. Pujas referenciales en esta fase MVP.</p>
+    <div class="footer-bottom">
+      <span>© 2025 GarageBids Chile.</span>
+      <span style="color:rgba(255,255,255,.3)">MVP — Operación manual</span>
+    </div>
+  </div>
+</footer>
+
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
+<script>
+// Patch seller details after car loads
+(function patchSellerDetails() {
+  const params = new URLSearchParams(window.location.search);
+  const id = params.get("id");
+  if (typeof CARS === "undefined") return;
+  const car = CARS.find(c => c.slug === id) || CARS[0];
+  const locEl = document.getElementById("seller-location");
+  const respEl = document.getElementById("seller-responsiveness");
+  const docsEl = document.getElementById("seller-docs");
+  const bcEl = document.getElementById("breadcrumb-title");
+  if (locEl) locEl.textContent = car.location;
+  if (respEl) respEl.textContent = car.sellerResponsiveness;
+  if (docsEl) docsEl.textContent = car.documentationStatus;
+  if (bcEl) bcEl.textContent = car.title;
+
+  // Patch bid amount display on input
+  const input = document.getElementById("bid-amount-input");
+  const dispEl = document.getElementById("bid-amount-display");
+  if (input && dispEl) {
+    input.addEventListener("input", () => {
+      const v = parseInt(input.value.replace(/\D/g,"")) || 0;
+      dispEl.textContent = v > 0 ? formatCLP(v) : "—";
+    });
+  }
+})();
+</script>
+</body>
+</html>

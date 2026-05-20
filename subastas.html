@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Subastas activas — GarageBids Chile</title>
+<meta name="description" content="Explora todas las subastas activas de autos especiales en Chile. Deportivos, 4x4, clásicos modernos y premium usados."/>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏁</text></svg>"/>
+<link rel="stylesheet" href="css/styles.css"/>
+<style>
+.auctions-layout { display: grid; grid-template-columns: 240px 1fr; gap: 32px; align-items: start; }
+.sidebar-filters { position: sticky; top: 140px; }
+.filter-section { margin-bottom: 24px; padding-bottom: 24px; border-bottom: 1px solid var(--border); }
+.filter-section:last-child { border-bottom: none; }
+.filter-section-title { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .07em; color: var(--graphite-4); margin-bottom: 12px; }
+.filter-option { display: flex; align-items: center; gap: 8px; padding: 6px 0; font-size: 14px; color: var(--graphite-2); cursor: pointer; }
+.filter-option input[type=checkbox] { accent-color: var(--graphite); width: 15px; height: 15px; }
+.filter-option:hover { color: var(--graphite); }
+.results-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; flex-wrap: wrap; gap: 12px; }
+.results-count { font-size: 14px; color: var(--graphite-4); }
+.sort-select { padding: 8px 32px 8px 12px; border: 1.5px solid var(--border); border-radius: var(--radius-sm); font-size: 13px; color: var(--graphite-2); appearance: none; background: var(--white) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236B6B6B' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E") no-repeat right 10px center; cursor: pointer; }
+.sort-select:focus { outline: none; border-color: var(--graphite-3); }
+@media (max-width: 900px) {
+  .auctions-layout { grid-template-columns: 1fr; }
+  .sidebar-filters { position: static; display: none; }
+}
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="container">
+    <div class="header-inner">
+      <a href="index.html" class="logo">
+        <span class="logo-g">G</span>arageBids
+        <span class="logo-dot"></span>
+        <span style="color:var(--graphite-4);font-size:.9rem;font-family:var(--font-sans)">Chile</span>
+      </a>
+      <nav class="nav">
+        <a href="subastas.html">Subastas</a>
+        <a href="vendidos.html">Vendidos</a>
+        <a href="como-funciona.html">Cómo funciona</a>
+        <a href="editorial.html">Editorial</a>
+        <a href="pricing.html">Pricing</a>
+        <a href="vender.html">Vender</a>
+      </nav>
+      <a href="vender.html" class="header-cta">Postular mi auto →</a>
+      <button class="hamburger" id="hamburger" aria-label="Menú">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+  <nav class="mobile-nav" id="mobile-nav">
+    <a href="subastas.html">Subastas</a>
+    <a href="vendidos.html">Vendidos</a>
+    <a href="como-funciona.html">Cómo funciona</a>
+    <a href="editorial.html">Editorial</a>
+    <a href="pricing.html">Pricing</a>
+    <a href="vender.html">Vender</a>
+    <a href="vender.html" class="mobile-cta">Postular mi auto →</a>
+  </nav>
+</header>
+
+<!-- LIVE TICKER -->
+<div class="live-ticker">
+  <div class="ticker-inner">
+    <span class="ticker-item"><span class="ticker-dot"></span>Driver***84 pujó por el <strong>BMW M3 E92</strong> — $28.500.000</span>
+    <span class="ticker-item"><span class="ticker-dot"></span><strong>STI GD</strong> termina en menos de 5 horas — ¡no te quedes afuera!</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>RotaryFan*** pujó por el <strong>Mazda RX-7 FD</strong> — $38.000.000</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>AutoFan*** preguntó sobre el <strong>Porsche 911 Carrera S</strong></span>
+    <span class="ticker-item"><span class="ticker-dot"></span>74 personas guardaron el <strong>Ford Mustang Fastback 1968</strong></span>
+  </div>
+</div>
+
+<!-- PAGE HERO -->
+<section class="page-hero">
+  <div class="container">
+    <div class="page-hero-eyebrow">Subastas</div>
+    <h1 class="page-hero-title">Autos especiales en subasta</h1>
+    <p class="page-hero-lead">Deportivos, 4x4 icónicos, clásicos modernos y premium usados. Curados, con ficha editorial y compradores reales.</p>
+  </div>
+</section>
+
+<!-- TABS + FILTER BAR -->
+<div class="filter-bar">
+  <div class="container">
+    <div class="tabs" id="auction-tabs">
+      <div class="tab active" data-tab="activas" onclick="switchTab(this,'activas')">Activas <span style="font-size:11px;color:var(--graphite-5);font-weight:400;margin-left:4px">(12)</span></div>
+      <div class="tab" data-tab="sinreserva" onclick="switchTab(this,'sinreserva')">Sin reserva <span style="font-size:11px;color:var(--graphite-5);font-weight:400;margin-left:4px">(4)</span></div>
+      <div class="tab" data-tab="proximamente" onclick="switchTab(this,'proximamente')">Próximamente</div>
+      <div class="tab" data-tab="vendidas" onclick="switchTab(this,'vendidas')">Vendidas</div>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN CONTENT -->
+<section class="section-sm">
+  <div class="container">
+    <div class="auctions-layout">
+
+      <!-- SIDEBAR FILTERS -->
+      <aside class="sidebar-filters">
+        <div style="font-size:13px;font-weight:700;margin-bottom:16px;display:flex;justify-content:space-between;align-items:center">
+          Filtros
+          <button onclick="clearFilters()" style="font-size:12px;color:var(--accent);font-weight:500;cursor:pointer;background:none;border:none">Limpiar</button>
+        </div>
+
+        <div class="filter-section">
+          <div class="filter-section-title">Categoría</div>
+          <label class="filter-option"><input type="checkbox" value="Deportivo" onchange="applyFilters()"> Deportivos (5)</label>
+          <label class="filter-option"><input type="checkbox" value="4x4 Icónico" onchange="applyFilters()"> 4x4 Icónicos (3)</label>
+          <label class="filter-option"><input type="checkbox" value="Clásico Moderno" onchange="applyFilters()"> Clásicos Modernos (2)</label>
+          <label class="filter-option"><input type="checkbox" value="Premium Usado" onchange="applyFilters()"> Premium Usados (2)</label>
+          <label class="filter-option"><input type="checkbox" value="Rare Spec" onchange="applyFilters()"> Rare Specs (1)</label>
+        </div>
+
+        <div class="filter-section">
+          <div class="filter-section-title">Transmisión</div>
+          <label class="filter-option"><input type="checkbox" value="Manual" onchange="applyFilters()"> Manual</label>
+          <label class="filter-option"><input type="checkbox" value="Automático" onchange="applyFilters()"> Automático / DCT</label>
+          <label class="filter-option"><input type="checkbox" value="PDK" onchange="applyFilters()"> PDK / DSG</label>
+        </div>
+
+        <div class="filter-section">
+          <div class="filter-section-title">Tracción</div>
+          <label class="filter-option"><input type="checkbox" value="Trasera" onchange="applyFilters()"> Tracción Trasera</label>
+          <label class="filter-option"><input type="checkbox" value="AWD" onchange="applyFilters()"> AWD / 4WD</label>
+          <label class="filter-option"><input type="checkbox" value="Delantera" onchange="applyFilters()"> Tracción Delantera</label>
+        </div>
+
+        <div class="filter-section">
+          <div class="filter-section-title">Características</div>
+          <label class="filter-option"><input type="checkbox" id="filter-noreserve" onchange="applyFilters()"> Sin reserva</label>
+          <label class="filter-option"><input type="checkbox" id="filter-hot" onchange="applyFilters()"> Hot auction 🔥</label>
+          <label class="filter-option"><input type="checkbox" id="filter-editorial" onchange="applyFilters()"> Editorial Pick</label>
+          <label class="filter-option"><input type="checkbox" id="filter-endingsoon" onchange="applyFilters()"> Termina hoy</label>
+        </div>
+      </aside>
+
+      <!-- RESULTS -->
+      <div>
+        <div class="results-header">
+          <div class="results-count" id="results-count">12 subastas activas</div>
+          <select class="sort-select" onchange="sortCars(this.value)">
+            <option value="ending">Termina pronto</option>
+            <option value="bids">Mayor actividad</option>
+            <option value="price-high">Precio mayor</option>
+            <option value="price-low">Precio menor</option>
+            <option value="watchers">Más guardados</option>
+          </select>
+        </div>
+
+        <!-- ACTIVE -->
+        <div id="tab-activas" data-tab-content="activas">
+          <div class="grid-3" id="all-cars-grid" style="margin-bottom:40px"></div>
+        </div>
+
+        <!-- SIN RESERVA -->
+        <div id="tab-sinreserva" data-tab-content="sinreserva" style="display:none">
+          <div style="background:var(--success-bg);border:1px solid #BBF7D0;border-radius:var(--radius);padding:16px 20px;margin-bottom:24px;font-size:14px;color:var(--success)">
+            <strong>Sin reserva</strong> — Estos autos se venden al mejor postor, sin precio mínimo oculto. La subasta termina y el auto cambia de dueño.
+          </div>
+          <div class="grid-3" id="noreserve-grid"></div>
+        </div>
+
+        <!-- PRÓXIMAMENTE -->
+        <div id="tab-proximamente" data-tab-content="proximamente" style="display:none">
+          <div style="text-align:center;padding:64px 24px">
+            <div style="font-size:3rem;margin-bottom:16px">🔜</div>
+            <h3 style="margin-bottom:8px">Próximas subastas</h3>
+            <p style="color:var(--graphite-4);font-size:15px;max-width:400px;margin:0 auto 24px">Estamos preparando los siguientes autos. Regístrate para ser notificado cuando lleguen.</p>
+            <div style="display:flex;flex-direction:column;gap:12px;max-width:480px;margin:0 auto">
+              <div style="background:var(--white);border:1px solid var(--border);border-radius:var(--radius);padding:16px 20px;display:flex;align-items:center;gap:16px">
+                <div style="font-size:2rem">🚗</div>
+                <div style="text-align:left">
+                  <div style="font-weight:700;font-size:14px">Honda NSX NA1 — 1993</div>
+                  <div style="font-size:13px;color:var(--graphite-4)">Deportivo · V6 3.0L NA · Manual 5 vel.</div>
+                  <span class="badge badge-upcoming" style="margin-top:6px">Llega en ~2 semanas</span>
+                </div>
+              </div>
+              <div style="background:var(--white);border:1px solid var(--border);border-radius:var(--radius);padding:16px 20px;display:flex;align-items:center;gap:16px">
+                <div style="font-size:2rem">🚗</div>
+                <div style="text-align:left">
+                  <div style="font-weight:700;font-size:14px">Toyota Supra MK4 2JZ-GTE — 1994</div>
+                  <div style="font-size:13px;color:var(--graphite-4)">Clásico Moderno · 3.0L Twin Turbo · Manual</div>
+                  <span class="badge badge-upcoming" style="margin-top:6px">Llega en ~3 semanas</span>
+                </div>
+              </div>
+              <div style="background:var(--white);border:1px solid var(--border);border-radius:var(--radius);padding:16px 20px;display:flex;align-items:center;gap:16px">
+                <div style="font-size:2rem">🚗</div>
+                <div style="text-align:left">
+                  <div style="font-weight:700;font-size:14px">Porsche 996 GT3 — 2002</div>
+                  <div style="font-size:13px;color:var(--graphite-4)">Deportivo · Flat-6 3.6L NA · Manual 6 vel.</div>
+                  <span class="badge badge-upcoming" style="margin-top:6px">En evaluación</span>
+                </div>
+              </div>
+            </div>
+            <p style="margin-top:24px;font-size:13px;color:var(--graphite-5)">¿Tienes un auto para postular? <a href="vender.html" style="color:var(--accent)">Postular gratis →</a></p>
+          </div>
+        </div>
+
+        <!-- VENDIDAS -->
+        <div id="tab-vendidas" data-tab-content="vendidas" style="display:none">
+          <div style="display:flex;flex-direction:column;gap:16px" id="sold-cars-list"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="logo" style="margin-bottom:12px;color:var(--white)">
+          <span class="logo-g">G</span>arageBids
+          <span class="logo-dot"></span>
+          <span style="color:rgba(255,255,255,.4);font-size:.9rem;font-family:var(--font-sans)">Chile</span>
+        </div>
+        <p class="footer-tagline">"Autos especiales merecen una venta especial."</p>
+      </div>
+      <div>
+        <div class="footer-col-title">Subastas</div>
+        <a href="subastas.html" class="footer-link">Activas</a>
+        <a href="vendidos.html" class="footer-link">Vendidos</a>
+      </div>
+      <div>
+        <div class="footer-col-title">Plataforma</div>
+        <a href="como-funciona.html" class="footer-link">Cómo funciona</a>
+        <a href="pricing.html" class="footer-link">Pricing</a>
+        <a href="vender.html" class="footer-link">Postular auto</a>
+      </div>
+      <div>
+        <div class="footer-col-title">Contacto</div>
+        <a href="mailto:hola@garagebids.cl" class="footer-link">hola@garagebids.cl</a>
+        <a href="#" class="footer-link">Instagram</a>
+      </div>
+    </div>
+    <p class="footer-disclaimer">GarageBids no es dueño de los vehículos publicados. La plataforma conecta compradores y vendedores. La revisión mecánica, legal y la transferencia final deben ser verificadas por las partes. Pujas referenciales en esta fase MVP.</p>
+    <div class="footer-bottom">
+      <span>© 2025 GarageBids Chile.</span>
+      <span style="color:rgba(255,255,255,.3)">MVP — Operación manual</span>
+    </div>
+  </div>
+</footer>
+
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
+<script>
+function switchTab(el, tab) {
+  document.querySelectorAll("#auction-tabs .tab").forEach(t => t.classList.remove("active"));
+  el.classList.add("active");
+  document.querySelectorAll("[data-tab-content]").forEach(p => p.style.display = "none");
+  const target = document.getElementById("tab-" + tab);
+  if (target) target.style.display = "";
+  if (tab === "vendidas") renderSoldCarsInline();
+  if (tab === "sinreserva") renderNoReserve();
+}
+
+function renderNoReserve() {
+  const el = document.getElementById("noreserve-grid");
+  if (!el || el.children.length > 0 || typeof CARS === "undefined") return;
+  const nr = CARS.filter(c => c.isSinReserva && c.status === "active");
+  el.innerHTML = nr.map(renderVehicleCard).join("") || "<p style='color:var(--graphite-4)'>No hay subastas sin reserva en este momento.</p>";
+}
+
+function renderSoldCarsInline() {
+  const el = document.getElementById("sold-cars-list");
+  if (!el || el.children.length > 0) return;
+  // sold-cars-list is rendered by app.js already
+}
+
+function applyFilters() {
+  const grid = document.getElementById("all-cars-grid");
+  if (!grid || typeof CARS === "undefined") return;
+  const checkedCats = [...document.querySelectorAll('.filter-option input[type=checkbox][value]')].filter(c=>c.checked).map(c=>c.value);
+  const noReserve = document.getElementById("filter-noreserve")?.checked;
+  const isHot = document.getElementById("filter-hot")?.checked;
+  const isEditorial = document.getElementById("filter-editorial")?.checked;
+  const endingSoon = document.getElementById("filter-endingsoon")?.checked;
+
+  let filtered = CARS.filter(c => c.status === "active");
+  if (checkedCats.length > 0) filtered = filtered.filter(c => checkedCats.some(cat => c.category.includes(cat) || c.transmission.includes(cat) || c.drivetrain.includes(cat)));
+  if (noReserve) filtered = filtered.filter(c => c.isSinReserva);
+  if (isHot) filtered = filtered.filter(c => c.isHot);
+  if (isEditorial) filtered = filtered.filter(c => c.isEditorialPick);
+  if (endingSoon) filtered = filtered.filter(c => c.endingSoon);
+
+  grid.innerHTML = filtered.map(renderVehicleCard).join("") || `<div style="grid-column:1/-1;text-align:center;padding:48px;color:var(--graphite-4)">No hay autos con esos filtros.</div>`;
+  document.getElementById("results-count").textContent = `${filtered.length} subastas`;
+}
+
+function clearFilters() {
+  document.querySelectorAll('.filter-option input[type=checkbox]').forEach(c => c.checked = false);
+  applyFilters();
+}
+
+function sortCars(val) {
+  const grid = document.getElementById("all-cars-grid");
+  if (!grid || typeof CARS === "undefined") return;
+  let sorted = [...CARS.filter(c => c.status === "active")];
+  if (val === "ending") sorted.sort((a,b) => (a.timeLeftHours*60+a.timeLeftMinutes) - (b.timeLeftHours*60+b.timeLeftMinutes));
+  if (val === "bids") sorted.sort((a,b) => b.bidCount - a.bidCount);
+  if (val === "price-high") sorted.sort((a,b) => b.currentBid - a.currentBid);
+  if (val === "price-low") sorted.sort((a,b) => a.currentBid - b.currentBid);
+  if (val === "watchers") sorted.sort((a,b) => b.watchers - a.watchers);
+  grid.innerHTML = sorted.map(renderVehicleCard).join("");
+}
+</script>
+</body>
+</html>
