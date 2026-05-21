@@ -239,7 +239,7 @@ function showToast(msg, duration = 4000) {
 /* ── Car grid filter ────────────────────────────────────── */
 function filterCars() {
   const activeStatus = document.querySelector(".tab.active")?.dataset.tab || "activas";
-  const cards = document.querySelectorAll(".vehicle-card[data-status]");
+  const cards = document.querySelectorAll(".auction-card[data-status], .vehicle-card[data-status]");
   cards.forEach(card => {
     const status = card.dataset.status;
     let show = true;
@@ -248,6 +248,61 @@ function filterCars() {
     if (activeStatus === "sinreserva" && card.dataset.reserve !== "false") show = false;
     card.parentElement.style.display = show ? "" : "none";
   });
+}
+
+function applyFilters() {
+  if (typeof CARS === "undefined") return;
+  const el = document.getElementById("all-cars-grid");
+  if (!el) return;
+
+  const checkedCats = [...document.querySelectorAll('.filter-section input[value]:checked')].map(i => i.value);
+  const checkedTrans = [...document.querySelectorAll('input[value="Manual"]:checked, input[value="Automático"]:checked, input[value="PDK"]:checked')].map(i => i.value);
+  const noReserve = document.getElementById("filter-noreserve")?.checked;
+  const hotOnly = document.getElementById("filter-hot")?.checked;
+  const editorialOnly = document.getElementById("filter-editorial")?.checked;
+  const endingSoonOnly = document.getElementById("filter-endingsoon")?.checked;
+
+  const cats = ['Deportivo','4x4 Icónico','Clásico Moderno','Premium Usado','Rare Spec'];
+  const trans = ['Manual','Automático','PDK'];
+  const checkedCatsFiltered = checkedCats.filter(v => cats.includes(v));
+  const checkedTransFiltered = checkedTrans.filter(v => trans.includes(v));
+
+  let cars = CARS.filter(c => c.status === "active");
+  if (checkedCatsFiltered.length) cars = cars.filter(c => checkedCatsFiltered.some(cat => c.category.includes(cat)));
+  if (checkedTransFiltered.length) cars = cars.filter(c => checkedTransFiltered.some(t => c.transmission.includes(t)));
+  if (noReserve) cars = cars.filter(c => c.isSinReserva);
+  if (hotOnly) cars = cars.filter(c => c.isHot);
+  if (editorialOnly) cars = cars.filter(c => c.isEditorialPick);
+  if (endingSoonOnly) cars = cars.filter(c => c.endingSoon);
+
+  el.innerHTML = cars.map(renderVehicleCard).join("");
+  cars.forEach(car => {
+    el.querySelectorAll(`[data-countdown="${car.slug}"]`).forEach(e => startCountdown(e, car.timeLeftHours*60+car.timeLeftMinutes));
+  });
+
+  const count = document.getElementById("results-count");
+  if (count) count.innerHTML = `<strong>${cars.length}</strong> subasta${cars.length !== 1 ? 's' : ''}`;
+}
+
+function sortCars(val) {
+  if (typeof CARS === "undefined") return;
+  const el = document.getElementById("all-cars-grid");
+  if (!el) return;
+  let cars = [...CARS.filter(c => c.status === "active")];
+  if (val === "bids") cars.sort((a,b) => b.bidCount - a.bidCount);
+  else if (val === "price-high") cars.sort((a,b) => b.currentBid - a.currentBid);
+  else if (val === "price-low") cars.sort((a,b) => a.currentBid - b.currentBid);
+  else if (val === "watchers") cars.sort((a,b) => b.watchers - a.watchers);
+  else cars.sort((a,b) => (a.timeLeftHours*60+a.timeLeftMinutes) - (b.timeLeftHours*60+b.timeLeftMinutes));
+  el.innerHTML = cars.map(renderVehicleCard).join("");
+  cars.forEach(car => {
+    el.querySelectorAll(`[data-countdown="${car.slug}"]`).forEach(e => startCountdown(e, car.timeLeftHours*60+car.timeLeftMinutes));
+  });
+}
+
+function clearFilters() {
+  document.querySelectorAll(".filter-option input[type=checkbox]").forEach(i => i.checked = false);
+  applyFilters();
 }
 
 /* ── Sell form ──────────────────────────────────────────── */
@@ -299,127 +354,161 @@ document.addEventListener("click", function(e) {
   window.open(`https://wa.me/?text=${msg}`, "_blank");
 });
 
-/* ── Render vehicle cards ───────────────────────────────── */
+/* ── Render auction card (Cars & Bids style) ────────────── */
 function renderVehicleCard(car) {
   const urgentClass = isUrgent(car.timeLeftHours) ? "urgent" : "";
+  const timeLabel = getTimeLabel(car.timeLeftHours, car.timeLeftMinutes);
+
   const badges = [];
-  if (car.isHot) badges.push(`<span class="badge badge-hot">🔥 Hot</span>`);
   if (car.isSinReserva) badges.push(`<span class="badge badge-noreserve">Sin Reserva</span>`);
-  if (car.isEditorialPick) badges.push(`<span class="badge badge-editorial">Editorial Pick</span>`);
+  if (car.isHot) badges.push(`<span class="badge badge-hot">Hot</span>`);
+  if (car.isEditorialPick) badges.push(`<span class="badge badge-editorial">Pick</span>`);
   if (car.endingSoon) badges.push(`<span class="badge badge-endingsoon">Termina Hoy</span>`);
   if (car.status === "upcoming") badges.push(`<span class="badge badge-upcoming">Próximamente</span>`);
 
-  const timeLabel = getTimeLabel(car.timeLeftHours, car.timeLeftMinutes);
-  const highlights = (car.highlights || []).slice(0, 3).map(h =>
-    `<span class="highlight-tag">${h.split("—")[0].trim()}</span>`
-  ).join("");
+  const specLine = [car.transmission, car.drivetrain, car.color].filter(Boolean).join(" · ");
+
+  if (car.status === "upcoming") {
+    return `
+    <div class="auction-card" data-status="${car.status}" data-reserve="true">
+      <div class="auction-card-img" style="background:var(--bg-3)">
+        <div class="auction-img-badges">${badges.join("")}</div>
+        <img src="${car.heroImage}" alt="${car.title}" loading="lazy" style="opacity:.6">
+      </div>
+      <div class="auction-card-body">
+        <div class="auction-card-title">${car.title}</div>
+        <div class="auction-card-sub">${specLine}</div>
+      </div>
+      <div class="auction-card-bar">
+        <div class="auction-bar-col">
+          <div class="auction-bar-label">Estado</div>
+          <div class="auction-bar-value">Próximamente</div>
+        </div>
+        <div class="auction-bar-col">
+          <div class="auction-bar-label">Ubicación</div>
+          <div class="auction-bar-value" style="font-size:12px;font-weight:500">${car.location}</div>
+        </div>
+        <div class="auction-bar-col">
+          <div class="auction-bar-label">Km</div>
+          <div class="auction-bar-value">${car.mileage.toLocaleString("es-CL")}</div>
+        </div>
+      </div>
+    </div>`;
+  }
 
   return `
-    <a href="auto.html?id=${car.slug}" class="vehicle-card" data-status="${car.status}" data-reserve="${car.isSinReserva ? 'false' : 'true'}">
-      <div class="vehicle-card-img">
-        <div class="card-badges">${badges.join("")}</div>
-        <button class="card-save-btn" onclick="event.preventDefault()" aria-label="Guardar">
+    <a href="auto.html?id=${car.slug}" class="auction-card" data-status="${car.status}" data-reserve="${car.isSinReserva ? 'false' : 'true'}">
+      <div class="auction-card-img">
+        <div class="auction-img-badges">${badges.join("")}</div>
+        <button class="auction-save-btn" onclick="event.preventDefault();this.classList.toggle('saved')" aria-label="Guardar">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
         </button>
         <img src="${car.heroImage}" alt="${car.title}" loading="lazy">
+        <div class="auction-location-chip">${car.location}</div>
       </div>
-      <div class="vehicle-card-body">
-        <div>
-          <div class="vehicle-title">${car.title}</div>
-          <div class="vehicle-sub">${car.location} · ${car.transmission}</div>
-        </div>
-        <div class="vehicle-stats">
-          <span class="vehicle-stat">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-            ${car.mileage.toLocaleString("es-CL")} km
-          </span>
-          <span class="vehicle-stat">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
-            ${car.engine.split(" ").slice(0, 3).join(" ")}
-          </span>
-          <span class="vehicle-stat">👁 ${car.views.toLocaleString()}</span>
-        </div>
-        ${highlights ? `<div class="vehicle-highlights">${highlights}</div>` : ""}
+      <div class="auction-card-body">
+        <div class="auction-card-title">${car.title}</div>
+        <div class="auction-card-sub">${specLine}</div>
       </div>
-      <div class="vehicle-card-footer">
-        <div>
-          <div class="current-bid-label">Puja actual</div>
-          <div class="current-bid-amount">${formatCLP(car.currentBid)}</div>
-          <div class="bid-meta">${car.bidCount} pujas · ${car.watchers} guardados</div>
+      <div class="auction-card-bar">
+        <div class="auction-bar-col">
+          <div class="auction-bar-label">Termina en</div>
+          <div class="auction-bar-value ${urgentClass}" data-countdown="${car.slug}">${timeLabel}</div>
         </div>
-        <div class="timer">
-          <div class="timer-label">Termina en</div>
-          <div class="timer-value ${urgentClass}">${timeLabel}</div>
+        <div class="auction-bar-col" style="text-align:center">
+          <div class="auction-bar-label">Puja actual</div>
+          <div class="auction-bar-bid">${formatCLP(car.currentBid)}</div>
+        </div>
+        <div class="auction-bar-col">
+          <div class="auction-bar-label">Pujas</div>
+          <div class="auction-bar-value">${car.bidCount}</div>
         </div>
       </div>
     </a>`;
 }
 
-/* ── Render featured card ───────────────────────────────── */
-function renderFeaturedCard(car) {
+/* ── Render featured auction hero (C&B homepage style) ──── */
+function renderFeaturedAuction(car) {
+  const timeLabel = getTimeLabel(car.timeLeftHours, car.timeLeftMinutes);
+  const urgentClass = isUrgent(car.timeLeftHours) ? "urgent" : "";
   const badges = [];
-  if (car.isHot) badges.push(`<span class="badge badge-hot">🔥 Hot</span>`);
-  if (car.isEditorialPick) badges.push(`<span class="badge badge-editorial">Editorial Pick</span>`);
   if (car.isSinReserva) badges.push(`<span class="badge badge-noreserve">Sin Reserva</span>`);
+  if (car.isHot) badges.push(`<span class="badge badge-hot">Hot</span>`);
+  if (car.isEditorialPick) badges.push(`<span class="badge badge-editorial">Editorial Pick</span>`);
 
   return `
-    <a href="auto.html?id=${car.slug}" class="featured-card">
-      <div class="featured-card-img">
-        <img src="${car.heroImage}" alt="${car.title}" loading="lazy">
+    <a href="auto.html?id=${car.slug}" class="featured-auction">
+      <div class="featured-auction-img">
+        <img src="${car.heroImage}" alt="${car.title}">
+        <div class="featured-auction-badges">${badges.join("")}</div>
       </div>
-      <div class="featured-card-badges">${badges.join("")}</div>
-      <div class="featured-card-overlay">
-        <div class="featured-card-title">${car.title}</div>
-        <div class="featured-card-sub">${car.location} · ${car.mileage.toLocaleString("es-CL")} km · ${car.transmission}</div>
-        <div class="featured-card-row">
-          <div class="featured-bid">
-            <div class="featured-bid-label">Puja actual</div>
-            <div class="featured-bid-amount">${formatCLP(car.currentBid)}</div>
+      <div class="featured-auction-panel">
+        <div>
+          <div class="featured-auction-eyebrow">${car.category} · ${car.year}</div>
+          <h2 class="featured-auction-title">${car.title}</h2>
+          <div class="featured-auction-specs">${car.transmission} · ${car.drivetrain} · ${car.engine}</div>
+          <div class="featured-auction-location">${car.location} · ${car.mileage.toLocaleString("es-CL")} km</div>
+        </div>
+        <div>
+          <div class="featured-auction-bid-label">Puja actual</div>
+          <div class="featured-auction-bid">${formatCLP(car.currentBid)}</div>
+          <div class="featured-auction-meta">
+            <div class="featured-meta-item">
+              <div class="featured-meta-label">Termina en</div>
+              <div class="featured-meta-value ${urgentClass}" data-countdown="${car.slug}">${timeLabel}</div>
+            </div>
+            <div class="featured-meta-item">
+              <div class="featured-meta-label">Pujas</div>
+              <div class="featured-meta-value">${car.bidCount}</div>
+            </div>
           </div>
-          <div style="text-align:right;color:rgba(255,255,255,.8)">
-            <div style="font-size:11px;text-transform:uppercase;letter-spacing:.05em;margin-bottom:2px;">Termina en</div>
-            <div style="font-size:16px;font-weight:700;">${getTimeLabel(car.timeLeftHours, car.timeLeftMinutes)}</div>
-            <div style="font-size:12px;color:rgba(255,255,255,.6)">${car.bidCount} pujas</div>
+          <div style="margin-top:20px;display:flex;gap:10px">
+            <span class="btn btn-primary" style="flex:1;justify-content:center;pointer-events:none">Ver subasta →</span>
           </div>
         </div>
       </div>
     </a>`;
 }
+
+/* ── renderFeaturedCard (legacy alias) ──────────────────── */
+function renderFeaturedCard(car) { return renderFeaturedAuction(car); }
 
 /* ── Mount car grids ────────────────────────────────────── */
 (function mountCarGrids() {
+  if (typeof CARS === "undefined") return;
+
+  // Helper: init all countdown timers in a container
+  function initCountdowns(container, cars) {
+    cars.forEach(car => {
+      const els = container.querySelectorAll(`[data-countdown="${car.slug}"]`);
+      els.forEach(el => startCountdown(el, car.timeLeftHours * 60 + car.timeLeftMinutes));
+    });
+  }
+
+  // Featured auction hero (homepage)
+  const heroFeaturedEl = document.getElementById("home-featured-auction");
+  if (heroFeaturedEl) {
+    const hero = CARS.filter(c => c.status === "active" && (c.isHot || c.isEditorialPick))[0]
+      || CARS.find(c => c.status === "active");
+    if (hero) {
+      heroFeaturedEl.innerHTML = renderFeaturedAuction(hero);
+      initCountdowns(heroFeaturedEl, [hero]);
+    }
+  }
+
+  // Featured grid (homepage — 6 cards below hero)
   const featuredEl = document.getElementById("featured-grid");
-  if (featuredEl && typeof CARS !== "undefined") {
-    const featured = CARS.filter(c => c.status === "active").slice(0, 6);
-    featuredEl.innerHTML = featured.map(renderVehicleCard).join("");
-    // Init countdowns in cards
-    featured.forEach(car => {
-      const cards = featuredEl.querySelectorAll(`a[href*="${car.slug}"]`);
-      cards.forEach(card => {
-        const timerEl = card.querySelector(".timer-value");
-        if (timerEl) {
-          startCountdown(timerEl, car.timeLeftHours * 60 + car.timeLeftMinutes);
-        }
-      });
-    });
+  if (featuredEl) {
+    const cars = CARS.filter(c => c.status === "active").slice(0, 6);
+    featuredEl.innerHTML = cars.map(renderVehicleCard).join("");
+    initCountdowns(featuredEl, cars);
   }
 
-  const heroFeaturedEl = document.getElementById("hero-featured");
-  if (heroFeaturedEl && typeof CARS !== "undefined") {
-    const hot = CARS.filter(c => c.isHot && c.status === "active").slice(0, 1)[0];
-    if (hot) heroFeaturedEl.innerHTML = renderFeaturedCard(hot);
-  }
-
+  // All cars grid (subastas page)
   const allCarsEl = document.getElementById("all-cars-grid");
-  if (allCarsEl && typeof CARS !== "undefined") {
+  if (allCarsEl) {
     allCarsEl.innerHTML = CARS.map(renderVehicleCard).join("");
-    CARS.forEach(car => {
-      const cards = allCarsEl.querySelectorAll(`a[href*="${car.slug}"]`);
-      cards.forEach(card => {
-        const timerEl = card.querySelector(".timer-value");
-        if (timerEl) startCountdown(timerEl, car.timeLeftHours * 60 + car.timeLeftMinutes);
-      });
-    });
+    initCountdowns(allCarsEl, CARS);
   }
 })();
 
@@ -459,7 +548,7 @@ function renderFeaturedCard(car) {
     let b = `<span class="badge badge-category">${car.category}</span>`;
     if (car.isEditorialPick) b += `<span class="badge badge-editorial">Editorial Pick</span>`;
     if (car.isSinReserva) b += `<span class="badge badge-noreserve">Sin Reserva</span>`;
-    if (car.isHot) b += `<span class="badge badge-hot">🔥 Hot Auction</span>`;
+    if (car.isHot) b += `<span class="badge badge-hot">Hot Auction</span>`;
     if (car.endingSoon) b += `<span class="badge badge-endingsoon">Termina Hoy</span>`;
     badgesEl.innerHTML = b;
   }
@@ -467,12 +556,12 @@ function renderFeaturedCard(car) {
   const quickfactsEl = document.getElementById("detail-quickfacts");
   if (quickfactsEl) {
     quickfactsEl.innerHTML = [
-      { icon: "📍", val: car.location },
-      { icon: "🛣️", val: car.mileage.toLocaleString("es-CL") + " km" },
-      { icon: "⚙️", val: car.transmission },
-      { icon: "🔧", val: car.engine },
-      { icon: "🚗", val: car.drivetrain },
-    ].map(f => `<span class="quickfact">${f.icon} <span>${f.val}</span></span>`).join("");
+      { label: "Ubicación", val: car.location },
+      { label: "Km", val: car.mileage.toLocaleString("es-CL") + " km" },
+      { label: "Trans.", val: car.transmission },
+      { label: "Motor", val: car.engine },
+      { label: "Tracción", val: car.drivetrain },
+    ].map(f => `<span class="quickfact"><span style="color:var(--graphite-5);font-size:11px;text-transform:uppercase;letter-spacing:.04em">${f.label}</span> <span>${f.val}</span></span>`).join("");
   }
 
   // Bid panel
@@ -515,7 +604,7 @@ function renderFeaturedCard(car) {
   const flawsEl = document.getElementById("flaws-list");
   if (flawsEl) {
     flawsEl.innerHTML = (car.knownFlaws || []).map(f =>
-      `<div class="flaw-item">⚠️ <span>${f}</span></div>`
+      `<div class="flaw-item"><span>${f}</span></div>`
     ).join("");
   }
 
@@ -540,7 +629,7 @@ function renderFeaturedCard(car) {
     if (mods.length === 0) {
       modsEl.innerHTML = `<p style="color:var(--graphite-4);font-size:14px">Sin modificaciones — completamente original.</p>`;
     } else {
-      modsEl.innerHTML = mods.map(m => `<div class="flaw-item" style="background:var(--bg-2);border-color:var(--border)">🔧 ${m}</div>`).join("");
+      modsEl.innerHTML = mods.map(m => `<div class="flaw-item" style="background:var(--bg-2);border-color:var(--border)">${m}</div>`).join("");
     }
   }
 
@@ -573,7 +662,7 @@ function renderFeaturedCard(car) {
     } else {
       qaEl.innerHTML = qa.map(q =>
         `<div class="qa-item">
-          <div class="qa-q">❓ ${q.q}</div>
+          <div class="qa-q">${q.q}</div>
           <div class="qa-a">${q.a}</div>
           <div class="qa-meta">${q.user} · ${q.time}</div>
         </div>`
@@ -599,7 +688,7 @@ function renderFeaturedCard(car) {
   if (quirksEl) {
     quirksEl.innerHTML = (car.quirks || []).map(q =>
       `<div style="display:flex;gap:10px;padding:10px 0;border-bottom:1px solid var(--border);font-size:14px">
-        <span>💬</span><span style="color:var(--graphite-2);line-height:1.5">${q}</span>
+        <span style="color:var(--graphite-2);line-height:1.5">${q}</span>
       </div>`
     ).join("");
   }
@@ -632,9 +721,9 @@ function renderFeaturedCard(car) {
           </div>
           <div class="sold-card-title">${car.title}</div>
           <div class="sold-stats">
-            <span>🔨 ${car.bidCount} pujas</span>
-            <span>👁 ${car.watchers} guardados</span>
-            <span>📅 ${car.daysListed} días</span>
+            <span>${car.bidCount} pujas</span>
+            <span>${car.watchers} guardados</span>
+            <span>${car.daysListed} días</span>
           </div>
         </div>
         <div>

@@ -861,12 +861,12 @@ const ARTICLES = [
 
 /* ── Categories ─────────────────────────────────────────── */
 const CATEGORIES = [
-  { icon: "🏎️", name: "Deportivos", desc: "Autos enfocados en performance. Manual, tracción trasera, historia de circuito bienvenida.", count: 5 },
-  { icon: "🏔️", name: "4x4 Icónicos", desc: "FJ, Defender, Wrangler, G-Class. Capacidad real, no SUV urbano disfrazado.", count: 3 },
-  { icon: "🎖️", name: "Clásicos Modernos", desc: "Autos de los 80s, 90s y 2000s que ya son historia. Antes de que el precio suba más.", count: 2 },
-  { icon: "💎", name: "Premium Usado", desc: "BMW, Mercedes, Porsche, Alfa. Con historia documentada y sin el precio de concesionaria.", count: 2 },
-  { icon: "🔧", name: "Modificados Bien Hechos", desc: "Stage 2, suspensión, audio. Preparaciones con factura y propósito real.", count: 1 },
-  { icon: "✨", name: "Rare Specs", desc: "Versiones de edición limitada, colores especiales o configuraciones únicas en Chile.", count: 1 },
+  { name: "Deportivos", desc: "Autos enfocados en performance. Manual, tracción trasera, historia de circuito bienvenida.", count: 5 },
+  { name: "4x4 Icónicos", desc: "FJ, Defender, Wrangler, G-Class. Capacidad real, no SUV urbano disfrazado.", count: 3 },
+  { name: "Clásicos Modernos", desc: "Autos de los 80s, 90s y 2000s que ya son historia. Antes de que el precio suba más.", count: 2 },
+  { name: "Premium Usado", desc: "BMW, Mercedes, Porsche, Alfa. Con historia documentada y sin el precio de concesionaria.", count: 2 },
+  { name: "Modificados Bien Hechos", desc: "Stage 2, suspensión, audio. Preparaciones con factura y propósito real.", count: 1 },
+  { name: "Rare Specs", desc: "Versiones de edición limitada, colores especiales o configuraciones únicas en Chile.", count: 1 },
 ];
 
 /* ── Helpers ────────────────────────────────────────────── */

@@ -82,13 +82,13 @@
 </section>
 
 <!-- TABS + FILTER BAR -->
-<div class="filter-bar">
+<div style="background:var(--white);border-bottom:1px solid var(--border);position:sticky;top:64px;z-index:800">
   <div class="container">
-    <div class="tabs" id="auction-tabs">
-      <div class="tab active" data-tab="activas" onclick="switchTab(this,'activas')">Activas <span style="font-size:11px;color:var(--graphite-5);font-weight:400;margin-left:4px">(12)</span></div>
-      <div class="tab" data-tab="sinreserva" onclick="switchTab(this,'sinreserva')">Sin reserva <span style="font-size:11px;color:var(--graphite-5);font-weight:400;margin-left:4px">(4)</span></div>
-      <div class="tab" data-tab="proximamente" onclick="switchTab(this,'proximamente')">Próximamente</div>
-      <div class="tab" data-tab="vendidas" onclick="switchTab(this,'vendidas')">Vendidas</div>
+    <div style="display:flex;align-items:center;gap:0;padding:0;overflow-x:auto;scrollbar-width:none" id="auction-tabs">
+      <button class="tab active" data-tab="activas" onclick="switchTab(this,'activas')">Activas <span style="font-size:11px;color:var(--graphite-5);font-weight:400;margin-left:4px">(12)</span></button>
+      <button class="tab" data-tab="sinreserva" onclick="switchTab(this,'sinreserva')">Sin reserva <span style="font-size:11px;color:var(--graphite-5);font-weight:400;margin-left:4px">(4)</span></button>
+      <button class="tab" data-tab="proximamente" onclick="switchTab(this,'proximamente')">Próximamente</button>
+      <button class="tab" data-tab="vendidas" onclick="switchTab(this,'vendidas')">Resultados</button>
     </div>
   </div>
 </div>
@@ -131,7 +131,7 @@
         <div class="filter-section">
           <div class="filter-section-title">Características</div>
           <label class="filter-option"><input type="checkbox" id="filter-noreserve" onchange="applyFilters()"> Sin reserva</label>
-          <label class="filter-option"><input type="checkbox" id="filter-hot" onchange="applyFilters()"> Hot auction 🔥</label>
+          <label class="filter-option"><input type="checkbox" id="filter-hot" onchange="applyFilters()"> Hot auction</label>
           <label class="filter-option"><input type="checkbox" id="filter-editorial" onchange="applyFilters()"> Editorial Pick</label>
           <label class="filter-option"><input type="checkbox" id="filter-endingsoon" onchange="applyFilters()"> Termina hoy</label>
         </div>
@@ -166,12 +166,12 @@
         <!-- PRÓXIMAMENTE -->
         <div id="tab-proximamente" data-tab-content="proximamente" style="display:none">
           <div style="text-align:center;padding:64px 24px">
-            <div style="font-size:3rem;margin-bottom:16px">🔜</div>
+            <div style="font-size:1rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--graphite-4);margin-bottom:16px">Próximamente</div>
             <h3 style="margin-bottom:8px">Próximas subastas</h3>
             <p style="color:var(--graphite-4);font-size:15px;max-width:400px;margin:0 auto 24px">Estamos preparando los siguientes autos. Regístrate para ser notificado cuando lleguen.</p>
             <div style="display:flex;flex-direction:column;gap:12px;max-width:480px;margin:0 auto">
               <div style="background:var(--white);border:1px solid var(--border);border-radius:var(--radius);padding:16px 20px;display:flex;align-items:center;gap:16px">
-                <div style="font-size:2rem">🚗</div>
+                <div style="width:36px;height:36px;background:var(--bg-2);border-radius:var(--radius-sm);flex-shrink:0"></div>
                 <div style="text-align:left">
                   <div style="font-weight:700;font-size:14px">Honda NSX NA1 — 1993</div>
                   <div style="font-size:13px;color:var(--graphite-4)">Deportivo · V6 3.0L NA · Manual 5 vel.</div>
@@ -179,7 +179,7 @@
                 </div>
               </div>
               <div style="background:var(--white);border:1px solid var(--border);border-radius:var(--radius);padding:16px 20px;display:flex;align-items:center;gap:16px">
-                <div style="font-size:2rem">🚗</div>
+                <div style="width:36px;height:36px;background:var(--bg-2);border-radius:var(--radius-sm);flex-shrink:0"></div>
                 <div style="text-align:left">
                   <div style="font-weight:700;font-size:14px">Toyota Supra MK4 2JZ-GTE — 1994</div>
                   <div style="font-size:13px;color:var(--graphite-4)">Clásico Moderno · 3.0L Twin Turbo · Manual</div>
@@ -187,7 +187,7 @@
                 </div>
               </div>
               <div style="background:var(--white);border:1px solid var(--border);border-radius:var(--radius);padding:16px 20px;display:flex;align-items:center;gap:16px">
-                <div style="font-size:2rem">🚗</div>
+                <div style="width:36px;height:36px;background:var(--bg-2);border-radius:var(--radius-sm);flex-shrink:0"></div>
                 <div style="text-align:left">
                   <div style="font-weight:700;font-size:14px">Porsche 996 GT3 — 2002</div>
                   <div style="font-size:13px;color:var(--graphite-4)">Deportivo · Flat-6 3.6L NA · Manual 6 vel.</div>
@@ -260,52 +260,40 @@ function switchTab(el, tab) {
 
 function renderNoReserve() {
   const el = document.getElementById("noreserve-grid");
-  if (!el || el.children.length > 0 || typeof CARS === "undefined") return;
+  if (!el || typeof CARS === "undefined") return;
   const nr = CARS.filter(c => c.isSinReserva && c.status === "active");
   el.innerHTML = nr.map(renderVehicleCard).join("") || "<p style='color:var(--graphite-4)'>No hay subastas sin reserva en este momento.</p>";
+  nr.forEach(car => {
+    el.querySelectorAll(`[data-countdown="${car.slug}"]`).forEach(e => startCountdown(e, car.timeLeftHours*60+car.timeLeftMinutes));
+  });
 }
 
 function renderSoldCarsInline() {
   const el = document.getElementById("sold-cars-list");
-  if (!el || el.children.length > 0) return;
-  // sold-cars-list is rendered by app.js already
-}
-
-function applyFilters() {
-  const grid = document.getElementById("all-cars-grid");
-  if (!grid || typeof CARS === "undefined") return;
-  const checkedCats = [...document.querySelectorAll('.filter-option input[type=checkbox][value]')].filter(c=>c.checked).map(c=>c.value);
-  const noReserve = document.getElementById("filter-noreserve")?.checked;
-  const isHot = document.getElementById("filter-hot")?.checked;
-  const isEditorial = document.getElementById("filter-editorial")?.checked;
-  const endingSoon = document.getElementById("filter-endingsoon")?.checked;
-
-  let filtered = CARS.filter(c => c.status === "active");
-  if (checkedCats.length > 0) filtered = filtered.filter(c => checkedCats.some(cat => c.category.includes(cat) || c.transmission.includes(cat) || c.drivetrain.includes(cat)));
-  if (noReserve) filtered = filtered.filter(c => c.isSinReserva);
-  if (isHot) filtered = filtered.filter(c => c.isHot);
-  if (isEditorial) filtered = filtered.filter(c => c.isEditorialPick);
-  if (endingSoon) filtered = filtered.filter(c => c.endingSoon);
-
-  grid.innerHTML = filtered.map(renderVehicleCard).join("") || `<div style="grid-column:1/-1;text-align:center;padding:48px;color:var(--graphite-4)">No hay autos con esos filtros.</div>`;
-  document.getElementById("results-count").textContent = `${filtered.length} subastas`;
-}
-
-function clearFilters() {
-  document.querySelectorAll('.filter-option input[type=checkbox]').forEach(c => c.checked = false);
-  applyFilters();
-}
-
-function sortCars(val) {
-  const grid = document.getElementById("all-cars-grid");
-  if (!grid || typeof CARS === "undefined") return;
-  let sorted = [...CARS.filter(c => c.status === "active")];
-  if (val === "ending") sorted.sort((a,b) => (a.timeLeftHours*60+a.timeLeftMinutes) - (b.timeLeftHours*60+b.timeLeftMinutes));
-  if (val === "bids") sorted.sort((a,b) => b.bidCount - a.bidCount);
-  if (val === "price-high") sorted.sort((a,b) => b.currentBid - a.currentBid);
-  if (val === "price-low") sorted.sort((a,b) => a.currentBid - b.currentBid);
-  if (val === "watchers") sorted.sort((a,b) => b.watchers - a.watchers);
-  grid.innerHTML = sorted.map(renderVehicleCard).join("");
+  if (!el || el.children.length > 0 || typeof SOLD_CARS === "undefined") return;
+  el.innerHTML = SOLD_CARS.map(car => `
+    <div class="sold-card">
+      <div class="sold-card-img"><img src="${car.image}" alt="${car.title}" loading="lazy"></div>
+      <div class="sold-card-body">
+        <div>
+          <div style="display:flex;gap:6px;margin-bottom:6px">
+            <span class="badge badge-sold">Vendido</span>
+            <span class="badge badge-category">${car.category}</span>
+          </div>
+          <div class="sold-card-title">${car.title}</div>
+          <div class="sold-stats">
+            <span>${car.bidCount} pujas</span>
+            <span>${car.watchers} guardados</span>
+            <span>${car.daysListed} días</span>
+          </div>
+        </div>
+        <div>
+          <div style="font-size:11px;color:var(--graphite-5);text-transform:uppercase;letter-spacing:.05em;margin-bottom:2px">Precio final</div>
+          <div class="sold-price">${formatCLP(car.soldPrice)}</div>
+          <div class="sold-comment">${car.editorialComment}</div>
+        </div>
+      </div>
+    </div>`).join("");
 }
 </script>
 </body>

@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>GarageBids Chile — Subastas curadas de autos especiales</title>
 <meta name="description" content="Compra y vende deportivos, clásicos modernos, 4x4 y autos con historia en Chile. Subastas curadas, fichas editoriales y compradores reales."/>
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏁</text></svg>"/>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='12' fill='%23111'/><text y='.85em' font-size='72' x='12'>G</text></svg>"/>
 <link rel="stylesheet" href="css/styles.css"/>
 </head>
 <body>
@@ -21,11 +21,10 @@
       </a>
       <nav class="nav">
         <a href="subastas.html">Subastas</a>
-        <a href="vendidos.html">Vendidos</a>
+        <a href="vendidos.html">Resultados</a>
         <a href="como-funciona.html">Cómo funciona</a>
         <a href="editorial.html">Editorial</a>
         <a href="pricing.html">Pricing</a>
-        <a href="vender.html">Vender</a>
       </nav>
       <a href="vender.html" class="header-cta">Postular mi auto →</a>
       <button class="hamburger" id="hamburger" aria-label="Menú">
@@ -35,11 +34,10 @@
   </div>
   <nav class="mobile-nav" id="mobile-nav">
     <a href="subastas.html">Subastas</a>
-    <a href="vendidos.html">Vendidos</a>
+    <a href="vendidos.html">Resultados</a>
     <a href="como-funciona.html">Cómo funciona</a>
     <a href="editorial.html">Editorial</a>
     <a href="pricing.html">Pricing</a>
-    <a href="vender.html">Vender</a>
     <a href="vender.html" class="mobile-cta">Postular mi auto →</a>
   </nav>
 </header>
@@ -47,8 +45,15 @@
 <!-- LIVE TICKER -->
 <div class="live-ticker">
   <div class="ticker-inner">
-    <span class="ticker-item"><span class="ticker-dot"></span>Driver***84 acaba de pujar por el <strong>BMW M3 E92 V8</strong> — $28.500.000</span>
-    <span class="ticker-item"><span class="ticker-dot"></span>74 personas guardaron el <strong>Ford Mustang Fastback 1968</strong></span>
+    <span class="ticker-item"><span class="ticker-dot"></span>Driver***84 pujó por el <strong>BMW M3 E92 V8</strong> — $28.500.000</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>74 personas guardan el <strong>Ford Mustang Fastback 1968</strong></span>
+    <span class="ticker-item"><span class="ticker-dot"></span>AutoFan*** preguntó por las mantenciones del <strong>Porsche 911 Carrera S</strong></span>
+    <span class="ticker-item"><span class="ticker-dot"></span>El <strong>Subaru WRX STI GD</strong> termina en menos de 5 horas</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>RotaryFan*** pujó por el <strong>Mazda RX-7 FD Bathurst</strong> — $38.000.000</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>118 personas guardan el <strong>Mustang Fastback 1968</strong> — el más visto del mes</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>Nueva subasta próximamente: <strong>Honda NSX NA1 1993</strong></span>
+    <span class="ticker-item"><span class="ticker-dot"></span>Driver***84 pujó por el <strong>BMW M3 E92 V8</strong> — $28.500.000</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>74 personas guardan el <strong>Ford Mustang Fastback 1968</strong></span>
     <span class="ticker-item"><span class="ticker-dot"></span>AutoFan*** preguntó por las mantenciones del <strong>Porsche 911 Carrera S</strong></span>
     <span class="ticker-item"><span class="ticker-dot"></span>El <strong>Subaru WRX STI GD</strong> termina en menos de 5 horas</span>
     <span class="ticker-item"><span class="ticker-dot"></span>RotaryFan*** pujó por el <strong>Mazda RX-7 FD Bathurst</strong> — $38.000.000</span>
@@ -57,74 +62,89 @@
   </div>
 </div>
 
-<!-- HERO -->
-<section class="hero">
+<!-- HOMEPAGE HERO — Featured Auction (Cars & Bids style) -->
+<section class="home-hero">
   <div class="container">
-    <div class="hero-inner">
+    <div class="home-hero-headline">
       <div>
-        <div class="hero-eyebrow">
-          <span class="hero-eyebrow-dot"></span>
-          Subastas curadas · Chile
-        </div>
-        <h1 class="hero-title">
-          Subastas curadas de<br>
-          <em>autos especiales</em><br>
-          en Chile.
+        <h1 class="home-hero-title">
+          Subastas curadas de <em>autos especiales</em>
         </h1>
-        <p class="hero-sub">
-          Compra y vende deportivos, clásicos modernos, 4x4 icónicos y autos con historia — con mejor información, más confianza y compradores reales.
-        </p>
-        <div class="hero-ctas">
-          <a href="subastas.html" class="btn btn-primary btn-lg">Ver subastas activas</a>
-          <a href="vender.html" class="btn btn-ghost btn-lg">Postular mi auto</a>
-        </div>
-        <div class="hero-trust">
-          <div class="trust-item">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-            Publicación gratis
-          </div>
-          <div class="trust-item">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-            Fichas editoriales
-          </div>
-          <div class="trust-item">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-            Subastas transparentes
-          </div>
+        <div class="home-hero-sub">
+          <span class="live-dot">12 activas ahora</span>
+          <span>· Chile · Fichas editoriales · Sin reserva</span>
         </div>
       </div>
-      <div class="hero-cards">
-        <div id="hero-featured"></div>
-        <div class="hero-card-stack" id="hero-mini-cards"></div>
+      <div style="display:flex;gap:10px;flex-shrink:0">
+        <a href="vender.html" class="btn btn-ghost btn-sm">Postular auto</a>
+        <a href="subastas.html" class="btn btn-primary btn-sm">Ver todas →</a>
       </div>
     </div>
+
+    <!-- Featured Auction Card -->
+    <div id="home-featured-auction" style="margin-bottom:48px"></div>
   </div>
 </section>
 
-<!-- STATS STRIP -->
-<div class="stats-strip">
+<!-- TRUST BAR (CambiaLaBici style) -->
+<div class="trust-bar-strip">
   <div class="container">
-    <div class="stats-strip-inner">
-      <div class="stat-item"><div class="stat-number">12</div><div class="stat-label">Subastas activas</div></div>
-      <div class="stat-item"><div class="stat-number">$49M</div><div class="stat-label">Puja más alta activa</div></div>
-      <div class="stat-item"><div class="stat-number">4</div><div class="stat-label">Autos vendidos</div></div>
-      <div class="stat-item"><div class="stat-number">680+</div><div class="stat-label">Compradores activos</div></div>
-      <div class="stat-item"><div class="stat-number">7 días</div><div class="stat-label">Duración subasta</div></div>
+    <div class="trust-bar-inner">
+      <div class="trust-bar-item">
+        <div class="trust-bar-icon">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <div class="trust-bar-text"><strong>Publicación gratis</strong> para el vendedor</div>
+      </div>
+      <div class="trust-bar-item">
+        <div class="trust-bar-icon">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        </div>
+        <div class="trust-bar-text"><strong>Ficha editorial</strong> con historia completa</div>
+      </div>
+      <div class="trust-bar-item">
+        <div class="trust-bar-icon">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        </div>
+        <div class="trust-bar-text"><strong>7 días</strong> de subasta transparente</div>
+      </div>
+      <div class="trust-bar-item">
+        <div class="trust-bar-icon">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/></svg>
+        </div>
+        <div class="trust-bar-text"><strong>Compradores reales</strong> que entienden el auto</div>
+      </div>
+      <div class="trust-bar-item">
+        <div class="trust-bar-icon">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+        </div>
+        <div class="trust-bar-text"><strong>Fee 3%</strong> solo al comprador ganador</div>
+      </div>
     </div>
   </div>
 </div>
 
-<!-- FEATURED AUCTIONS -->
+<!-- ACTIVE AUCTIONS GRID -->
 <section class="section">
   <div class="container">
-    <div class="section-header flex justify-between items-center" style="flex-wrap:wrap;gap:16px">
+    <!-- Section header with tabs -->
+    <div class="auction-section-header">
       <div>
-        <div class="section-eyebrow">Subastas destacadas</div>
-        <h2 class="section-title">Lo que está pasando ahora</h2>
+        <div class="section-eyebrow">Subastas activas</div>
+        <h2 class="section-title" style="font-size:clamp(1.3rem,2.5vw,1.8rem)">Lo que está pasando ahora</h2>
       </div>
-      <a href="subastas.html" class="btn btn-ghost">Ver todas →</a>
+      <div class="auction-section-tabs">
+        <button class="auction-tab active" onclick="filterHomeGrid(this,'active')">Termina pronto</button>
+        <button class="auction-tab" onclick="filterHomeGrid(this,'noreserve')">Sin reserva</button>
+        <button class="auction-tab" onclick="filterHomeGrid(this,'hot')">Hot</button>
+      </div>
     </div>
+
     <div class="grid-3" id="featured-grid"></div>
+
+    <div style="text-align:center;margin-top:40px">
+      <a href="subastas.html" class="btn btn-ghost btn-lg">Ver las 12 subastas activas →</a>
+    </div>
   </div>
 </section>
 
@@ -171,45 +191,15 @@
       <div class="step"><div class="step-number">2</div><div class="step-title">Revisamos</div><div class="step-text">Nuestro equipo evalúa si califica. Respondemos en 48h.</div></div>
       <div class="step"><div class="step-number">3</div><div class="step-title">Creamos la ficha</div><div class="step-text">Ficha editorial completa: historia, highlights, flaws, mantenciones.</div></div>
       <div class="step"><div class="step-number">4</div><div class="step-title">7 días de subasta</div><div class="step-text">Compradores reales pujan públicamente. Preguntas abiertas.</div></div>
-      <div class="step"><div class="step-number">5</div><div class="step-title">Cierre y pago</div><div class="step-text">Fee del 3% al comprador ganador. Mín $150k, máx $1,5M.</div></div>
+      <div class="step"><div class="step-number">5</div><div class="step-title">Cierre</div><div class="step-text">Fee del 3% al comprador ganador. Mín $150k, máx $1,5M.</div></div>
     </div>
     <div style="text-align:center;margin-top:48px">
-      <a href="como-funciona.html" class="btn btn-ghost">Más detalles →</a>
+      <a href="como-funciona.html" class="btn btn-ghost">Leer más sobre el proceso →</a>
     </div>
   </div>
 </section>
 
-<!-- QUÉ ACEPTAMOS -->
-<section class="section" style="background:var(--bg-2)">
-  <div class="container">
-    <div class="section-header">
-      <div class="section-eyebrow">Categorías</div>
-      <h2 class="section-title">Qué autos aceptamos</h2>
-      <p class="section-lead">No todos los autos deberían venderse como autos normales.</p>
-    </div>
-    <div class="grid-3" id="categories-grid"></div>
-  </div>
-</section>
-
-<!-- CONFIANZA -->
-<section class="section">
-  <div class="container">
-    <div class="section-header" style="text-align:center;max-width:560px;margin:0 auto 48px">
-      <div class="section-eyebrow">Por qué confiar</div>
-      <h2 class="section-title">Información que cambia la decisión</h2>
-    </div>
-    <div class="trust-grid">
-      <div class="trust-card"><div class="trust-card-icon">📋</div><div class="trust-card-title">Historial documentado</div><div class="trust-card-text">Cada auto llega con su ficha editorial: mantenciones, modificaciones, historial y contexto de uso real.</div></div>
-      <div class="trust-card"><div class="trust-card-icon">❓</div><div class="trust-card-title">Preguntas públicas</div><div class="trust-card-text">Todo lo que preguntas es visible para todos. Eso obliga honestidad y crea un banco de información colectiva.</div></div>
-      <div class="trust-card"><div class="trust-card-icon">🔨</div><div class="trust-card-title">Pujas transparentes</div><div class="trust-card-text">El historial de pujas es público. Nadie sube precios artificialmente. El mercado decide el precio real.</div></div>
-      <div class="trust-card"><div class="trust-card-icon">⚠️</div><div class="trust-card-title">Known Flaws obligatorios</div><div class="trust-card-text">Exigimos que cada vendedor declare los defectos conocidos. El comprador entra con información completa.</div></div>
-      <div class="trust-card"><div class="trust-card-icon">🏁</div><div class="trust-card-title">Comunidad entusiasta</div><div class="trust-card-text">Los compradores en GarageBids entienden los autos. No van a cuestionar el valor de un manual o de un escape Akrapovic.</div></div>
-      <div class="trust-card"><div class="trust-card-icon">✅</div><div class="trust-card-title">Curación editorial</div><div class="trust-card-text">No publicamos todo. Cada auto pasa por revisión. Eso protege el valor de los autos que sí están.</div></div>
-    </div>
-  </div>
-</section>
-
-<!-- VENDIDOS -->
+<!-- RESULTADOS RECIENTES -->
 <section class="section" style="background:var(--bg-2)">
   <div class="container">
     <div class="section-header flex justify-between items-center" style="flex-wrap:wrap;gap:16px">
@@ -217,7 +207,7 @@
         <div class="section-eyebrow">Resultados reales</div>
         <h2 class="section-title">Vendidos recientemente</h2>
       </div>
-      <a href="vendidos.html" class="btn btn-ghost">Ver todos →</a>
+      <a href="vendidos.html" class="btn btn-ghost">Ver todos los resultados →</a>
     </div>
     <div style="display:flex;flex-direction:column;gap:16px" id="sold-cars-list"></div>
   </div>
@@ -242,7 +232,7 @@
   <div class="container">
     <div class="quote-block">
       <p class="quote-text">"Tu auto merece algo mejor<br>que perderse en WhatsApp."</p>
-      <p style="color:rgba(255,255,255,.6);font-size:15px;max-width:480px;margin:0 auto 0">Del grupo de WhatsApp a una subasta transparente. Postular es gratis.</p>
+      <p style="color:rgba(255,255,255,.6);font-size:15px;max-width:480px;margin:0 auto">Del grupo de WhatsApp a una subasta transparente. Postular es gratis.</p>
       <div class="quote-cta">
         <a href="vender.html" class="btn btn-accent btn-lg">Postular mi auto gratis</a>
         <a href="subastas.html" class="btn btn-ghost btn-lg" style="color:var(--white);border-color:rgba(255,255,255,.3)">Ver subastas activas</a>
@@ -267,7 +257,7 @@
         <div class="footer-col-title">Subastas</div>
         <a href="subastas.html" class="footer-link">Activas</a>
         <a href="subastas.html" class="footer-link">Próximamente</a>
-        <a href="vendidos.html" class="footer-link">Vendidos</a>
+        <a href="vendidos.html" class="footer-link">Resultados</a>
         <a href="subastas.html" class="footer-link">Sin reserva</a>
       </div>
       <div>
@@ -286,7 +276,7 @@
     </div>
     <p class="footer-disclaimer">GarageBids no es dueño de los vehículos publicados. La plataforma conecta compradores y vendedores, entrega información ordenada y facilita el proceso de subasta. La revisión mecánica, legal y la transferencia final deben ser verificadas por las partes antes del cierre. Todas las pujas son referenciales en esta fase MVP.</p>
     <div class="footer-bottom">
-      <span>© 2025 GarageBids Chile. Todos los derechos reservados.</span>
+      <span>© 2025 GarageBids Chile.</span>
       <span style="color:rgba(255,255,255,.3)">MVP — Operación manual</span>
     </div>
   </div>
@@ -295,22 +285,72 @@
 <script src="js/data.js"></script>
 <script src="js/app.js"></script>
 <script>
+// Homepage grid tab filter
+function filterHomeGrid(btn, type) {
+  document.querySelectorAll(".auction-tab").forEach(b => b.classList.remove("active"));
+  btn.classList.add("active");
+  if (typeof CARS === "undefined") return;
+  const el = document.getElementById("featured-grid");
+  if (!el) return;
+  let cars;
+  if (type === "noreserve") cars = CARS.filter(c => c.isSinReserva && c.status === "active");
+  else if (type === "hot") cars = CARS.filter(c => c.isHot && c.status === "active");
+  else cars = CARS.filter(c => c.status === "active").sort((a,b) => (a.timeLeftHours*60+a.timeLeftMinutes) - (b.timeLeftHours*60+b.timeLeftMinutes));
+  el.innerHTML = cars.slice(0,6).map(renderVehicleCard).join("");
+  cars.slice(0,6).forEach(car => {
+    el.querySelectorAll(`[data-countdown="${car.slug}"]`).forEach(e => startCountdown(e, car.timeLeftHours*60+car.timeLeftMinutes));
+  });
+}
+
+// Render sold cars on homepage
 (function() {
-  const el = document.getElementById("hero-mini-cards");
-  if (!el || typeof CARS === "undefined") return;
-  const hot = CARS.filter(c => c.isHot && c.status === "active").slice(0, 3);
-  el.innerHTML = hot.map(car => `
-    <a href="auto.html?id=${car.slug}" class="hero-mini-card">
-      <div class="hero-mini-img"><img src="${car.heroImage}" alt="${car.title}" loading="lazy"></div>
-      <div class="hero-mini-info">
-        <div class="hero-mini-title">${car.title}</div>
-        <div class="hero-mini-sub">${car.location} · ${car.mileage.toLocaleString("es-CL")} km</div>
-        <div class="hero-mini-footer">
-          <span class="hero-mini-bid">${formatCLP(car.currentBid)}</span>
-          <span class="hero-mini-time">${getTimeLabel(car.timeLeftHours, car.timeLeftMinutes)} restantes</span>
+  const el = document.getElementById("sold-cars-list");
+  if (!el || typeof SOLD_CARS === "undefined") return;
+  el.innerHTML = SOLD_CARS.slice(0,3).map(car => `
+    <div class="sold-card">
+      <div class="sold-card-img">
+        <img src="${car.image}" alt="${car.title}" loading="lazy">
+      </div>
+      <div class="sold-card-body">
+        <div>
+          <div style="display:flex;gap:6px;margin-bottom:6px">
+            <span class="badge badge-sold">Vendido</span>
+            <span class="badge badge-category">${car.category}</span>
+          </div>
+          <div class="sold-card-title">${car.title}</div>
+          <div class="sold-stats">
+            <span>${car.bidCount} pujas</span>
+            <span>${car.watchers} guardados</span>
+            <span>${car.daysListed} días</span>
+          </div>
+        </div>
+        <div>
+          <div style="font-size:11px;color:var(--graphite-5);text-transform:uppercase;letter-spacing:.05em;margin-bottom:2px">Precio final</div>
+          <div class="sold-price">${formatCLP(car.soldPrice)}</div>
+          <div class="sold-comment">${car.editorialComment}</div>
         </div>
       </div>
-    </a>`).join("");
+    </div>
+  `).join("");
+})();
+
+// Render editorial cards
+(function() {
+  const el = document.getElementById("editorial-grid");
+  if (!el || typeof ARTICLES === "undefined") return;
+  el.innerHTML = ARTICLES.map(a => `
+    <div class="editorial-card">
+      <div class="editorial-card-img">
+        <img src="${a.image}" alt="${a.title}" loading="lazy">
+      </div>
+      <div class="editorial-card-body">
+        <div class="editorial-tag">${a.tag}</div>
+        <div class="editorial-card-title">${a.title}</div>
+        <div class="editorial-card-lead">${a.lead}</div>
+        <div class="editorial-meta">${a.author} · ${a.readTime}</div>
+      </div>
+    </div>
+  `).join("");
 })();
 </script>
 </body>
