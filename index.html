@@ -21,10 +21,11 @@
       </a>
       <nav class="nav">
         <a href="subastas.html">Subastas</a>
-        <a href="vendidos.html">Resultados</a>
+        <a href="vendidos.html">Vendidos</a>
         <a href="como-funciona.html">Cómo funciona</a>
         <a href="editorial.html">Editorial</a>
         <a href="pricing.html">Pricing</a>
+        <a href="vender.html">Vender</a>
       </nav>
       <a href="vender.html" class="header-cta">Postular mi auto →</a>
       <button class="hamburger" id="hamburger" aria-label="Menú">
@@ -34,10 +35,11 @@
   </div>
   <nav class="mobile-nav" id="mobile-nav">
     <a href="subastas.html">Subastas</a>
-    <a href="vendidos.html">Resultados</a>
+    <a href="vendidos.html">Vendidos</a>
     <a href="como-funciona.html">Cómo funciona</a>
     <a href="editorial.html">Editorial</a>
     <a href="pricing.html">Pricing</a>
+    <a href="vender.html">Vender</a>
     <a href="vender.html" class="mobile-cta">Postular mi auto →</a>
   </nav>
 </header>
@@ -65,24 +67,20 @@
 <!-- HOMEPAGE HERO — Featured Auction (Cars & Bids style) -->
 <section class="home-hero">
   <div class="container">
-    <div class="home-hero-headline">
-      <div>
-        <h1 class="home-hero-title">
-          Subastas curadas de <em>autos especiales</em>
-        </h1>
-        <div class="home-hero-sub">
-          <span class="live-dot">12 activas ahora</span>
-          <span>· Chile · Fichas editoriales · Sin reserva</span>
-        </div>
+    <!-- Slim utility bar — C&B style, no big marketing headline -->
+    <div class="home-hero-bar">
+      <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap">
+        <span class="live-dot">12 activas ahora</span>
+        <span style="color:var(--graphite-5);font-size:13px">Chile · Fichas editoriales · Sin reserva</span>
       </div>
-      <div style="display:flex;gap:10px;flex-shrink:0">
+      <div style="display:flex;gap:8px;flex-shrink:0">
         <a href="vender.html" class="btn btn-ghost btn-sm">Postular auto</a>
         <a href="subastas.html" class="btn btn-primary btn-sm">Ver todas →</a>
       </div>
     </div>
 
-    <!-- Featured Auction Card -->
-    <div id="home-featured-auction" style="margin-bottom:48px"></div>
+    <!-- Featured Auction — the hero IS the car -->
+    <div id="home-featured-auction"></div>
   </div>
 </section>
 
@@ -127,11 +125,11 @@
 <!-- ACTIVE AUCTIONS GRID -->
 <section class="section">
   <div class="container">
-    <!-- Section header with tabs -->
+    <!-- Section header with tabs — C&B style: direct, data-forward -->
     <div class="auction-section-header">
       <div>
-        <div class="section-eyebrow">Subastas activas</div>
-        <h2 class="section-title" style="font-size:clamp(1.3rem,2.5vw,1.8rem)">Lo que está pasando ahora</h2>
+        <h2 style="font-size:1.25rem;font-weight:700;letter-spacing:-.02em;margin-bottom:2px">Subastas activas</h2>
+        <div style="font-size:13px;color:var(--graphite-4)">12 subastas en vivo · termina el ganador</div>
       </div>
       <div class="auction-section-tabs">
         <button class="auction-tab active" onclick="filterHomeGrid(this,'active')">Termina pronto</button>

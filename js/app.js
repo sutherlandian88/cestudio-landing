@@ -441,13 +441,13 @@ function renderFeaturedAuction(car) {
       <div class="featured-auction-img">
         <img src="${car.heroImage}" alt="${car.title}">
         <div class="featured-auction-badges">${badges.join("")}</div>
+        <div style="position:absolute;bottom:16px;left:16px;background:rgba(10,10,10,.6);color:rgba(255,255,255,.9);font-size:11.5px;font-weight:500;padding:4px 12px;border-radius:20px;backdrop-filter:blur(4px)">${car.location} · ${car.mileage.toLocaleString("es-CL")} km</div>
       </div>
       <div class="featured-auction-panel">
         <div>
           <div class="featured-auction-eyebrow">${car.category} · ${car.year}</div>
           <h2 class="featured-auction-title">${car.title}</h2>
           <div class="featured-auction-specs">${car.transmission} · ${car.drivetrain} · ${car.engine}</div>
-          <div class="featured-auction-location">${car.location} · ${car.mileage.toLocaleString("es-CL")} km</div>
         </div>
         <div>
           <div class="featured-auction-bid-label">Puja actual</div>
@@ -462,9 +462,10 @@ function renderFeaturedAuction(car) {
               <div class="featured-meta-value">${car.bidCount}</div>
             </div>
           </div>
-          <div style="margin-top:20px;display:flex;gap:10px">
-            <span class="btn btn-primary" style="flex:1;justify-content:center;pointer-events:none">Ver subasta →</span>
+          <div style="margin-top:24px">
+            <span class="btn btn-primary" style="width:100%;justify-content:center;padding:14px 24px;font-size:15px;letter-spacing:.01em;pointer-events:none">Ver subasta →</span>
           </div>
+          <div style="margin-top:10px;text-align:center;font-size:11.5px;color:var(--graphite-5)">${car.watchers} personas siguen esta subasta</div>
         </div>
       </div>
     </a>`;

@@ -857,18 +857,19 @@ textarea.form-input { min-height: 100px; resize: vertical; }
 /* ── Featured auction (hero C&B) ── */
 .featured-auction {
   display: grid;
-  grid-template-columns: 1fr 380px;
+  grid-template-columns: 1fr 400px;
   background: var(--white);
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
   overflow: hidden;
   transition: box-shadow var(--t);
+  margin-bottom: 40px;
 }
 .featured-auction:hover { box-shadow: var(--shadow-lg); }
 
 .featured-auction-img {
   position: relative; overflow: hidden;
-  min-height: 340px; max-height: 520px;
+  min-height: 480px; max-height: 640px;
 }
 .featured-auction-img img {
   width: 100%; height: 100%;
@@ -883,9 +884,10 @@ textarea.form-input { min-height: 100px; resize: vertical; }
   display: flex; gap: 6px; z-index: 1;
 }
 .featured-auction-panel {
-  padding: 32px;
+  padding: 32px 36px;
   display: flex; flex-direction: column; justify-content: space-between;
   border-left: 1px solid var(--border);
+  background: var(--white);
 }
 .featured-auction-eyebrow {
   font-size: 11px; font-weight: 600; letter-spacing: .08em;
@@ -893,8 +895,8 @@ textarea.form-input { min-height: 100px; resize: vertical; }
 }
 .featured-auction-title {
   font-family: var(--font-serif);
-  font-size: clamp(1.3rem, 2vw, 1.7rem);
-  font-weight: 400; line-height: 1.2; margin-bottom: 8px;
+  font-size: clamp(1.6rem, 2.4vw, 2.2rem);
+  font-weight: 400; line-height: 1.15; margin-bottom: 10px;
 }
 .featured-auction-specs {
   font-size: 13px; color: var(--graphite-4);
@@ -908,32 +910,34 @@ textarea.form-input { min-height: 100px; resize: vertical; }
   letter-spacing: .05em; color: var(--graphite-5); margin-bottom: 4px;
 }
 .featured-auction-bid {
-  font-size: clamp(1.6rem, 2.5vw, 2.2rem);
-  font-weight: 700; letter-spacing: -.03em; color: var(--graphite);
+  font-size: clamp(2.2rem, 3.5vw, 3.2rem);
+  font-weight: 700; letter-spacing: -.04em; color: var(--graphite);
+  line-height: 1;
 }
 .featured-auction-meta {
   display: grid; grid-template-columns: 1fr 1fr;
-  gap: 0; margin-top: 16px; padding-top: 16px;
+  gap: 0; margin-top: 20px; padding-top: 18px;
   border-top: 1px solid var(--border);
 }
 .featured-meta-item {}
 .featured-meta-item:last-child { text-align: right; }
 .featured-meta-label {
-  font-size: 10px; font-weight: 600; text-transform: uppercase;
-  letter-spacing: .05em; color: var(--graphite-5); margin-bottom: 2px;
+  font-size: 10px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: .06em; color: var(--graphite-5); margin-bottom: 4px;
 }
 .featured-meta-value {
-  font-size: 15px; font-weight: 700;
+  font-size: 18px; font-weight: 700;
   color: var(--graphite); font-variant-numeric: tabular-nums;
+  letter-spacing: -.01em;
 }
 .featured-meta-value.urgent { color: var(--hot); }
 
 /* ── Homepage: active auctions section ── */
 .auction-section-header {
   display: flex; align-items: center; justify-content: space-between;
-  padding: 36px 0 20px;
+  padding: 28px 0 18px;
   border-bottom: 1px solid var(--border);
-  margin-bottom: 28px;
+  margin-bottom: 24px;
 }
 .auction-section-tabs {
   display: flex; gap: 0; border-bottom: none;
@@ -1014,24 +1018,20 @@ textarea.form-input { min-height: 100px; resize: vertical; }
 
 /* ── Updated homepage hero ── */
 .home-hero {
-  padding: 48px 0 0;
+  padding: 16px 0 0;
   background: var(--bg);
-  border-bottom: 1px solid var(--border);
 }
-.home-hero-headline {
+/* Slim utility bar above featured auction — like C&B */
+.home-hero-bar {
   display: flex; align-items: center; justify-content: space-between;
-  margin-bottom: 28px; flex-wrap: wrap; gap: 16px;
+  margin-bottom: 16px; padding-bottom: 14px;
+  border-bottom: 1px solid var(--border);
+  flex-wrap: wrap; gap: 12px;
 }
-.home-hero-title {
-  font-family: var(--font-serif);
-  font-size: clamp(1.8rem, 3.5vw, 2.8rem);
-  font-weight: 400; line-height: 1.1; letter-spacing: -.02em;
-}
-.home-hero-title em { font-style: italic; color: var(--accent); }
-.home-hero-sub {
-  font-size: 14px; color: var(--graphite-4); margin-top: 8px;
-  display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
-}
+/* kept for legacy, no longer displayed as big title */
+.home-hero-headline { display: none; }
+.home-hero-title { display: none; }
+.home-hero-sub { display: none; }
 .live-dot {
   display: inline-flex; align-items: center; gap: 6px;
   font-size: 12px; font-weight: 600; color: var(--accent);
@@ -1110,7 +1110,7 @@ textarea.form-input { min-height: 100px; resize: vertical; }
   .detail-layout { grid-template-columns: 1fr; }
   .detail-sidebar { position: static; }
   .sticky-bid-bar { display: block; }
-  .featured-auction { grid-template-columns: 1fr 320px; }
+  .featured-auction { grid-template-columns: 1fr 340px; }
   .subastas-layout { grid-template-columns: 1fr; }
   .subastas-sidebar { position: static; }
 }
