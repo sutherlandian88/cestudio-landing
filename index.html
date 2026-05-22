@@ -136,6 +136,33 @@ footer { background:#322f2c; border-top:0.5px solid rgba(255,255,255,0.07); padd
 .hero-cta { display:inline-block; margin-top:28px; font-size:9px; letter-spacing:2.5px; text-transform:uppercase; color:#3a3632; text-decoration:none; border-bottom:0.5px solid #3a3632; padding-bottom:2px; font-family:'Jost',sans-serif; transition:opacity 0.2s; }
 .hero-cta:hover { opacity:0.6; }
 .contact-form { display:flex; flex-direction:column; gap:12px; }
+
+/* Comparison table */
+.compare-section { padding:72px 40px; background:#f5f3ef; border-top:0.5px solid #d8d4cc; }
+.compare-label { font-size:9px; letter-spacing:2.5px; text-transform:uppercase; color:#b0aaa4; margin-bottom:16px; }
+.compare-heading { font-family:'Cormorant Garamond',serif; font-size:36px; font-weight:300; color:#3a3632; margin-bottom:8px; line-height:1.2; }
+.compare-heading em { font-style:italic; color:#8a847e; }
+.compare-sub { font-size:11px; color:#9a948e; margin-bottom:40px; line-height:1.7; }
+.compare-table { width:100%; border-collapse:collapse; }
+.compare-table th { font-size:9px; letter-spacing:2px; text-transform:uppercase; padding:14px 20px; text-align:center; font-weight:400; color:#9a948e; border-bottom:0.5px solid #d8d4cc; }
+.compare-table th.col-service { text-align:left; color:#b0aaa4; }
+.compare-table th.col-cestudio { background:#3a3632; color:#f0ece5; border-radius:0; }
+.compare-table td { padding:16px 20px; font-size:12px; color:#3a3632; border-bottom:0.5px solid #ece9e3; text-align:center; vertical-align:middle; }
+.compare-table td.col-service { text-align:left; color:#6b6560; font-size:11px; }
+.compare-table td.col-cestudio { background:#f0ede8; }
+.compare-table tr:last-child td { border-bottom:none; }
+.compare-check { color:#5a8a6a; font-size:16px; }
+.compare-cross { color:#c8c4be; font-size:14px; }
+.compare-sometimes { color:#9a948e; font-size:10px; letter-spacing:1px; font-style:italic; }
+.compare-footer { font-size:10px; color:#9a948e; margin-top:28px; line-height:1.8; border-top:0.5px solid #d8d4cc; padding-top:20px; }
+.compare-footer strong { color:#3a3632; font-weight:400; }
+@media (max-width:768px) {
+  .compare-section { padding:40px 20px; }
+  .compare-heading { font-size:26px; }
+  .compare-table th, .compare-table td { padding:12px 10px; font-size:10px; }
+  .compare-table td.col-service { font-size:10px; }
+}
+
 .whatsapp-float { position:fixed; bottom:28px; right:28px; z-index:1000; width:56px; height:56px; background:#25d366; border-radius:50%; display:flex; align-items:center; justify-content:center; box-shadow:0 4px 16px rgba(0,0,0,0.22); transition:transform 0.2s,box-shadow 0.2s; text-decoration:none; }
 .whatsapp-float:hover { transform:scale(1.08); box-shadow:0 6px 20px rgba(0,0,0,0.28); }
 .whatsapp-float svg { width:32px; height:32px; fill:#fff; }
@@ -287,6 +314,66 @@ footer { background:#322f2c; border-top:0.5px solid rgba(255,255,255,0.07); padd
       <p class="project-name">Isabel La Católica</p>
     </div>
   </div>
+</section>
+<section class="compare-section">
+  <p class="compare-label">Por qué C Estudio</p>
+  <h2 class="compare-heading">No somos solo arquitectos.<br><em>Somos tu dirección de proyecto.</em></h2>
+  <p class="compare-sub">C | Estudio cubre el ciclo completo — desde el diseño hasta la entrega de obra.</p>
+  <table class="compare-table">
+    <thead>
+      <tr>
+        <th class="col-service">Servicio</th>
+        <th class="col-cestudio">C | Estudio</th>
+        <th>Contratista Tradicional</th>
+        <th>Solo Arquitecto</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="col-service">Diseño + proyecto de arquitectura</td>
+        <td class="col-cestudio"><span class="compare-check">✓</span></td>
+        <td><span class="compare-cross">×</span></td>
+        <td><span class="compare-check">✓</span></td>
+      </tr>
+      <tr>
+        <td class="col-service">Planimetría + Especificaciones Técnicas</td>
+        <td class="col-cestudio"><span class="compare-check">✓</span></td>
+        <td><span class="compare-cross">×</span></td>
+        <td><span class="compare-sometimes">A veces</span></td>
+      </tr>
+      <tr>
+        <td class="col-service">Elección de materiales + cotizaciones</td>
+        <td class="col-cestudio"><span class="compare-check">✓</span></td>
+        <td><span class="compare-cross">×</span></td>
+        <td><span class="compare-sometimes">Raro</span></td>
+      </tr>
+      <tr>
+        <td class="col-service">Gestión y coordinación de contratistas</td>
+        <td class="col-cestudio"><span class="compare-check">✓</span></td>
+        <td><span class="compare-cross">×</span></td>
+        <td><span class="compare-cross">×</span></td>
+      </tr>
+      <tr>
+        <td class="col-service">Supervisión activa de obra</td>
+        <td class="col-cestudio"><span class="compare-check">✓</span></td>
+        <td><span class="compare-cross">×</span></td>
+        <td><span class="compare-cross">×</span></td>
+      </tr>
+      <tr>
+        <td class="col-service">Interlocutor único cliente–obra</td>
+        <td class="col-cestudio"><span class="compare-check">✓</span></td>
+        <td><span class="compare-sometimes">Parcial</span></td>
+        <td><span class="compare-cross">×</span></td>
+      </tr>
+      <tr>
+        <td class="col-service">Gestión permiso DOM</td>
+        <td class="col-cestudio"><span class="compare-check">✓</span></td>
+        <td><span class="compare-cross">×</span></td>
+        <td><span class="compare-sometimes">A veces</span></td>
+      </tr>
+    </tbody>
+  </table>
+  <p class="compare-footer">C | Estudio opera como <strong>dirección de proyecto integral</strong> — cubre el ciclo completo desde el diseño hasta la entrega de obra. Es lo más cercano a un <em>project manager</em> de arquitectura para el segmento residencial premium.</p>
 </section>
 <section class="contact" id="contacto">
   <div class="contact-left">
