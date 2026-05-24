@@ -163,6 +163,48 @@ footer { background:#322f2c; border-top:0.5px solid rgba(255,255,255,0.07); padd
   .compare-table td.col-service { font-size:10px; }
 }
 
+/* ── Mobile nav drawer ── */
+.nav-toggle { display:none; background:none; border:none; cursor:pointer; padding:4px; color:#3a3632; line-height:0; }
+.nav-drawer { display:none; position:fixed; inset:0; top:57px; background:#f5f3ef; z-index:9; padding:28px 24px; border-top:0.5px solid #d8d4cc; flex-direction:column; overflow-y:auto; }
+.nav-drawer.open { display:flex; }
+.nav-drawer li { list-style:none; }
+.nav-drawer li a { display:block; font-size:11px; letter-spacing:2px; text-transform:uppercase; color:#6b6560; padding:18px 0; border-bottom:0.5px solid #d8d4cc; text-decoration:none; transition:color 0.2s; }
+.nav-drawer li a:hover { color:#3a3632; }
+.nav-drawer-cta { display:inline-block; margin-top:28px; font-size:9px; letter-spacing:2.5px; text-transform:uppercase; color:#3a3632; border-bottom:0.5px solid #3a3632; padding-bottom:2px; text-decoration:none; }
+
+/* ── Cómo trabajamos ── */
+.proceso { padding:72px 40px; border-top:0.5px solid #d8d4cc; background:#f5f3ef; }
+.proceso-label { font-size:9px; letter-spacing:2.5px; text-transform:uppercase; color:#b0aaa4; margin-bottom:16px; }
+.proceso-title { font-family:'Cormorant Garamond',serif; font-size:44px; font-weight:300; color:#3a3632; line-height:1.1; margin-bottom:52px; }
+.proceso-title em { font-style:italic; color:#8a847e; }
+.proceso-steps { display:grid; grid-template-columns:repeat(4,1fr); border-top:0.5px solid #d8d4cc; }
+.proceso-step { padding:32px 24px; border-right:0.5px solid #d8d4cc; }
+.proceso-step:last-child { border-right:none; }
+.proceso-num { font-family:'Cormorant Garamond',serif; font-size:52px; font-style:italic; color:#d8d4cc; line-height:1; margin-bottom:20px; }
+.proceso-step-title { font-family:'Cormorant Garamond',serif; font-size:22px; font-weight:400; color:#3a3632; margin-bottom:10px; line-height:1.2; }
+.proceso-step-desc { font-size:11px; color:#9a948e; line-height:1.85; font-weight:300; }
+
+/* ── Lead capture ── */
+.lead-capture { padding:72px 40px; border-top:0.5px solid rgba(255,255,255,0.08); background:#3a3632; }
+.lead-inner { display:grid; grid-template-columns:1fr 1fr; gap:80px; align-items:center; }
+.lead-label { font-size:9px; letter-spacing:2.5px; text-transform:uppercase; color:#7a746e; margin-bottom:16px; }
+.lead-title { font-family:'Cormorant Garamond',serif; font-size:40px; font-weight:300; color:#f0ece5; line-height:1.2; margin-bottom:14px; }
+.lead-title em { font-style:italic; color:#a09c96; }
+.lead-desc { font-size:11px; color:#7a746e; line-height:1.9; }
+.lead-form { display:flex; flex-direction:column; gap:10px; }
+.lead-input { background:rgba(255,255,255,0.06); border:0.5px solid rgba(255,255,255,0.15); color:#f0ece5; font-family:'Jost',sans-serif; font-size:12px; padding:11px 14px; outline:none; width:100%; transition:border-color 0.2s; }
+.lead-input:focus { border-color:rgba(255,255,255,0.4); }
+.lead-input::placeholder { color:#5a5450; }
+.lead-select { background:rgba(255,255,255,0.06); border:0.5px solid rgba(255,255,255,0.15); color:#f0ece5; font-family:'Jost',sans-serif; font-size:12px; padding:11px 14px; outline:none; width:100%; -webkit-appearance:none; appearance:none; cursor:pointer; transition:border-color 0.2s; }
+.lead-select:focus { border-color:rgba(255,255,255,0.4); }
+.lead-select option { background:#3a3632; }
+.lead-btn { font-size:9px; letter-spacing:2px; text-transform:uppercase; border:0.5px solid rgba(255,255,255,0.35); padding:13px 26px; cursor:pointer; background:transparent; color:#f0ece5; font-family:'Jost',sans-serif; margin-top:4px; transition:background 0.2s,border-color 0.2s; }
+.lead-btn:hover { background:rgba(255,255,255,0.08); border-color:rgba(255,255,255,0.6); }
+.lead-success { display:none; padding:16px 0; }
+.lead-success.visible { display:block; }
+.lead-success p { font-size:10px; color:#8ab89a; letter-spacing:1.5px; text-transform:uppercase; line-height:1.8; }
+
+/* ── WhatsApp FAB ── */
 .whatsapp-float { position:fixed; bottom:28px; right:28px; z-index:1000; width:56px; height:56px; background:#25d366; border-radius:50%; display:flex; align-items:center; justify-content:center; box-shadow:0 4px 16px rgba(0,0,0,0.22); transition:transform 0.2s,box-shadow 0.2s; text-decoration:none; }
 .whatsapp-float:hover { transform:scale(1.08); box-shadow:0 6px 20px rgba(0,0,0,0.28); }
 .whatsapp-float svg { width:32px; height:32px; fill:#fff; }
@@ -223,6 +265,24 @@ footer { background:#322f2c; border-top:0.5px solid rgba(255,255,255,0.07); padd
   /* WhatsApp */
   .whatsapp-float { bottom:20px; right:16px; width:50px; height:50px; }
   .whatsapp-float svg { width:28px; height:28px; }
+
+  /* Mobile nav toggle */
+  .nav-toggle { display:flex; }
+  .nav-links { display:none; }
+
+  /* Proceso */
+  .proceso { padding:40px 20px; }
+  .proceso-title { font-size:32px; margin-bottom:36px; }
+  .proceso-steps { grid-template-columns:1fr 1fr; }
+  .proceso-step { padding:24px 16px; }
+  .proceso-step:nth-child(2) { border-right:none; }
+  .proceso-step:nth-child(3) { border-top:0.5px solid #d8d4cc; }
+  .proceso-num { font-size:40px; }
+
+  /* Lead capture */
+  .lead-capture { padding:40px 20px; }
+  .lead-inner { grid-template-columns:1fr; gap:36px; }
+  .lead-title { font-size:30px; }
 }
 </style>
 </head>
@@ -232,9 +292,19 @@ footer { background:#322f2c; border-top:0.5px solid rgba(255,255,255,0.07); padd
   <ul class="nav-links">
     <li><a href="#quienes-somos">Quiénes somos</a></li>
     <li><a href="#servicios">Servicios</a></li>
+    <li><a href="#proceso">Proceso</a></li>
     <li><a href="#contacto">Contacto</a></li>
   </ul>
+  <button class="nav-toggle" id="navToggle" aria-label="Abrir menú" aria-expanded="false">
+    <svg width="22" height="16" viewBox="0 0 22 16" fill="none"><path d="M1 1h20M1 8h20M1 15h20" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+  </button>
 </nav>
+<ul class="nav-drawer" id="navDrawer">
+  <li><a href="#quienes-somos">Quiénes somos</a></li>
+  <li><a href="#servicios">Servicios</a></li>
+  <li><a href="#proceso">Proceso</a></li>
+  <li><a href="#contacto">Contacto</a></li>
+</ul>
 <h1 class="sr-only">C Estudio — Arquitecta en Santiago | Diseño Arquitectónico, Remodelaciones y Diseño Interior en Las Condes, Providencia, Vitacura, Lo Barnechea, La Reina y Ñuñoa</h1>
 <section class="hero">
   <div class="hero-left">
@@ -267,6 +337,33 @@ footer { background:#322f2c; border-top:0.5px solid rgba(255,255,255,0.07); padd
   <div class="service-item"><p class="service-name">Diseño Interior</p><p class="service-subtitle">¿Tu espacio necesita un cambio?</p><p class="service-desc">Intervenimos ambientes con materialidad, mobiliario y ambientación a medida.</p></div>
   <div class="service-item"><p class="service-name">Asesorías</p><p class="service-subtitle">¿No sabes por dónde partir?</p><p class="service-desc">Evaluamos tu proyecto y te decimos qué hacer.</p></div>
 </div>
+<section class="proceso" id="proceso">
+  <p class="proceso-label">Cómo trabajamos</p>
+  <h2 class="proceso-title">Un proceso claro,<br><em>de principio a fin.</em></h2>
+  <div class="proceso-steps">
+    <div class="proceso-step">
+      <div class="proceso-num">01</div>
+      <div class="proceso-step-title">Consulta inicial</div>
+      <p class="proceso-step-desc">Conversamos sobre tu proyecto, espacio y presupuesto. Sin compromiso. Te decimos si podemos ayudarte y cómo.</p>
+    </div>
+    <div class="proceso-step">
+      <div class="proceso-num">02</div>
+      <div class="proceso-step-title">Diseño y proyecto</div>
+      <p class="proceso-step-desc">Desarrollamos el diseño arquitectónico, planimetría y especificaciones. Tú apruebas cada etapa antes de avanzar.</p>
+    </div>
+    <div class="proceso-step">
+      <div class="proceso-num">03</div>
+      <div class="proceso-step-title">Gestión de obra</div>
+      <p class="proceso-step-desc">Coordinamos contratistas, materiales y plazos. Supervisamos activamente para que lo diseñado se ejecute bien.</p>
+    </div>
+    <div class="proceso-step">
+      <div class="proceso-num">04</div>
+      <div class="proceso-step-title">Entrega</div>
+      <p class="proceso-step-desc">Recorres el proyecto terminado con Camila. Revisamos cada detalle. Entras con la llave cuando está perfecto.</p>
+    </div>
+  </div>
+</section>
+
 <section class="about" id="quienes-somos">
   <div class="about-img"><span class="about-img-caption">C Estudio — Santiago, Chile</span></div>
   <div class="about-text">
@@ -370,6 +467,35 @@ footer { background:#322f2c; border-top:0.5px solid rgba(255,255,255,0.07); padd
   </table>
   <p class="compare-footer">C | Estudio opera como <strong>dirección de proyecto integral</strong> — cubre el ciclo completo desde el diseño hasta la entrega de obra. Es lo más cercano a un <em>project manager</em> de arquitectura para el segmento residencial premium.</p>
 </section>
+<section class="lead-capture">
+  <div class="lead-inner">
+    <div>
+      <p class="lead-label">¿No sabes por dónde partir?</p>
+      <h2 class="lead-title">Cuéntanos tu idea.<br><em>Camila te escribe.</em></h2>
+      <p class="lead-desc">Si tienes un proyecto en mente pero no sabes si es viable, cuánto cuesta o cómo empezar — déjanos tus datos y Camila te responde esta semana con orientación sin compromiso.</p>
+    </div>
+    <div>
+      <form class="lead-form" id="leadForm" action="https://formspree.io/f/mlgzzyjz" method="POST">
+        <input class="lead-input" type="text" name="nombre_lead" placeholder="Tu nombre" required/>
+        <input class="lead-input" type="email" name="email_lead" placeholder="Tu correo" required/>
+        <input class="lead-input" type="tel" name="whatsapp" placeholder="WhatsApp (opcional)"/>
+        <select class="lead-select" name="tipo_proyecto">
+          <option value="" disabled selected>Tipo de proyecto</option>
+          <option value="remodelacion">Remodelación integral</option>
+          <option value="diseno-interior">Diseño interior</option>
+          <option value="arquitectura">Proyecto nuevo</option>
+          <option value="asesoria">Asesoría puntual</option>
+          <option value="otro">No sé todavía</option>
+        </select>
+        <button class="lead-btn" type="submit">Enviar consulta</button>
+        <div class="lead-success" id="leadSuccess">
+          <p>✓ Recibido — Camila te contacta esta semana</p>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
 <section class="contact" id="contacto">
   <div class="contact-left">
     <p class="contact-label">Contacto</p>
@@ -393,6 +519,11 @@ footer { background:#322f2c; border-top:0.5px solid rgba(255,255,255,0.07); padd
 <footer>
   <span>© 2025 C Estudio · Camila Barros Lama, Arquitecta</span>
 </footer>
+
+<!-- WhatsApp FAB -->
+<a href="https://wa.me/56998182936?text=Hola%20Camila%2C%20me%20interesa%20hablar%20de%20un%20proyecto." class="whatsapp-float" target="_blank" rel="noopener noreferrer" aria-label="Contactar por WhatsApp">
+  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+</a>
 <script>
 
     var _vasco = [
@@ -484,9 +615,52 @@ footer { background:#322f2c; border-top:0.5px solid rgba(255,255,255,0.07); padd
       }
     });
   }
+
+  // ── Mobile nav drawer ──
+  (function() {
+    var toggle = document.getElementById('navToggle');
+    var drawer = document.getElementById('navDrawer');
+    if (!toggle || !drawer) return;
+    toggle.addEventListener('click', function() {
+      var open = drawer.classList.toggle('open');
+      toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+      toggle.setAttribute('aria-label', open ? 'Cerrar menú' : 'Abrir menú');
+    });
+    drawer.querySelectorAll('a').forEach(function(a) {
+      a.addEventListener('click', function() {
+        drawer.classList.remove('open');
+        toggle.setAttribute('aria-expanded', 'false');
+        toggle.setAttribute('aria-label', 'Abrir menú');
+      });
+    });
+  })();
+
+  // ── Lead capture form ──
+  (function() {
+    var form = document.getElementById('leadForm');
+    var success = document.getElementById('leadSuccess');
+    if (!form || !success) return;
+    form.addEventListener('submit', async function(e) {
+      e.preventDefault();
+      var btn = form.querySelector('.lead-btn');
+      btn.textContent = 'Enviando...';
+      btn.disabled = true;
+      try {
+        var res = await fetch(form.action, { method:'POST', body: new FormData(form), headers:{'Accept':'application/json'} });
+        if (res.ok) {
+          form.querySelectorAll('input,select').forEach(function(el) { el.style.display='none'; });
+          btn.style.display = 'none';
+          success.classList.add('visible');
+        } else {
+          btn.textContent = 'Error, intenta de nuevo';
+          btn.disabled = false;
+        }
+      } catch(err) {
+        btn.textContent = 'Error, intenta de nuevo';
+        btn.disabled = false;
+      }
+    });
+  })();
 </script>
-<a href="https://wa.me/56998182936" class="whatsapp-float" target="_blank" rel="noopener" aria-label="Contactar por WhatsApp">
-  <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><path d="M16 0C7.163 0 0 7.163 0 16c0 2.822.736 5.469 2.027 7.77L0 32l8.469-2.004A15.938 15.938 0 0016 32c8.837 0 16-7.163 16-16S24.837 0 16 0zm0 29.333a13.27 13.27 0 01-6.771-1.854l-.485-.29-5.025 1.189 1.214-4.896-.318-.503A13.267 13.267 0 012.667 16C2.667 8.636 8.636 2.667 16 2.667S29.333 8.636 29.333 16 23.364 29.333 16 29.333zm7.261-9.928c-.398-.199-2.356-1.162-2.72-1.295-.364-.133-.629-.199-.894.199-.265.398-1.029 1.295-1.261 1.561-.232.265-.465.298-.863.1-.398-.199-1.681-.619-3.202-1.976-1.183-1.056-1.981-2.36-2.214-2.758-.232-.398-.025-.614.175-.812.179-.178.398-.465.597-.697.199-.232.265-.398.398-.664.133-.265.067-.497-.033-.696-.1-.199-.894-2.155-1.225-2.95-.322-.775-.649-.67-.894-.682l-.762-.013c-.265 0-.696.1-1.061.497-.364.398-1.393 1.362-1.393 3.318s1.427 3.847 1.626 4.113c.199.265 2.807 4.285 6.801 5.998.951.41 1.693.655 2.271.839.954.304 1.823.261 2.509.158.766-.114 2.356-.963 2.688-1.893.332-.93.332-1.727.232-1.893-.099-.166-.364-.265-.762-.464z"/></svg>
-</a>
 </body>
 </html>
