@@ -7,6 +7,7 @@
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.2/Sortable.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
@@ -142,6 +143,18 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 /* ── Loading ── */
 #loadingOverlay{position:fixed;inset:0;background:#f5f5f5;display:flex;align-items:center;justify-content:center;z-index:999;flex-direction:column;gap:12px;}
 #loadingOverlay p{font-size:13px;color:#888;}
+.login-card{background:#fff;border-radius:16px;padding:40px 48px;text-align:center;box-shadow:0 4px 24px rgba(0,0,0,0.08);max-width:380px;width:90%;}
+.login-card .login-logo{height:52px;margin-bottom:16px;}
+.login-card h2{font-size:20px;font-weight:700;color:#111;margin-bottom:6px;}
+.login-card p{font-size:13px;color:#888;margin-bottom:28px;}
+.btn-google{display:flex;align-items:center;gap:10px;background:#fff;border:1.5px solid #e5e5e5;border-radius:8px;padding:11px 20px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;width:100%;justify-content:center;transition:background 0.15s,border-color 0.15s;}
+.btn-google:hover{background:#f8f8f8;border-color:#ccc;}
+.btn-google svg{flex-shrink:0;}
+.btn-signout{background:none;border:none;color:#aaa;font-size:11px;cursor:pointer;font-family:inherit;padding:3px 8px;border-radius:5px;transition:all 0.15s;}
+.btn-signout:hover{background:#333;color:#fff;}
+.header-user{display:flex;align-items:center;gap:8px;}
+.user-photo{width:28px;height:28px;border-radius:50%;object-fit:cover;border:2px solid #333;flex-shrink:0;}
+.user-display-name{font-size:11px;color:#aaa;max-width:100px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 .spinner{width:24px;height:24px;border:3px solid #e5e5e5;border-top-color:#111;border-radius:50%;animation:spin 0.7s linear infinite;}
 @keyframes spin{to{transform:rotate(360deg);}}
 
@@ -344,8 +357,21 @@ td[contenteditable]:focus{outline:none;background:#fffbeb;box-shadow:inset 0 0 0
 <body>
 
 <div id="loadingOverlay">
-  <div class="spinner"></div>
-  <p id="loadingMsg">Cargando CRM...</p>
+  <div id="loadingSpinner" style="display:flex;flex-direction:column;align-items:center;gap:12px;">
+    <div class="spinner"></div>
+    <p id="loadingMsg">Cargando CRM...</p>
+  </div>
+  <div id="loginCard" style="display:none;">
+    <div class="login-card">
+      <img class="login-logo" src="https://customer-assets.emergentagent.com/job_cotiza-ahora/artifacts/8hb3rbcf_Captura_de_pantalla_2026-05-13_a_la_s__17.02.49-removebg-preview.png" alt="Mi Comunidad Segura">
+      <h2>Mi Comunidad Segura</h2>
+      <p>CRM interno — acceso solo para el equipo</p>
+      <button class="btn-google" id="btnGoogleLogin">
+        <svg width="18" height="18" viewBox="0 0 18 18"><path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.874 2.684-6.615z"/><path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18z"/><path fill="#FBBC05" d="M3.964 10.71A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.042l3.007-2.332z"/><path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.958L3.964 6.29C4.672 4.163 6.656 3.58 9 3.58z"/></svg>
+        Continuar con Google
+      </button>
+    </div>
+  </div>
 </div>
 
 <div class="header">
@@ -360,6 +386,11 @@ td[contenteditable]:focus{outline:none;background:#fffbeb;box-shadow:inset 0 0 0
   <div class="header-right">
     <div class="presence-wrap" id="presenceWrap"></div>
     <div class="sync-dot" id="syncDot" title="Estado de sincronización"></div>
+    <div class="header-user" id="headerUser" style="display:none;">
+      <img class="user-photo" id="userPhoto" src="" alt="">
+      <span class="user-display-name" id="userDisplayName"></span>
+      <button class="btn-signout" id="btnSignout">Salir</button>
+    </div>
   </div>
 </div>
 <div class="progress-global"><div class="progress-global-bar" id="globalBar" style="width:0%"></div></div>
@@ -485,6 +516,8 @@ let USE_FIREBASE = false;
 let USE_STORAGE = false;
 let DB_REF = null;
 let STORAGE = null;
+let AUTH = null;
+let CURRENT_USER = null;
 let appReady = false;
 
 // ── Firebase or localStorage ──────────────────────────────
@@ -493,20 +526,60 @@ function initStorage() {
   if (hasConfig) {
     try {
       firebase.initializeApp(FIREBASE_CONFIG);
-      DB_REF = firebase.database().ref(VERTICAL_CONFIG[VERTICAL].firebasePath);
+      AUTH = firebase.auth();
       USE_FIREBASE = true;
       if (FIREBASE_CONFIG.storageBucket) { STORAGE = firebase.storage(); USE_STORAGE = true; }
-      document.getElementById('loadingMsg').textContent = 'Conectando con Firebase...';
-      DB_REF.on('value', snap => {
-        STATE = snap.val() || {};
-        renderAll();
-        if (!appReady) {
-          appReady = true;
-          document.getElementById('loadingOverlay').style.display = 'none';
-          startPresenceFlow();
+      document.getElementById('loadingMsg').textContent = 'Verificando acceso...';
+
+      // ── Google login button ───────────────────────────
+      document.getElementById('btnGoogleLogin').addEventListener('click', () => {
+        const provider = new firebase.auth.GoogleAuthProvider();
+        AUTH.signInWithPopup(provider).catch(err => alert('Error al iniciar sesión: ' + err.message));
+      });
+      document.getElementById('btnSignout').addEventListener('click', () => {
+        AUTH.signOut();
+      });
+
+      // ── Auth state gate ───────────────────────────────
+      AUTH.onAuthStateChanged(user => {
+        if (user) {
+          CURRENT_USER = user;
+          // Show user info in header
+          const photoEl = document.getElementById('userPhoto');
+          const nameEl  = document.getElementById('userDisplayName');
+          const userEl  = document.getElementById('headerUser');
+          if (user.photoURL) photoEl.src = user.photoURL; else photoEl.style.display = 'none';
+          nameEl.textContent = user.displayName || user.email || '';
+          userEl.style.display = 'flex';
+          // Hide login, show spinner
+          document.getElementById('loginCard').style.display = 'none';
+          document.getElementById('loadingSpinner').style.display = 'flex';
+          document.getElementById('loadingMsg').textContent = 'Conectando con Firebase...';
+          // Connect to DB
+          if (!DB_REF) {
+            DB_REF = firebase.database().ref(VERTICAL_CONFIG[VERTICAL].firebasePath);
+            DB_REF.on('value', snap => {
+              STATE = snap.val() || {};
+              renderAll();
+              if (!appReady) {
+                appReady = true;
+                document.getElementById('loadingOverlay').style.display = 'none';
+                startPresenceFlow();
+              }
+            });
+            setSyncOnline();
+          }
+        } else {
+          CURRENT_USER = null;
+          document.getElementById('headerUser').style.display = 'none';
+          if (DB_REF) { DB_REF.off(); DB_REF = null; }
+          // Show login screen
+          document.getElementById('loadingOverlay').style.display = 'flex';
+          document.getElementById('loadingSpinner').style.display = 'none';
+          document.getElementById('loginCard').style.display = 'block';
+          appReady = false;
         }
       });
-      setSyncOnline();
     } catch(e) {
       console.warn('Firebase error, usando localStorage:', e);
       initLocalStorage();
@@ -1734,15 +1807,18 @@ function getMyColor() {
   if (!c) { c = COLORS[Math.floor(Math.random()*COLORS.length)]; localStorage.setItem('crm_color',c); }
   return c;
 }
-function getMyName() { return localStorage.getItem('crm_name') || ''; }
+function getMyName() {
+  if (CURRENT_USER) return CURRENT_USER.displayName || CURRENT_USER.email || 'Usuario';
+  return localStorage.getItem('crm_name') || '';
+}
 function saveMyName(n) { localStorage.setItem('crm_name', n); }
 
-function initPresence(name) {
+function initPresence(name, photo) {
   if (!USE_FIREBASE) return;
   const db = firebase.database();
   PRESENCE_REF = db.ref('crm_cotizaciones/presence');
   myPresenceRef = PRESENCE_REF.child(SESSION_ID);
-  myPresenceRef.set({ name, color: getMyColor(), ts: Date.now() });
+  myPresenceRef.set({ name, color: getMyColor(), photo: photo||null, ts: Date.now() });
   myPresenceRef.onDisconnect().remove();
   setInterval(() => myPresenceRef && myPresenceRef.update({ ts: Date.now() }), 30000);
 
@@ -1774,7 +1850,13 @@ function renderPresence(data) {
     const av = document.createElement('div');
     av.className = 'avatar';
     av.style.background = u.color || '#6366f1';
-    av.textContent = (u.name || '?')[0].toUpperCase();
+    if (u.photo) {
+      av.style.backgroundImage = `url(${u.photo})`;
+      av.style.backgroundSize = 'cover';
+      av.style.backgroundPosition = 'center';
+    } else {
+      av.textContent = (u.name || '?')[0].toUpperCase();
+    }
     av.dataset.name = u.name + (sid===SESSION_ID ? ' (tú)' : '');
     wrap.appendChild(av);
   });
@@ -1867,8 +1949,12 @@ function showNameModal() {
 
 function startPresenceFlow() {
   if (!USE_FIREBASE) return;
-  const name = getMyName();
-  if (name) initPresence(name); else showNameModal();
+  if (CURRENT_USER) {
+    initPresence(CURRENT_USER.displayName || CURRENT_USER.email || 'Usuario', CURRENT_USER.photoURL);
+  } else {
+    const name = getMyName();
+    if (name) initPresence(name, null); else showNameModal();
+  }
 }
 
 // ── Tab switching ─────────────────────────────────────────
