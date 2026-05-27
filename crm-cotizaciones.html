@@ -575,7 +575,7 @@ function initStorage() {
                 const examples = VERTICAL === 'comunidades' ? EXAMPLE_LEADS_COM : EXAMPLE_LEADS;
                 const seed = { _seeded: true };
                 examples.forEach(l => { seed[l.id] = l; });
-                DB_REF.set(seed); // triggers on('value') again with seeded data
+                DB_REF.update(seed); // update (not set) — never wipes existing data
                 return;
               }
               renderAll();
@@ -947,8 +947,15 @@ function saveState() {
 
 function fbWrite(id, data) {
   if (USE_FIREBASE && DB_REF) {
+    const prev = STATE[id]; // snapshot for rollback
     setSyncing();
-    DB_REF.child(id).set(data).then(setSyncOnline).catch(setSyncOffline);
+    DB_REF.child(id).set(data)
+      .then(setSyncOnline)
+      .catch(err => {
+        STATE[id] = prev; // rollback optimistic update on failure
+        setSyncOffline(err);
+        renderAll();
+      });
   } else {
     STATE[id] = data;
     saveState();
@@ -958,8 +965,15 @@ function fbWrite(id, data) {
 
 function fbRemove(id) {
   if (USE_FIREBASE && DB_REF) {
+    const prev = STATE[id]; // snapshot for rollback
     setSyncing();
-    DB_REF.child(id).remove().then(setSyncOnline).catch(setSyncOffline);
+    DB_REF.child(id).remove()
+      .then(setSyncOnline)
+      .catch(err => {
+        STATE[id] = prev; // rollback
+        setSyncOffline(err);
+        renderAll();
+      });
   } else {
     delete STATE[id];
     saveState();
@@ -1021,9 +1035,12 @@ function fmtPrima(v) {
 
 function fmtDate(d) {
   if (!d) return '';
-  const [y,m,day] = d.split('-');
-  const meses = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
-  return `${parseInt(day)} ${meses[parseInt(m)-1]}`;
+  try {
+    const parts = String(d).replace(/\//g,'-').split('-');
+    const mo = parseInt(parts[1]); const dy = parseInt(parts[2]);
+    if (isNaN(mo) || isNaN(dy) || mo < 1 || mo > 12) return d;
+    return `${dy} ${['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'][mo-1]}`;
+  } catch { return d; }
 }
 
 // ── Filter state ──────────────────────────────────────────
@@ -1288,11 +1305,15 @@ function updateCompaniaFilter() {
 }
 
 // ── Sortable ──────────────────────────────────────────────
+let _sortableInstances = [];
 function initSortable() {
+  // Destroy previous Sortable instances before re-creating (prevents memory leaks on vertical switch)
+  _sortableInstances.forEach(s => { try { s.destroy(); } catch {} });
+  _sortableInstances = [];
   COLUMNS.forEach(c => {
     const list = document.getElementById(`list-${c.id}`);
     if (!list) return;
-    Sortable.create(list, {
+    _sortableInstances.push(Sortable.create(list, {
       group: 'leads',
       animation: 150,
       ghostClass: 'sortable-ghost',
@@ -1348,7 +1369,7 @@ function initSortable() {
           if (bar) bar.style.width = (total>0 ? Math.round(n/total*100) : 0) + '%';
         });
       }
-    });
+    })); // close Sortable.create + push
   });
 }
 
@@ -1356,6 +1377,7 @@ function initSortable() {
 function openModal(id, defaultCol, activeTab) {
   document.querySelectorAll('.modal-bg').forEach(el => el.remove());
   const isEdit = !!id;
+  if (isEdit && !STATE[id]) { showToast('Este lead ya no existe o fue eliminado', 'error'); return; }
   const lead = isEdit ? { ...STATE[id] } : defaultLead({ columna: defaultCol || 'nuevo' });
 
   const bg = document.createElement('div');
@@ -1788,6 +1810,11 @@ function openModal(id, defaultCol, activeTab) {
       updated.historial = [...(lead.historial||[]).slice(-49), { ts: Date.now(), usuario: getMyName()||'Usuario', desc: changes.join(' · ') }];
     }
 
+    // Detect concurrent edits: warn if another user saved this lead while modal was open
+    const serverLead = STATE[updated.id];
+    if (isEdit && serverLead && lead.updatedAt && serverLead.updatedAt > lead.updatedAt) {
+      if (!confirm('⚠️ Este lead fue modificado por otro usuario mientras lo tenías abierto.\n¿Sobreescribir sus cambios con los tuyos?')) return;
+    }
     if (myPresenceRef) myPresenceRef.update({ activeLead: null });
     bg.remove();
     STATE[updated.id] = updated;
@@ -1865,7 +1892,14 @@ function openModal(id, defaultCol, activeTab) {
       // ── Firebase Storage path ──────────────────────────────
       if (progressEl) { progressEl.style.display = 'block'; progressEl.textContent = '⏫ Subiendo 0/' + valid.length + '...'; }
       if (docUploadBtn) docUploadBtn.disabled = true;
-      let uploaded = 0;
+      let settled = 0; // counts both successes and failures
+      function checkDone() {
+        if (settled < valid.length) return;
+        const successfulDocs = newDocs.filter(Boolean);
+        if (progressEl) progressEl.style.display = 'none';
+        if (docUploadBtn) docUploadBtn.disabled = false;
+        if (successfulDocs.length) finalize(successfulDocs);
+      }
       valid.forEach((file, i) => {
         const docId = (Date.now()+i)+'_'+Math.random().toString(36).slice(2,6);
         const storagePath = `documentos/${VERTICAL}/${lead.id}/${docId}/${file.name}`;
@@ -1874,14 +1908,14 @@ function openModal(id, defaultCol, activeTab) {
           .then(snap => snap.ref.getDownloadURL())
           .then(url => {
             newDocs[i] = { id:docId, nombre:file.name, tipo:file.type||'application/octet-stream', tamaño:file.size, url, storagePath, ts:Date.now(), usuario:getMyName()||'Usuario' };
-            uploaded++;
-            if (progressEl) progressEl.textContent = `⏫ Subiendo ${uploaded}/${valid.length}...`;
-            if (uploaded === valid.length) finalize(newDocs);
+            settled++;
+            if (progressEl) progressEl.textContent = `⏫ Subiendo ${settled}/${valid.length}...`;
+            checkDone();
           })
           .catch(err => {
-            if (docUploadBtn) docUploadBtn.disabled = false;
-            if (progressEl) progressEl.style.display = 'none';
+            settled++;
             showToast('⚠ Error al subir "' + file.name + '": ' + err.message, 'error', 5000);
+            checkDone();
           });
       });
     } else {
@@ -2033,6 +2067,7 @@ document.getElementById('importFileInput').addEventListener('change', e => {
       const ws = wb.Sheets[wb.SheetNames[0]];
       const data = XLSX.utils.sheet_to_json(ws, {defval:''});
       let imported = 0;
+      const importedLeads = [];
       data.forEach(row => {
         const toDate = v => { try { const d = new Date(v); return isNaN(d)?'':`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; } catch { return ''; }};
         const toNum  = v => String(v||'').replace(/[^\d]/g,'');
@@ -2063,7 +2098,7 @@ document.getElementById('importFileInput').addEventListener('change', e => {
             cierre:            esCierre,
             columna:           esCierre ? 'emitida' : 'nuevo',
           });
-          if (lead.edificio) { STATE[lead.id] = lead; imported++; }
+          if (lead.edificio) { STATE[lead.id] = lead; importedLeads.push(lead); imported++; }
         } else {
           lead = defaultLead({
             fecha:             toDate(row['Fecha']) || today(),
@@ -2087,13 +2122,14 @@ document.getElementById('importFileInput').addEventListener('change', e => {
             compania:          String(row['Compañía']||row['Compania']||''),
             columna:           esCierre ? 'emitida' : 'nuevo',
           });
-          if (lead.asegurado) { STATE[lead.id] = lead; imported++; }
+          if (lead.asegurado) { STATE[lead.id] = lead; importedLeads.push(lead); imported++; }
         }
       });
       if (USE_FIREBASE && DB_REF) {
         setSyncing();
+        // Only write the newly imported leads — never rewrite the whole STATE
         const updates = {};
-        Object.values(STATE).forEach(l => { updates[l.id] = l; });
+        importedLeads.forEach(l => { updates[l.id] = l; });
         DB_REF.update(updates).then(setSyncOnline).catch(setSyncOffline);
       } else {
         saveState();
@@ -2127,32 +2163,49 @@ function getMyColor() {
   if (!c) { c = COLORS[Math.floor(Math.random()*COLORS.length)]; localStorage.setItem('crm_color',c); }
   return c;
 }
+// Sanitize colors coming from Firebase presence (only allow hex or our palette)
+function safeColor(c) {
+  return (c && /^#[0-9a-fA-F]{3,8}$/.test(c)) ? c : '#6366f1';
+}
 function getMyName() {
   if (CURRENT_USER) return CURRENT_USER.displayName || CURRENT_USER.email || 'Usuario';
   return localStorage.getItem('crm_name') || '';
 }
 function saveMyName(n) { localStorage.setItem('crm_name', n); }
 
+let _presenceInterval  = null;
+let _presenceMouseMove = null;
+let _presenceMouseLeave = null;
+
 function initPresence(name, photo) {
   if (!USE_FIREBASE) return;
+
+  // Clean up any previous presence session (handles logout → login in same tab)
+  if (_presenceInterval)   { clearInterval(_presenceInterval); _presenceInterval = null; }
+  if (_presenceMouseMove)  { document.removeEventListener('mousemove',   _presenceMouseMove);  _presenceMouseMove = null; }
+  if (_presenceMouseLeave) { document.removeEventListener('mouseleave',  _presenceMouseLeave); _presenceMouseLeave = null; }
+  if (PRESENCE_REF) { PRESENCE_REF.off(); }
+
   const db = firebase.database();
   PRESENCE_REF = db.ref('crm_cotizaciones/presence');
   myPresenceRef = PRESENCE_REF.child(SESSION_ID);
   myPresenceRef.set({ name, color: getMyColor(), photo: photo||null, ts: Date.now() });
   myPresenceRef.onDisconnect().remove();
-  setInterval(() => myPresenceRef && myPresenceRef.update({ ts: Date.now() }), 30000);
+  _presenceInterval = setInterval(() => myPresenceRef && myPresenceRef.update({ ts: Date.now() }), 30000);
 
   PRESENCE_REF.on('value', snap => renderPresence(snap.val() || {}));
 
-  document.addEventListener('mousemove', e => {
+  _presenceMouseMove = e => {
     if (!myPresenceRef) return;
     if (Date.now() - (initPresence._last||0) < 100) return;
     initPresence._last = Date.now();
     myPresenceRef.update({ cursor: { x: Math.round(e.clientX), y: Math.round(e.clientY) } });
-  });
-  document.addEventListener('mouseleave', () => {
+  };
+  _presenceMouseLeave = () => {
     if (myPresenceRef) myPresenceRef.update({ cursor: null });
-  });
+  };
+  document.addEventListener('mousemove',  _presenceMouseMove);
+  document.addEventListener('mouseleave', _presenceMouseLeave);
 }
 
 function renderPresence(data) {
@@ -2169,15 +2222,15 @@ function renderPresence(data) {
   users.forEach(([sid, u]) => {
     const av = document.createElement('div');
     av.className = 'avatar';
-    av.style.background = u.color || '#6366f1';
-    if (u.photo) {
+    av.style.background = safeColor(u.color);
+    if (u.photo && /^https?:\/\//.test(u.photo)) { // only allow http(s) photo URLs
       av.style.backgroundImage = `url(${u.photo})`;
       av.style.backgroundSize = 'cover';
       av.style.backgroundPosition = 'center';
     } else {
       av.textContent = (u.name || '?')[0].toUpperCase();
     }
-    av.dataset.name = u.name + (sid===SESSION_ID ? ' (tú)' : '');
+    av.dataset.name = esc(u.name || '?') + (sid===SESSION_ID ? ' (tú)' : '');
     wrap.appendChild(av);
   });
   updateRemoteCursors(data);
@@ -2213,9 +2266,18 @@ function updateModalViewersBanner(data) {
   const viewers = Object.entries(data).filter(([sid, u]) => sid !== SESSION_ID && u.activeLead === leadId);
   if (viewers.length === 0) { banner.style.display = 'none'; return; }
   banner.style.display = 'flex';
-  banner.innerHTML = viewers.map(([, u]) =>
-    `<div class="viewing-av" style="background:${u.color||'#6366f1'}">${(u.name||'?')[0].toUpperCase()}</div>`
-  ).join('') + `<span><strong>${viewers.map(([,u])=>u.name||'?').join(', ')}</strong> también ${viewers.length===1?'está':'están'} viendo este lead</span>`;
+  banner.innerHTML = '';
+  viewers.forEach(([, u]) => {
+    const av = document.createElement('div');
+    av.className = 'viewing-av';
+    av.style.background = safeColor(u.color);
+    av.textContent = (u.name || '?')[0].toUpperCase();
+    banner.appendChild(av);
+  });
+  const lbl = document.createElement('span');
+  const names = viewers.map(([,u]) => esc(u.name||'?')).join(', ');
+  lbl.innerHTML = `<strong>${names}</strong> también ${viewers.length===1?'está':'están'} viendo este lead`;
+  banner.appendChild(lbl);
 }
 
 function updateRemoteCursors(data) {
@@ -2228,7 +2290,13 @@ function updateRemoteCursors(data) {
     if (!remoteCursors[sid]) {
       const el = document.createElement('div');
       el.className = 'remote-cursor';
-      el.innerHTML = `<svg width="14" height="20" viewBox="0 0 14 20" fill="none"><path d="M0 0L0 16L4.5 11.5L7.5 18.5L9.5 17.5L6.5 10.5L12 10.5Z" fill="${color}" stroke="white" stroke-width="1.2" stroke-linejoin="round"/></svg><span class="cursor-label" style="background:${color}">${u.name||'?'}</span>`;
+      const safeCol = safeColor(color);
+      el.innerHTML = `<svg width="14" height="20" viewBox="0 0 14 20" fill="none"><path d="M0 0L0 16L4.5 11.5L7.5 18.5L9.5 17.5L6.5 10.5L12 10.5Z" fill="${safeCol}" stroke="white" stroke-width="1.2" stroke-linejoin="round"/></svg>`;
+      const lbl = document.createElement('span');
+      lbl.className = 'cursor-label';
+      lbl.style.background = safeCol;
+      lbl.textContent = u.name || '?'; // textContent — no XSS
+      el.appendChild(lbl);
       document.body.appendChild(el);
       remoteCursors[sid] = { el, timeout: null };
     }
@@ -2365,12 +2433,14 @@ function saveLead(l, histDesc) {
   }
   STATE[l.id] = l;
   if (USE_FIREBASE && DB_REF) {
+    const prev = STATE[l.id];
     setSyncing();
-    DB_REF.child(l.id).set(l).then(setSyncOnline).catch(setSyncOffline);
+    DB_REF.child(l.id).set(l)
+      .then(setSyncOnline)
+      .catch(err => { STATE[l.id] = prev; setSyncOffline(err); renderAll(); });
   } else {
     saveState();
-    renderStats();
-    updateCompaniaFilter();
+    renderAll(); // full re-render so Kanban stays in sync with table edits
   }
 }
 
@@ -2983,6 +3053,7 @@ function openQuickAdd() {
 // ── Vertical switcher ─────────────────────────────────────
 function switchVertical(v) {
   if (v === VERTICAL) return;
+  if (!appReady) return; // don't switch while initial auth/data load is in progress
   VERTICAL = v;
   localStorage.setItem('crm_vertical', v);
 
@@ -3026,7 +3097,7 @@ function switchVertical(v) {
         const examples = v === 'comunidades' ? EXAMPLE_LEADS_COM : EXAMPLE_LEADS;
         const seed = { _seeded: true };
         examples.forEach(l => { seed[l.id] = l; });
-        DB_REF.set(seed);
+        DB_REF.update(seed); // update (not set) — never wipes existing data
         return;
       }
       renderAll();
