@@ -592,7 +592,7 @@ function newLeadId() { return 'l_' + Date.now() + '_' + Math.random().toString(3
 function defaultLead(overrides) {
   const base = VERTICAL === 'comunidades' ? {
     id: newLeadId(), columna:'nuevo', orden:Date.now(), fecha:today(),
-    fuente:'', edificio:'', administrador:'', telefono:'', correo:'', rutComunidad:'', direccion:'', unidades:'',
+    fuente:'', edificio:'', tipoContacto:'Administrador', administrador:'', telefono:'', correo:'', rutComunidad:'', direccion:'', comuna:'', unidades:'',
     polizaVigente:false, cartaAsignacion:false, maec:'', mau:'',
     compania:'', primaNeta:'', fechaCotizacion:today(), accionSeguimiento:'', cierre:false,
     comentarios:'', fechaEmision:'', fechaSeguimiento:'',
@@ -981,7 +981,12 @@ function openModal(id, defaultCol, activeTab) {
         </div>
         <div class="form-row">
           <label>Administrador / Contacto</label>
-          <input id="mAdministrador" type="text" value="${esc(lead.administrador||'')}" placeholder="Nombre del contacto">
+          <div style="display:flex;gap:6px;">
+            <select id="mTipoContacto" style="width:130px;border:1.5px solid #e5e5e5;border-radius:7px;padding:6px 8px;font-size:12px;font-family:inherit;outline:none;color:#111;background:#fff;flex-shrink:0;">
+              ${['Administrador','Comité','Residente','Otro'].map(t=>`<option${(lead.tipoContacto||'Administrador')===t?' selected':''}>${t}</option>`).join('')}
+            </select>
+            <input id="mAdministrador" type="text" value="${esc(lead.administrador||'')}" placeholder="Nombre del contacto" style="flex:1;">
+          </div>
         </div>
       </div>
       <div class="form-2col">
@@ -1010,6 +1015,13 @@ function openModal(id, defaultCol, activeTab) {
           <label>Dirección</label>
           <input id="mDireccion" type="text" value="${esc(lead.direccion||'')}" placeholder="Av. Las Condes 1234, Santiago">
         </div>
+      </div>
+      <div class="form-2col">
+        <div class="form-row">
+          <label>Comuna</label>
+          <input id="mComuna" type="text" value="${esc(lead.comuna||'')}" placeholder="Las Condes">
+        </div>
+        <div class="form-row"></div>
       </div>
       <div class="form-2col">
         <div class="form-row">
@@ -1317,12 +1329,14 @@ function openModal(id, defaultCol, activeTab) {
       if (!edificio) { bg.querySelector('#mEdificio').focus(); return; }
       updated = Object.assign({}, lead, {
         edificio,
+        tipoContacto:      bg.querySelector('#mTipoContacto').value,
         administrador:     bg.querySelector('#mAdministrador').value.trim(),
         telefono:          bg.querySelector('#mTelefono').value.trim(),
         correo:            bg.querySelector('#mCorreo').value.trim(),
         rutComunidad:      bg.querySelector('#mRutCom').value.trim(),
         unidades:          bg.querySelector('#mUnidades').value.trim(),
         direccion:         bg.querySelector('#mDireccion').value.trim(),
+        comuna:            bg.querySelector('#mComuna').value.trim(),
         polizaVigente:     bg.querySelector('#mPolizaVigente').checked,
         cartaAsignacion:   bg.querySelector('#mCartaAsignacion').checked,
         maec:              bg.querySelector('#mMaec').value.trim(),
@@ -1603,8 +1617,8 @@ document.getElementById('btnExport').addEventListener('click', () => {
   const leads = Object.values(STATE).filter(l => l && l.id);
   let headers, rows;
   if (VERTICAL === 'comunidades') {
-    headers = ['Fecha','Edificio','RUT Comunidad','Teléfono','Correo','Administrador','Dirección','Unidades','Póliza vigente','Carta Asignación','MAEC','MAU','Fuente','Aseguradora','Prima neta','Acción','F. Seguimiento','Cierre','F. Emisión','Comentarios','Etapa'];
-    rows = leads.map(l => [l.fecha,l.edificio,l.rutComunidad||'',l.telefono||'',l.correo||'',l.administrador||'',l.direccion||'',l.unidades||'',l.polizaVigente?'Sí':'No',l.cartaAsignacion?'Sí':'No',l.maec||'',l.mau||'',l.fuente,l.compania,l.primaNeta,l.accionSeguimiento,l.fechaSeguimiento,l.cierre?'Sí':'No',l.fechaEmision,l.comentarios,l.columna]);
+    headers = ['Fecha','Edificio','RUT Comunidad','Tipo Contacto','Administrador','Teléfono','Correo','Dirección','Comuna','Unidades','Póliza vigente','Carta Asignación','MAEC','MAU','Fuente','Aseguradora','Prima neta','Acción','F. Seguimiento','Cierre','F. Emisión','Comentarios','Etapa'];
+    rows = leads.map(l => [l.fecha,l.edificio,l.rutComunidad||'',l.tipoContacto||'',l.administrador||'',l.telefono||'',l.correo||'',l.direccion||'',l.comuna||'',l.unidades||'',l.polizaVigente?'Sí':'No',l.cartaAsignacion?'Sí':'No',l.maec||'',l.mau||'',l.fuente,l.compania,l.primaNeta,l.accionSeguimiento,l.fechaSeguimiento,l.cierre?'Sí':'No',l.fechaEmision,l.comentarios,l.columna]);
   } else {
     headers = ['Fecha','Asegurado','Teléfono','RUT','Fuente','Marca','Modelo','Año','Patente','Póliza vigente','Prima vigente','Deducible','F. Cotización','Aseguradora','Prima neta','Acción','F. Seguimiento','Cierre','F. Emisión','Comentarios','Etapa'];
     rows = leads.map(l => [l.fecha,l.asegurado,l.telefono||'',l.rut,l.fuente,l.marca,l.modelo,l.anio,l.patente,l.polizaVigente?'Sí':'No',l.primaVigente,l.deducibleActual,l.fechaCotizacion,l.compania,l.primaNeta,l.accionSeguimiento,l.fechaSeguimiento,l.cierre?'Sí':'No',l.fechaEmision,l.comentarios,l.columna]);
@@ -1638,8 +1652,10 @@ document.getElementById('importFileInput').addEventListener('change', e => {
             edificio:          String(row['Edificio']||row['Edificio / Condominio']||'').trim(),
             administrador:     String(row['Administrador']||row['Administrador / Contacto']||'').trim(),
             telefono:          String(row['Teléfono']||row['Telefono']||row['Celular']||'').trim(),
+            tipoContacto:      String(row['Tipo Contacto']||row['Tipo contacto']||'Administrador'),
             correo:            String(row['Correo']||row['Email']||row['Correo electrónico']||'').trim(),
             rutComunidad:      formatRut(String(row['RUT Comunidad']||row['RUT']||row['Rut']||'')),
+            comuna:            String(row['Comuna']||''),
             direccion:         String(row['Dirección']||row['Direccion']||''),
             unidades:          String(row['Unidades']||row['N° Unidades']||''),
             polizaVigente:     /si/i.test(String(row['Póliza vigente']||row['Poliza vigente']||'')),
@@ -1894,8 +1910,10 @@ const TABLE_COLS_COM = [
   { key:'fecha',             label:'Fecha',         sort:true  },
   { key:'edificio',          label:'Edificio',      sort:true  },
   { key:'telefono',          label:'Teléfono',      sort:false },
+  { key:'tipoContacto',      label:'Tipo contacto', sort:true  },
   { key:'administrador',     label:'Administrador', sort:true  },
   { key:'direccion',         label:'Dirección',     sort:false },
+  { key:'comuna',            label:'Comuna',        sort:true  },
   { key:'unidades',          label:'Unidades',      sort:false },
   { key:'polizaVigente',     label:'Póliza vigente',   sort:false },
   { key:'cartaAsignacion',   label:'Carta Asignación', sort:false },
@@ -2054,8 +2072,10 @@ function buildEditableRowCom(lead) {
   tr.appendChild(dateTd('fecha'));
   tr.appendChild(textTd('edificio','t-asegurado'));
   tr.appendChild(telefonTd());
+  tr.appendChild(textTd('tipoContacto','t-muted','font-size:11px'));
   tr.appendChild(textTd('administrador','t-muted','font-size:11px'));
   tr.appendChild(textTd('direccion','t-muted','font-size:11px;max-width:160px'));
+  tr.appendChild(textTd('comuna','t-muted','font-size:11px'));
   tr.appendChild(textTd('unidades','t-muted','font-size:11px;text-align:center'));
   tr.appendChild(boolTd('polizaVigente'));
   tr.appendChild(boolTd('cartaAsignacion'));
