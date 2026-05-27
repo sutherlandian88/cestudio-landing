@@ -565,9 +565,9 @@ function initStorage() {
                 appReady = true;
                 document.getElementById('loadingOverlay').style.display = 'none';
                 startPresenceFlow();
+                setSyncOnline(); // only mark online once Firebase delivers real data
               }
             });
-            setSyncOnline();
           }
         } else {
           CURRENT_USER = null;
@@ -1001,6 +1001,8 @@ function initSortable() {
                 updates[cid + '/orden'] = i * 100;
               }
             });
+            // persist updatedAt for the card that was actually moved
+            updates[id + '/updatedAt'] = STATE[id].updatedAt;
             DB_REF.update(updates).then(setSyncOnline).catch(setSyncOffline);
           } else {
             saveState();
@@ -2472,6 +2474,25 @@ function renderTable() {
   }
 
   leads.forEach(l => tbody.appendChild(buildEditableRow(l)));
+
+  // Sync body cell order to match the header (which may have been drag-reordered).
+  // buildEditableRow always produces cells in the original getTableCols() order;
+  // after a column drag the <th> elements are reordered but the header is not
+  // rebuilt (only cleared on vertical switch), so we need to re-sequence the
+  // <td> elements in every new body row to match the current <th> sequence.
+  const hThs = [...thead.querySelectorAll('th')];
+  const origCols = getTableCols();
+  tbody.querySelectorAll('tr').forEach(tr => {
+    const tds = [...tr.children]; // snapshot before DOM mutations
+    if (tds.length !== hThs.length) return;
+    const ordered = hThs.map((th, hIdx) => {
+      if (hIdx === 0) return tds[0]; // actions column
+      const key = th.dataset.key;
+      const origIdx = origCols.findIndex(c => c.key === key);
+      return origIdx >= 0 ? tds[origIdx + 1] : null;
+    }).filter(Boolean);
+    ordered.forEach(td => tr.appendChild(td)); // appendChild moves existing nodes in order
+  });
 }
 
 document.getElementById('addRowBtn').addEventListener('click', () => openModal(null));
