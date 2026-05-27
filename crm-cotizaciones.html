@@ -590,6 +590,7 @@ function defaultLead(overrides) {
   const base = VERTICAL === 'comunidades' ? {
     id: newLeadId(), columna:'nuevo', orden:Date.now(), fecha:today(),
     fuente:'', edificio:'', administrador:'', telefono:'', direccion:'', unidades:'',
+    maec:'', mau:'',
     compania:'', primaNeta:'', fechaCotizacion:today(), accionSeguimiento:'', cierre:false,
     comentarios:'', fechaEmision:'', fechaSeguimiento:'',
     notas:[], historial:[], documentos:[], createdAt:Date.now(), updatedAt:Date.now()
@@ -987,6 +988,16 @@ function openModal(id, defaultCol, activeTab) {
       </div>
       <div class="form-2col">
         <div class="form-row">
+          <label>Monto Asegurado Espacios Comunes (MAEC)</label>
+          <input id="mMaec" type="text" value="${esc(lead.maec||'')}" placeholder="0">
+        </div>
+        <div class="form-row">
+          <label>Monto Asegurado Unidades (MAU)</label>
+          <input id="mMau" type="text" value="${esc(lead.mau||'')}" placeholder="0">
+        </div>
+      </div>
+      <div class="form-2col">
+        <div class="form-row">
           <label>Fuente lead</label>
           <select id="mFuente">${fuenteOptions}</select>
         </div>
@@ -1263,6 +1274,8 @@ function openModal(id, defaultCol, activeTab) {
         telefono:          bg.querySelector('#mTelefono').value.trim(),
         unidades:          bg.querySelector('#mUnidades').value.trim(),
         direccion:         bg.querySelector('#mDireccion').value.trim(),
+        maec:              bg.querySelector('#mMaec').value.trim(),
+        mau:               bg.querySelector('#mMau').value.trim(),
         fuente:            bg.querySelector('#mFuente').value,
         fecha:             bg.querySelector('#mFecha').value,
         columna:           bg.querySelector('#mColumna').value,
@@ -1539,8 +1552,8 @@ document.getElementById('btnExport').addEventListener('click', () => {
   const leads = Object.values(STATE).filter(l => l && l.id);
   let headers, rows;
   if (VERTICAL === 'comunidades') {
-    headers = ['Fecha','Edificio','Teléfono','Administrador','Dirección','Unidades','Fuente','Aseguradora','Prima neta','Acción','F. Seguimiento','Cierre','F. Emisión','Comentarios','Etapa'];
-    rows = leads.map(l => [l.fecha,l.edificio,l.telefono||'',l.administrador||'',l.direccion||'',l.unidades||'',l.fuente,l.compania,l.primaNeta,l.accionSeguimiento,l.fechaSeguimiento,l.cierre?'Sí':'No',l.fechaEmision,l.comentarios,l.columna]);
+    headers = ['Fecha','Edificio','Teléfono','Administrador','Dirección','Unidades','MAEC','MAU','Fuente','Aseguradora','Prima neta','Acción','F. Seguimiento','Cierre','F. Emisión','Comentarios','Etapa'];
+    rows = leads.map(l => [l.fecha,l.edificio,l.telefono||'',l.administrador||'',l.direccion||'',l.unidades||'',l.maec||'',l.mau||'',l.fuente,l.compania,l.primaNeta,l.accionSeguimiento,l.fechaSeguimiento,l.cierre?'Sí':'No',l.fechaEmision,l.comentarios,l.columna]);
   } else {
     headers = ['Fecha','Asegurado','Teléfono','RUT','Fuente','Marca','Modelo','Año','Patente','Póliza vigente','Prima vigente','Deducible','F. Cotización','Aseguradora','Prima neta','Acción','F. Seguimiento','Cierre','F. Emisión','Comentarios','Etapa'];
     rows = leads.map(l => [l.fecha,l.asegurado,l.telefono||'',l.rut,l.fuente,l.marca,l.modelo,l.anio,l.patente,l.polizaVigente?'Sí':'No',l.primaVigente,l.deducibleActual,l.fechaCotizacion,l.compania,l.primaNeta,l.accionSeguimiento,l.fechaSeguimiento,l.cierre?'Sí':'No',l.fechaEmision,l.comentarios,l.columna]);
@@ -1576,6 +1589,8 @@ document.getElementById('importFileInput').addEventListener('change', e => {
             telefono:          String(row['Teléfono']||row['Telefono']||row['Celular']||'').trim(),
             direccion:         String(row['Dirección']||row['Direccion']||''),
             unidades:          String(row['Unidades']||row['N° Unidades']||''),
+            maec:              toNum(row['MAEC']||row['Monto Asegurado Espacios Comunes']||''),
+            mau:               toNum(row['MAU']||row['Monto Asegurado Unidades']||''),
             compania:          String(row['Compañía']||row['Compania']||''),
             primaNeta:         toNum(row['Prima neta']),
             accionSeguimiento: String(row['Acción / Seguimiento']||row['Accion / Seguimiento']||''),
@@ -1827,6 +1842,8 @@ const TABLE_COLS_COM = [
   { key:'administrador',     label:'Administrador', sort:true  },
   { key:'direccion',         label:'Dirección',     sort:false },
   { key:'unidades',          label:'Unidades',      sort:false },
+  { key:'maec',              label:'MAEC ($)',       sort:true  },
+  { key:'mau',               label:'MAU ($)',        sort:true  },
   { key:'fuente',            label:'Fuente',        sort:true  },
   { key:'compania',          label:'Aseguradora',   sort:true  },
   { key:'primaNeta',         label:'Prima neta',    sort:true  },
@@ -1983,6 +2000,8 @@ function buildEditableRowCom(lead) {
   tr.appendChild(textTd('administrador','t-muted','font-size:11px'));
   tr.appendChild(textTd('direccion','t-muted','font-size:11px;max-width:160px'));
   tr.appendChild(textTd('unidades','t-muted','font-size:11px;text-align:center'));
+  tr.appendChild(numTd('maec'));
+  tr.appendChild(numTd('mau'));
   tr.appendChild(fuenteTd());
   tr.appendChild(textTd('compania',''));
   tr.appendChild(numTd('primaNeta'));
