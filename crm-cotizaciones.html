@@ -592,7 +592,7 @@ function newLeadId() { return 'l_' + Date.now() + '_' + Math.random().toString(3
 function defaultLead(overrides) {
   const base = VERTICAL === 'comunidades' ? {
     id: newLeadId(), columna:'nuevo', orden:Date.now(), fecha:today(),
-    fuente:'', edificio:'', administrador:'', telefono:'', correo:'', direccion:'', unidades:'',
+    fuente:'', edificio:'', administrador:'', telefono:'', correo:'', rutComunidad:'', direccion:'', unidades:'',
     polizaVigente:false, maec:'', mau:'',
     compania:'', primaNeta:'', fechaCotizacion:today(), accionSeguimiento:'', cierre:false,
     comentarios:'', fechaEmision:'', fechaSeguimiento:'',
@@ -610,6 +610,15 @@ function defaultLead(overrides) {
 
 function today() {
   return new Date().toISOString().slice(0,10);
+}
+
+function formatRut(raw) {
+  const clean = raw.replace(/[^0-9kK]/g, '').toUpperCase();
+  if (clean.length < 2) return clean;
+  const dv  = clean.slice(-1);
+  const num = clean.slice(0, -1);
+  const formatted = num.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+  return formatted + '-' + dv;
 }
 
 function fmtPrima(v) {
@@ -987,6 +996,13 @@ function openModal(id, defaultCol, activeTab) {
       </div>
       <div class="form-2col">
         <div class="form-row">
+          <label>RUT Comunidad</label>
+          <input id="mRutCom" type="text" value="${esc(lead.rutComunidad||'')}" placeholder="17.176.532-3" maxlength="12" autocomplete="off">
+        </div>
+        <div class="form-row"></div>
+      </div>
+      <div class="form-2col">
+        <div class="form-row">
           <label>N° de unidades</label>
           <input id="mUnidades" type="text" value="${esc(lead.unidades||'')}" placeholder="48">
         </div>
@@ -1252,6 +1268,18 @@ function openModal(id, defaultCol, activeTab) {
   document.body.appendChild(bg);
   (bg.querySelector('#mAsegurado') || bg.querySelector('#mEdificio') || bg.querySelector('input')).focus();
 
+  // RUT auto-format (Comunidades)
+  const rutInput = bg.querySelector('#mRutCom');
+  if (rutInput) {
+    rutInput.addEventListener('input', () => {
+      const pos = rutInput.selectionStart;
+      const prev = rutInput.value;
+      rutInput.value = formatRut(prev);
+      // Keep cursor at end while typing
+      rutInput.setSelectionRange(rutInput.value.length, rutInput.value.length);
+    });
+  }
+
   // Dirty tracking — warn before discarding unsaved changes
   let _dirty = false;
   bg.querySelectorAll('input,select,textarea').forEach(el => {
@@ -1286,6 +1314,7 @@ function openModal(id, defaultCol, activeTab) {
         administrador:     bg.querySelector('#mAdministrador').value.trim(),
         telefono:          bg.querySelector('#mTelefono').value.trim(),
         correo:            bg.querySelector('#mCorreo').value.trim(),
+        rutComunidad:      bg.querySelector('#mRutCom').value.trim(),
         unidades:          bg.querySelector('#mUnidades').value.trim(),
         direccion:         bg.querySelector('#mDireccion').value.trim(),
         polizaVigente:     bg.querySelector('#mPolizaVigente').checked,
@@ -1567,8 +1596,8 @@ document.getElementById('btnExport').addEventListener('click', () => {
   const leads = Object.values(STATE).filter(l => l && l.id);
   let headers, rows;
   if (VERTICAL === 'comunidades') {
-    headers = ['Fecha','Edificio','Teléfono','Correo','Administrador','Dirección','Unidades','Póliza vigente','MAEC','MAU','Fuente','Aseguradora','Prima neta','Acción','F. Seguimiento','Cierre','F. Emisión','Comentarios','Etapa'];
-    rows = leads.map(l => [l.fecha,l.edificio,l.telefono||'',l.correo||'',l.administrador||'',l.direccion||'',l.unidades||'',l.polizaVigente?'Sí':'No',l.maec||'',l.mau||'',l.fuente,l.compania,l.primaNeta,l.accionSeguimiento,l.fechaSeguimiento,l.cierre?'Sí':'No',l.fechaEmision,l.comentarios,l.columna]);
+    headers = ['Fecha','Edificio','RUT Comunidad','Teléfono','Correo','Administrador','Dirección','Unidades','Póliza vigente','MAEC','MAU','Fuente','Aseguradora','Prima neta','Acción','F. Seguimiento','Cierre','F. Emisión','Comentarios','Etapa'];
+    rows = leads.map(l => [l.fecha,l.edificio,l.rutComunidad||'',l.telefono||'',l.correo||'',l.administrador||'',l.direccion||'',l.unidades||'',l.polizaVigente?'Sí':'No',l.maec||'',l.mau||'',l.fuente,l.compania,l.primaNeta,l.accionSeguimiento,l.fechaSeguimiento,l.cierre?'Sí':'No',l.fechaEmision,l.comentarios,l.columna]);
   } else {
     headers = ['Fecha','Asegurado','Teléfono','RUT','Fuente','Marca','Modelo','Año','Patente','Póliza vigente','Prima vigente','Deducible','F. Cotización','Aseguradora','Prima neta','Acción','F. Seguimiento','Cierre','F. Emisión','Comentarios','Etapa'];
     rows = leads.map(l => [l.fecha,l.asegurado,l.telefono||'',l.rut,l.fuente,l.marca,l.modelo,l.anio,l.patente,l.polizaVigente?'Sí':'No',l.primaVigente,l.deducibleActual,l.fechaCotizacion,l.compania,l.primaNeta,l.accionSeguimiento,l.fechaSeguimiento,l.cierre?'Sí':'No',l.fechaEmision,l.comentarios,l.columna]);
@@ -1603,6 +1632,7 @@ document.getElementById('importFileInput').addEventListener('change', e => {
             administrador:     String(row['Administrador']||row['Administrador / Contacto']||'').trim(),
             telefono:          String(row['Teléfono']||row['Telefono']||row['Celular']||'').trim(),
             correo:            String(row['Correo']||row['Email']||row['Correo electrónico']||'').trim(),
+            rutComunidad:      formatRut(String(row['RUT Comunidad']||row['RUT']||row['Rut']||'')),
             direccion:         String(row['Dirección']||row['Direccion']||''),
             unidades:          String(row['Unidades']||row['N° Unidades']||''),
             polizaVigente:     /si/i.test(String(row['Póliza vigente']||row['Poliza vigente']||'')),
