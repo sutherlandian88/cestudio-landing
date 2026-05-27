@@ -1,0 +1,2481 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mi Comunidad Segura — CRM Cotizaciones</title>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.2/Sortable.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f5f5f5;color:#111;font-size:14px;height:100vh;display:flex;flex-direction:column;overflow:hidden;}
+
+/* ── Header ── */
+.header{background:#111;color:#fff;padding:10px 24px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-shrink:0;position:relative;}
+.header-brand{display:flex;align-items:center;gap:12px;}
+.header-logo{height:38px;width:auto;display:block;object-fit:contain;filter:brightness(0) invert(1);}
+.header h1{font-size:13px;font-weight:700;letter-spacing:0.2px;color:#ffffff !important;}
+.header-right{display:flex;align-items:center;gap:14px;flex-shrink:0;}
+.sync-dot{width:7px;height:7px;border-radius:50%;background:#555;flex-shrink:0;transition:background 0.4s;}
+.sync-dot.online{background:#22c55e;}
+.sync-dot.syncing{background:#f59e0b;}
+.presence-wrap{display:flex;align-items:center;gap:5px;}
+.presence-label{font-size:11px;color:#555;margin-right:2px;}
+.avatar{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#fff;border:2px solid #111;flex-shrink:0;cursor:default;position:relative;transition:transform 0.15s;}
+.avatar:hover{transform:scale(1.15);z-index:1;}
+.avatar::after{content:attr(data-name);position:absolute;bottom:calc(100% + 6px);left:50%;transform:translateX(-50%);background:#222;color:#fff;font-size:10px;padding:3px 8px;border-radius:5px;white-space:nowrap;pointer-events:none;opacity:0;transition:opacity 0.15s;}
+.avatar:hover::after{opacity:1;}
+
+/* ── Progress bar ── */
+.progress-global{height:3px;background:#333;flex-shrink:0;}
+.progress-global-bar{height:100%;background:#22c55e;transition:width 0.3s;}
+
+/* ── Meta / stats ── */
+.meta{background:#fff;border-bottom:1px solid #e5e5e5;padding:8px 24px;display:flex;gap:24px;flex-wrap:wrap;align-items:center;flex-shrink:0;}
+.meta-item{font-size:11px;color:#888;line-height:1.4;}
+.meta-item strong{display:block;color:#111;font-size:12px;font-weight:700;}
+.meta-divider{width:1px;height:24px;background:#e5e5e5;}
+
+/* ── Filter bar ── */
+.filter-bar{background:#fff;border-bottom:1px solid #e5e5e5;padding:8px 24px;display:flex;align-items:center;gap:8px;flex-shrink:0;flex-wrap:wrap;}
+.filter-bar input{flex:1;min-width:160px;max-width:260px;border:1.5px solid #e5e5e5;border-radius:7px;padding:6px 10px;font-size:12px;font-family:inherit;outline:none;color:#111;}
+.filter-bar input:focus{border-color:#111;}
+.filter-bar select{border:1.5px solid #e5e5e5;border-radius:7px;padding:5px 8px;font-size:12px;font-family:inherit;outline:none;color:#111;background:#fff;cursor:pointer;}
+.filter-bar select:focus{border-color:#111;}
+.btn-nuevo{background:#111;color:#fff;border:none;border-radius:7px;padding:7px 14px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;white-space:nowrap;margin-left:auto;transition:background 0.15s;}
+.btn-nuevo:hover{background:#333;}
+.filter-count{font-size:11px;color:#aaa;white-space:nowrap;}
+
+/* ── Kanban ── */
+.kanban-wrap{flex:1;overflow-x:auto;overflow-y:hidden;padding:16px 24px;display:flex;flex-direction:column;}
+.kanban-board{display:flex;gap:10px;height:100%;align-items:flex-start;min-width:max-content;}
+.column{width:240px;display:flex;flex-direction:column;background:#fff;border:1px solid #e5e5e5;border-radius:10px;max-height:100%;flex-shrink:0;}
+.col-header{padding:10px 12px 8px;border-bottom:1px solid #f0f0f0;flex-shrink:0;}
+.col-header-top{display:flex;align-items:center;justify-content:space-between;gap:6px;margin-bottom:4px;}
+.col-title{font-size:11px;font-weight:700;letter-spacing:0.4px;text-transform:uppercase;}
+.col-count{font-size:10px;font-weight:700;padding:2px 6px;border-radius:10px;background:#f0f0f0;color:#888;}
+.col-prima{font-size:10px;color:#aaa;font-weight:500;}
+.col-bar{height:2px;border-radius:2px;background:#f0f0f0;overflow:hidden;}
+.col-bar-fill{height:100%;border-radius:2px;transition:width 0.3s;}
+
+.card-list{flex:1;overflow-y:auto;padding:8px;min-height:60px;scrollbar-width:thin;scrollbar-color:#e5e5e5 transparent;}
+.card-list::-webkit-scrollbar{width:4px;}
+.card-list::-webkit-scrollbar-thumb{background:#e5e5e5;border-radius:4px;}
+
+/* ── Cards ── */
+.card{background:#fafafa;border:1px solid #efefef;border-radius:8px;padding:9px 10px;margin-bottom:6px;cursor:grab;transition:box-shadow 0.15s,background 0.15s;position:relative;user-select:none;}
+.card:hover{border-color:#ddd;background:#f5f5f5;box-shadow:0 2px 8px rgba(0,0,0,0.06);}
+.card.sortable-ghost{opacity:0.3;background:#e0f2fe;border-color:#7dd3fc;}
+.card.sortable-drag{box-shadow:0 6px 20px rgba(0,0,0,0.15);cursor:grabbing;transform:rotate(1deg);}
+.card-name{font-size:12px;font-weight:700;color:#111;margin-bottom:3px;line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.card-vehicle{font-size:11px;color:#888;margin-bottom:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.card-row{display:flex;align-items:center;justify-content:space-between;gap:6px;margin-top:4px;}
+.card-prima{font-size:12px;font-weight:700;color:#111;}
+.card-prima.empty{color:#ccc;font-weight:400;}
+.fuente-badge{font-size:9px;font-weight:700;padding:2px 6px;border-radius:10px;letter-spacing:0.3px;text-transform:uppercase;white-space:nowrap;}
+.card-compania{font-size:10px;color:#aaa;margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.card-date{font-size:9px;color:#ccc;position:absolute;top:9px;right:8px;}
+.card-edit-btn{position:absolute;bottom:7px;right:7px;width:20px;height:20px;display:flex;align-items:center;justify-content:center;background:none;border:none;cursor:pointer;color:#ccc;opacity:0;transition:opacity 0.15s;border-radius:4px;font-size:12px;}
+.card:hover .card-edit-btn{opacity:1;}
+.card-edit-btn:hover{color:#111;background:#e5e5e5;}
+.card-tags{display:flex;flex-wrap:wrap;gap:3px;margin-top:4px;}
+.card-tag{font-size:9px;color:#888;background:#f0f0f0;padding:1px 5px;border-radius:4px;}
+
+.add-card-btn{width:calc(100% - 16px);margin:0 8px 8px;padding:6px;font-size:11px;color:#bbb;background:none;border:1.5px dashed #e5e5e5;border-radius:7px;cursor:pointer;font-family:inherit;transition:all 0.15s;flex-shrink:0;}
+.add-card-btn:hover{border-color:#bbb;color:#666;background:#fafafa;}
+
+/* Fuente badge colors */
+.fuente-instagram{background:#fce7f3;color:#9d174d;}
+.fuente-facebook{background:#dbeafe;color:#1e40af;}
+.fuente-referido{background:#d1fae5;color:#065f46;}
+.fuente-whatsapp{background:#dcfce7;color:#15803d;}
+.fuente-web{background:#ede9fe;color:#5b21b6;}
+.fuente-otro{background:#f3f4f6;color:#374151;}
+
+/* Column accent colors */
+.col-nuevo .col-title{color:#6b7280;}
+.col-nuevo .col-bar-fill{background:#9ca3af;}
+.col-nuevo .col-count{background:#f3f4f6;color:#6b7280;}
+.col-cotizando .col-title{color:#1d4ed8;}
+.col-cotizando .col-bar-fill{background:#3b82f6;}
+.col-cotizando .col-count{background:#dbeafe;color:#1d4ed8;}
+.col-propuesta .col-title{color:#6d28d9;}
+.col-propuesta .col-bar-fill{background:#7c3aed;}
+.col-propuesta .col-count{background:#ede9fe;color:#6d28d9;}
+.col-seguimiento .col-title{color:#92400e;}
+.col-seguimiento .col-bar-fill{background:#f59e0b;}
+.col-seguimiento .col-count{background:#fef3c7;color:#92400e;}
+.col-emitida .col-title{color:#15803d;}
+.col-emitida .col-bar-fill{background:#22c55e;}
+.col-emitida .col-count{background:#dcfce7;color:#15803d;}
+.col-perdido .col-title{color:#991b1b;}
+.col-perdido .col-bar-fill{background:#ef4444;}
+.col-perdido .col-count{background:#fee2e2;color:#991b1b;}
+
+/* ── Modal ── */
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,0.45);display:flex;align-items:center;justify-content:center;z-index:1000;padding:16px;}
+.modal-box{background:#fff;border-radius:14px;padding:24px 26px;width:540px;max-width:100%;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,0.2);}
+.modal-box h2{font-size:15px;font-weight:700;margin-bottom:18px;}
+.modal-section{font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#aaa;margin:16px 0 8px;padding-bottom:4px;border-bottom:1px solid #f0f0f0;}
+.form-row{margin-bottom:10px;}
+.form-row label{display:block;font-size:10px;font-weight:700;letter-spacing:0.5px;text-transform:uppercase;color:#aaa;margin-bottom:4px;}
+.form-row input,.form-row select,.form-row textarea{width:100%;border:1.5px solid #e5e5e5;border-radius:8px;padding:8px 10px;font-size:13px;font-family:inherit;outline:none;color:#111;background:#fff;}
+.form-row input:focus,.form-row select:focus,.form-row textarea:focus{border-color:#111;}
+.form-row textarea{min-height:60px;resize:vertical;}
+.form-2col{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.form-3col{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;}
+.form-row.checkbox-row{display:flex;align-items:center;gap:8px;padding:4px 0;}
+.form-row.checkbox-row label{margin-bottom:0;font-size:12px;color:#333;text-transform:none;letter-spacing:0;cursor:pointer;}
+.form-row.checkbox-row input[type=checkbox]{width:auto;accent-color:#111;width:14px;height:14px;}
+.modal-actions{display:flex;gap:8px;margin-top:20px;}
+.btn-guardar{flex:1;background:#111;color:#fff;border:none;border-radius:8px;padding:10px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;transition:background 0.15s;}
+.btn-guardar:hover{background:#333;}
+.btn-cancelar{background:#f5f5f5;color:#888;border:none;border-radius:8px;padding:10px 14px;font-size:13px;cursor:pointer;font-family:inherit;transition:background 0.15s;}
+.btn-cancelar:hover{background:#eee;}
+.btn-eliminar{background:#fee2e2;color:#991b1b;border:none;border-radius:8px;padding:10px 14px;font-size:13px;cursor:pointer;font-family:inherit;transition:background 0.15s;}
+.btn-eliminar:hover{background:#fecaca;}
+
+/* ── Loading ── */
+#loadingOverlay{position:fixed;inset:0;background:#f5f5f5;display:flex;align-items:center;justify-content:center;z-index:999;flex-direction:column;gap:12px;}
+#loadingOverlay p{font-size:13px;color:#888;}
+.spinner{width:24px;height:24px;border:3px solid #e5e5e5;border-top-color:#111;border-radius:50%;animation:spin 0.7s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+
+/* ── Name modal ── */
+.name-modal-bg{position:fixed;inset:0;background:rgba(0,0,0,0.55);display:flex;align-items:center;justify-content:center;z-index:1001;}
+.name-modal{background:#fff;border-radius:14px;padding:28px;width:300px;box-shadow:0 20px 60px rgba(0,0,0,0.25);}
+.name-modal h2{font-size:15px;font-weight:700;margin-bottom:6px;}
+.name-modal p{font-size:12px;color:#888;margin-bottom:18px;line-height:1.5;}
+.name-modal input{width:100%;border:1.5px solid #e5e5e5;border-radius:8px;padding:10px 12px;font-size:14px;font-family:inherit;outline:none;margin-bottom:12px;}
+.name-modal input:focus{border-color:#111;}
+.name-modal button{width:100%;background:#111;color:#fff;border:none;border-radius:8px;padding:11px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;}
+.name-modal button:hover{background:#333;}
+
+/* ── Remote cursors ── */
+.remote-cursor{position:fixed;pointer-events:none;z-index:9999;transition:left 0.09s linear,top 0.09s linear;display:none;}
+.cursor-label{position:absolute;top:18px;left:10px;font-size:10px;font-weight:700;color:#fff;padding:2px 7px;border-radius:5px;white-space:nowrap;font-family:-apple-system,sans-serif;}
+
+/* ── Card live viewers ── */
+.card-viewers{position:absolute;bottom:7px;left:8px;display:flex;align-items:center;}
+.card-viewer-av{width:18px;height:18px;border-radius:50%;font-size:8px;font-weight:700;color:#fff;display:flex;align-items:center;justify-content:center;border:2px solid #fafafa;margin-left:-5px;cursor:default;position:relative;}
+.card-viewer-av:first-child{margin-left:0;}
+.card-viewer-av::after{content:attr(data-name);position:absolute;bottom:calc(100% + 5px);left:50%;transform:translateX(-50%);background:#222;color:#fff;font-size:10px;padding:2px 7px;border-radius:5px;white-space:nowrap;pointer-events:none;opacity:0;transition:opacity 0.15s;z-index:10;}
+.card-viewer-av:hover::after{opacity:1;}
+
+/* ── Modal live viewers banner ── */
+.modal-viewing-banner{display:flex;align-items:center;gap:8px;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:8px 12px;margin-bottom:12px;font-size:12px;color:#166534;}
+.modal-viewing-banner .viewing-av{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:#fff;flex-shrink:0;}
+
+/* ── Empty state ── */
+.col-empty{font-size:11px;color:#ccc;text-align:center;padding:16px 8px;pointer-events:none;}
+
+/* ── Tabs ── */
+.tab-nav{background:#fff;border-bottom:1px solid #e5e5e5;padding:0 24px;display:flex;gap:0;flex-shrink:0;}
+.tab-btn{padding:10px 16px;font-size:12px;font-weight:600;color:#888;background:none;border:none;border-bottom:2px solid transparent;margin-bottom:-1px;cursor:pointer;font-family:inherit;transition:color 0.15s,border-color 0.15s;}
+.tab-btn:hover{color:#333;}
+.tab-btn.active{color:#111;border-bottom-color:#111;}
+
+/* ── Table view ── */
+#viewTabla{flex:1;overflow:auto;padding:16px 24px;display:none;}
+#viewTabla.active{display:block;}
+#viewKanban.hidden{display:none;}
+.table-toolbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+.table-toolbar span{font-size:11px;color:#aaa;}
+.leads-table{width:100%;border-collapse:collapse;font-size:12px;white-space:nowrap;}
+.leads-table thead{position:sticky;top:0;z-index:2;}
+.leads-table th{background:#fff;border-bottom:2px solid #e5e5e5;padding:8px 10px;text-align:left;font-size:10px;font-weight:700;letter-spacing:0.5px;text-transform:uppercase;color:#888;cursor:pointer;user-select:none;}
+.leads-table th:hover{color:#111;}
+.leads-table th .sort-arrow{margin-left:3px;opacity:0.35;font-size:9px;}
+.leads-table th.sort-active{color:#111;}
+.leads-table th.sort-active .sort-arrow{opacity:1;}
+.leads-table th.no-sort{cursor:default;}
+.leads-table th.no-sort:hover{color:#888;}
+.leads-table td{padding:7px 10px;border-bottom:1px solid #f5f5f5;vertical-align:middle;max-width:180px;overflow:hidden;text-overflow:ellipsis;}
+.leads-table tr:hover td{background:#fafafa;}
+.leads-table tr.row-emitida td{background:#f0fdf4;}
+.leads-table tr.row-perdido{opacity:0.5;}
+.t-asegurado{font-weight:700;color:#111;min-width:130px;}
+.t-vehicle{color:#888;}
+.t-badge{display:inline-block;font-size:9px;font-weight:700;padding:2px 6px;border-radius:10px;letter-spacing:0.3px;text-transform:uppercase;}
+.t-stage{display:inline-block;font-size:9px;font-weight:700;padding:2px 7px;border-radius:10px;}
+.t-check{text-align:center;color:#22c55e;}
+.t-muted{color:#bbb;}
+.t-prima{font-weight:700;color:#111;}
+.t-actions{width:32px;text-align:center;}
+.t-edit-btn{background:none;border:none;cursor:pointer;color:#ddd;font-size:12px;padding:3px 5px;border-radius:4px;transition:color 0.15s,background 0.15s;}
+.t-edit-btn:hover{color:#111;background:#eee;}
+.table-empty{text-align:center;padding:48px;color:#ccc;font-size:13px;}
+.add-row-btn{display:flex;align-items:center;gap:6px;padding:9px 12px;font-size:12px;color:#bbb;background:none;border:1.5px dashed #e5e5e5;border-radius:8px;cursor:pointer;font-family:inherit;transition:all 0.15s;margin-top:8px;width:100%;}
+.add-row-btn:hover{border-color:#bbb;color:#555;background:#fafafa;}
+.stage-nuevo{background:#f3f4f6;color:#6b7280;}
+.stage-cotizando{background:#dbeafe;color:#1d4ed8;}
+.stage-propuesta{background:#ede9fe;color:#6d28d9;}
+.stage-seguimiento{background:#fef3c7;color:#92400e;}
+.stage-emitida{background:#dcfce7;color:#15803d;}
+.stage-perdido{background:#fee2e2;color:#991b1b;}
+
+td[contenteditable]:hover:not(:focus){background:#f9f9f9;cursor:text;}
+td[contenteditable]:focus{outline:none;background:#fffbeb;box-shadow:inset 0 0 0 1.5px #fcd34d;border-radius:3px;}
+.td-click:hover{background:#f9f9f9;cursor:pointer;}
+.td-click:hover::after{content:'';position:absolute;inset:0;border:1.5px solid #e5e5e5;border-radius:3px;pointer-events:none;}
+.td-click{position:relative;}
+
+/* ── Seguimiento chip ── */
+.card-seg{font-size:9px;font-weight:600;padding:2px 7px;border-radius:10px;display:inline-block;margin-top:4px;}
+.card-seg.seg-vencida{background:#fee2e2;color:#991b1b;}
+.card-seg.seg-hoy{background:#fef3c7;color:#92400e;}
+.card-seg.seg-proxima{background:#dbeafe;color:#1d4ed8;}
+
+/* ── Cold leads ── */
+.card.fria{border-left:3px solid #fca5a5;}
+.card-fria-tag{font-size:8px;font-weight:700;color:#ef4444;letter-spacing:0.5px;display:block;margin-bottom:2px;}
+
+/* ── Export / Import ── */
+.btn-tool{background:#f5f5f5;color:#555;border:1px solid #e5e5e5;border-radius:7px;padding:6px 11px;font-size:11px;font-weight:600;cursor:pointer;font-family:inherit;transition:all 0.15s;white-space:nowrap;}
+.btn-tool:hover{background:#e5e5e5;color:#111;}
+#importFileInput{display:none;}
+.filter-date{border:1.5px solid #e5e5e5;border-radius:7px;padding:5px 8px;font-size:11px;font-family:inherit;outline:none;color:#111;background:#fff;}
+.filter-date:focus{border-color:#111;}
+.filter-sep{font-size:11px;color:#ccc;}
+
+/* ── Modal tabs ── */
+.modal-tabs{display:flex;border-bottom:1px solid #e5e5e5;margin:-4px -26px 16px;padding:0 26px;gap:0;}
+.modal-tab-btn{padding:8px 14px;font-size:12px;font-weight:600;color:#888;background:none;border:none;border-bottom:2px solid transparent;margin-bottom:-1px;cursor:pointer;font-family:inherit;transition:color 0.15s;}
+.modal-tab-btn.active{color:#111;border-bottom-color:#111;}
+.modal-tab-panel{display:none;}
+.modal-tab-panel.active{display:block;}
+
+/* ── Notes ── */
+.nota-item{padding:9px 11px;border-radius:8px;background:#f9f9f9;margin-bottom:6px;}
+.nota-meta{font-size:10px;color:#aaa;margin-bottom:3px;display:flex;justify-content:space-between;}
+.nota-texto{font-size:12px;color:#333;line-height:1.45;}
+.nota-input-row{display:flex;gap:8px;margin-top:10px;align-items:flex-end;}
+.nota-input-row textarea{flex:1;border:1.5px solid #e5e5e5;border-radius:8px;padding:8px 10px;font-size:12px;font-family:inherit;outline:none;resize:none;min-height:56px;}
+.nota-input-row textarea:focus{border-color:#111;}
+.btn-add-nota{background:#111;color:#fff;border:none;border-radius:8px;padding:9px 14px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;}
+.btn-add-nota:hover{background:#333;}
+.panel-empty{font-size:12px;color:#ccc;text-align:center;padding:24px 0;}
+
+/* ── History ── */
+.hist-item{display:flex;gap:10px;padding:7px 0;border-bottom:1px solid #f5f5f5;font-size:11px;}
+.hist-item:last-child{border-bottom:none;}
+.hist-dot{width:7px;height:7px;border-radius:50%;background:#d1d5db;flex-shrink:0;margin-top:3px;}
+.hist-body{flex:1;line-height:1.45;color:#555;}
+.hist-user{font-weight:700;color:#111;}
+.hist-ts{color:#bbb;font-size:10px;white-space:nowrap;}
+
+/* ── Dashboard ── */
+#viewDashboard{flex:1;overflow-y:auto;padding:20px 24px;display:none;}
+#viewDashboard.active{display:block;}
+.dash-kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px;}
+.dash-kpi{background:#fff;border:1px solid #e5e5e5;border-radius:10px;padding:14px 16px;}
+.dash-kpi .kpi-n{font-size:22px;font-weight:800;color:#111;display:block;line-height:1.1;}
+.dash-kpi .kpi-l{font-size:11px;color:#888;margin-top:3px;}
+.dash-charts{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.dash-box{background:#fff;border:1px solid #e5e5e5;border-radius:10px;padding:14px 16px;}
+.dash-box h3{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.6px;color:#aaa;margin-bottom:12px;}
+.dash-box canvas{max-height:200px;}
+@media(max-width:900px){.dash-kpis{grid-template-columns:repeat(2,1fr);}.dash-charts{grid-template-columns:1fr;}}
+
+/* ── Toast ── */
+.toast{position:fixed;bottom:24px;right:24px;background:#15803d;color:#fff;padding:10px 18px;border-radius:10px;font-size:13px;font-weight:600;z-index:9999;box-shadow:0 4px 20px rgba(0,0,0,0.18);display:flex;align-items:center;gap:8px;pointer-events:none;animation:toastIn 0.22s ease;}
+.toast.error{background:#991b1b;}
+@keyframes toastIn{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);}}
+@keyframes toastOut{from{opacity:1;transform:translateY(0);}to{opacity:0;transform:translateY(12px);}}
+.toast.out{animation:toastOut 0.22s ease forwards;}
+
+/* ── Today panel ── */
+.today-panel{background:#fffbeb;border-bottom:1px solid #fde68a;padding:6px 24px;display:flex;align-items:center;gap:7px;flex-wrap:wrap;flex-shrink:0;}
+.today-panel.hidden{display:none;}
+.today-panel-lbl{font-size:10px;font-weight:700;letter-spacing:0.5px;text-transform:uppercase;color:#92400e;flex-shrink:0;margin-right:2px;}
+.today-chip{font-size:10px;font-weight:600;padding:3px 10px;border-radius:20px;cursor:pointer;border:none;font-family:inherit;white-space:nowrap;transition:opacity 0.15s;}
+.today-chip:hover{opacity:0.75;}
+.today-chip.vencida{background:#fee2e2;color:#991b1b;}
+.today-chip.hoy{background:#fef3c7;color:#92400e;}
+.today-chip.fria{background:#ffedd5;color:#9a3412;}
+
+/* ── WhatsApp button on card ── */
+.card-wa-btn{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:6px;background:#dcfce7;color:#15803d;font-size:12px;cursor:pointer;border:none;padding:0;flex-shrink:0;transition:background 0.15s;vertical-align:middle;}
+.card-wa-btn:hover{background:#bbf7d0;}
+
+/* ── Quick-add modal ── */
+.quick-modal-bg{position:fixed;inset:0;background:rgba(0,0,0,0.45);display:flex;align-items:center;justify-content:center;z-index:1000;padding:16px;}
+.quick-modal{background:#fff;border-radius:14px;padding:24px 26px;width:400px;max-width:100%;box-shadow:0 20px 60px rgba(0,0,0,0.2);}
+.quick-modal h2{font-size:15px;font-weight:700;margin-bottom:4px;}
+.quick-modal p{font-size:11px;color:#aaa;margin-bottom:18px;line-height:1.5;}
+.quick-modal-actions{display:flex;gap:8px;margin-top:18px;}
+
+/* ── Btn rápido ── */
+.btn-rapido{background:#f5f5f5;color:#555;border:1px solid #e5e5e5;border-radius:7px;padding:7px 12px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;white-space:nowrap;transition:all 0.15s;}
+.btn-rapido:hover{background:#e5e5e5;color:#111;}
+
+/* ── Documentos ── */
+.doc-item{display:flex;align-items:center;gap:10px;padding:9px 11px;border-radius:8px;background:#f9f9f9;margin-bottom:6px;}
+.doc-icon{font-size:20px;flex-shrink:0;line-height:1;}
+.doc-info{flex:1;min-width:0;}
+.doc-name{font-size:12px;font-weight:600;color:#111;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.doc-meta{font-size:10px;color:#aaa;margin-top:1px;}
+.doc-actions{display:flex;gap:4px;flex-shrink:0;}
+.btn-doc-action{background:#f0f0f0;border:none;border-radius:6px;width:26px;height:26px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:12px;transition:background 0.15s;color:#555;}
+.btn-doc-action:hover{background:#e0e0e0;color:#111;}
+.btn-doc-action.danger:hover{background:#fee2e2;color:#991b1b;}
+.doc-upload-area{border:1.5px dashed #e5e5e5;border-radius:10px;padding:16px;text-align:center;margin-top:10px;transition:border-color 0.15s,background 0.15s;}
+.doc-upload-area.drag-over{border-color:#111;background:#f9f9f9;}
+.btn-doc-upload{background:#111;color:#fff;border:none;border-radius:8px;padding:8px 16px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;transition:background 0.15s;}
+.btn-doc-upload:hover{background:#333;}
+.doc-upload-hint{display:block;font-size:10px;color:#bbb;margin-top:6px;}
+
+/* ── Vertical switcher ── */
+.vertical-switcher{display:flex;align-items:center;gap:2px;background:#1a1a1a;border-radius:8px;padding:3px;margin:0 6px;}
+.vert-btn{background:none;border:none;color:#666;font-size:11px;font-weight:700;padding:5px 11px;border-radius:6px;cursor:pointer;font-family:inherit;white-space:nowrap;transition:all 0.15s;}
+.vert-btn:hover{color:#ccc;}
+.vert-btn.active{background:#fff;color:#111;}
+
+@media(max-width:600px){.kanban-board{gap:8px;}.column{width:200px;}.meta{gap:12px;}}
+</style>
+</head>
+<body>
+
+<div id="loadingOverlay">
+  <div class="spinner"></div>
+  <p id="loadingMsg">Cargando CRM...</p>
+</div>
+
+<div class="header">
+  <div class="header-brand">
+    <img class="header-logo" src="https://customer-assets.emergentagent.com/job_cotiza-ahora/artifacts/8hb3rbcf_Captura_de_pantalla_2026-05-13_a_la_s__17.02.49-removebg-preview.png" alt="Mi Comunidad Segura">
+    <h1 style="color:#fff;">CRM</h1>
+  </div>
+  <div class="vertical-switcher" id="verticalSwitcher">
+    <button class="vert-btn" data-v="flotas">🚗 Flotas</button>
+    <button class="vert-btn" data-v="comunidades">🏢 Comunidades</button>
+  </div>
+  <div class="header-right">
+    <div class="presence-wrap" id="presenceWrap"></div>
+    <div class="sync-dot" id="syncDot" title="Estado de sincronización"></div>
+  </div>
+</div>
+<div class="progress-global"><div class="progress-global-bar" id="globalBar" style="width:0%"></div></div>
+
+<div class="meta" id="metaBar">
+  <div class="meta-item"><strong id="statTotal">0</strong>Total leads</div>
+  <div class="meta-divider"></div>
+  <div class="meta-item"><strong id="statActivos">0</strong>Activos</div>
+  <div class="meta-divider"></div>
+  <div class="meta-item"><strong id="statEmitidas">0</strong>Emitidas</div>
+  <div class="meta-divider"></div>
+  <div class="meta-item"><strong id="statTasa">—</strong>Tasa cierre</div>
+  <div class="meta-divider"></div>
+  <div class="meta-item"><strong id="statPrima">—</strong>Prima prom. emitida</div>
+</div>
+
+<div class="filter-bar">
+  <input type="search" id="searchInput" placeholder="Buscar asegurado, marca, patente...">
+  <select id="filterFuente">
+    <option value="">Todas las fuentes</option>
+    <option>Instagram</option><option>Facebook</option><option>Referido</option>
+    <option>WhatsApp</option><option>Web</option><option>Otro</option>
+  </select>
+  <select id="filterCompania"><option value="">Todas las compañías</option></select>
+  <input type="date" id="filterDesde" class="filter-date" title="Desde">
+  <span class="filter-sep">→</span>
+  <input type="date" id="filterHasta" class="filter-date" title="Hasta">
+  <span class="filter-count" id="filterCount"></span>
+  <button class="btn-tool" id="btnImport" title="Importar Excel">⬆ Importar</button>
+  <button class="btn-tool" id="btnExport" title="Exportar CSV">⬇ Exportar</button>
+  <input type="file" id="importFileInput" accept=".xlsx,.xls,.csv">
+  <button class="btn-rapido" id="btnRapido">⚡ Rápido</button>
+  <button class="btn-nuevo" id="btnNuevo">+ Nuevo lead</button>
+</div>
+
+<div id="todayPanel" class="today-panel hidden"></div>
+
+<div class="tab-nav">
+  <button class="tab-btn active" data-tab="kanban">Kanban</button>
+  <button class="tab-btn" data-tab="tabla">Tabla</button>
+  <button class="tab-btn" data-tab="dashboard">Dashboard</button>
+</div>
+
+<div class="kanban-wrap" id="viewKanban">
+  <div class="kanban-board" id="kanbanBoard"></div>
+</div>
+
+<div id="viewTabla">
+  <div class="table-toolbar"><span id="tableCount"></span></div>
+  <table class="leads-table" id="leadsTable"><thead></thead><tbody id="leadsTableBody"></tbody></table>
+  <button class="add-row-btn" id="addRowBtn">+ Agregar lead</button>
+</div>
+
+<div id="viewDashboard">
+  <div class="dash-kpis">
+    <div class="dash-kpi"><span class="kpi-n" id="dTotal">0</span><span class="kpi-l">Total leads</span></div>
+    <div class="dash-kpi"><span class="kpi-n" id="dEmitidas">0</span><span class="kpi-l">Emitidas</span></div>
+    <div class="dash-kpi"><span class="kpi-n" id="dPrimaTotal">—</span><span class="kpi-l">Prima total emitida</span></div>
+    <div class="dash-kpi"><span class="kpi-n" id="dTasa">—</span><span class="kpi-l">Tasa de cierre</span></div>
+  </div>
+  <div class="dash-charts">
+    <div class="dash-box"><h3>Leads por fuente</h3><canvas id="chartFuente"></canvas></div>
+    <div class="dash-box"><h3>Embudo por etapa</h3><canvas id="chartEmbudo"></canvas></div>
+    <div class="dash-box"><h3>Prima emitida por mes</h3><canvas id="chartPrima"></canvas></div>
+    <div class="dash-box"><h3>Leads ingresados por mes</h3><canvas id="chartLeads"></canvas></div>
+  </div>
+</div>
+
+<script>
+// ════════════════════════════════════════════════════════════
+// FIREBASE CONFIG — reemplaza con tu proyecto Firebase
+// Si no tienes Firebase, la app usará localStorage automáticamente
+// ════════════════════════════════════════════════════════════
+const FIREBASE_CONFIG = {
+  apiKey: "",
+  authDomain: "",
+  databaseURL: "",
+  projectId: "",
+  storageBucket: "",
+  messagingSenderId: "",
+  appId: ""
+};
+// ════════════════════════════════════════════════════════════
+
+const COLUMNS = [
+  { id:'nuevo',       label:'Nuevo Lead',        emoji:'📥' },
+  { id:'cotizando',   label:'Cotizando',          emoji:'🔍' },
+  { id:'propuesta',   label:'Propuesta enviada',  emoji:'📋' },
+  { id:'seguimiento', label:'Seguimiento',        emoji:'🔔' },
+  { id:'emitida',     label:'Emitida',            emoji:'✅' },
+  { id:'perdido',     label:'Perdido',            emoji:'❌' },
+];
+
+const FUENTE_CLASS = {
+  'Instagram':'fuente-instagram','Facebook':'fuente-facebook',
+  'Referido':'fuente-referido','WhatsApp':'fuente-whatsapp',
+  'Web':'fuente-web','Otro':'fuente-otro'
+};
+
+// ── Vertical (Flotas / Comunidades) ──────────────────────
+let VERTICAL = localStorage.getItem('crm_vertical') || 'flotas';
+
+const VERTICAL_CONFIG = {
+  flotas: {
+    label:'Flotas', icon:'🚗',
+    storageKey:'crm_motor',
+    firebasePath:'crm_cotizaciones/leads',
+    searchPlaceholder:'Buscar asegurado, marca, patente...',
+    leadName: l => l.asegurado || 'Sin nombre',
+  },
+  comunidades: {
+    label:'Comunidades', icon:'🏢',
+    storageKey:'crm_comunidades',
+    firebasePath:'crm_comunidades/leads',
+    searchPlaceholder:'Buscar edificio, administrador...',
+    leadName: l => l.edificio || 'Sin nombre',
+  },
+};
+
+// ── State ─────────────────────────────────────────────────
+let STATE = {}; // { [id]: lead }
+let USE_FIREBASE = false;
+let USE_STORAGE = false;
+let DB_REF = null;
+let STORAGE = null;
+let appReady = false;
+
+// ── Firebase or localStorage ──────────────────────────────
+function initStorage() {
+  const hasConfig = FIREBASE_CONFIG.apiKey && FIREBASE_CONFIG.databaseURL;
+  if (hasConfig) {
+    try {
+      firebase.initializeApp(FIREBASE_CONFIG);
+      DB_REF = firebase.database().ref(VERTICAL_CONFIG[VERTICAL].firebasePath);
+      USE_FIREBASE = true;
+      if (FIREBASE_CONFIG.storageBucket) { STORAGE = firebase.storage(); USE_STORAGE = true; }
+      document.getElementById('loadingMsg').textContent = 'Conectando con Firebase...';
+      DB_REF.on('value', snap => {
+        STATE = snap.val() || {};
+        renderAll();
+        if (!appReady) {
+          appReady = true;
+          document.getElementById('loadingOverlay').style.display = 'none';
+          startPresenceFlow();
+        }
+      });
+      setSyncOnline();
+    } catch(e) {
+      console.warn('Firebase error, usando localStorage:', e);
+      initLocalStorage();
+    }
+  } else {
+    initLocalStorage();
+  }
+}
+
+const EXAMPLE_LEADS = [
+  { id:'ex_1', columna:'nuevo',       orden:100, fecha:'2026-05-20', fuente:'Instagram',  asegurado:'María González',  rut:'12.345.678-9', telefono:'+56 9 8765 4321', marca:'Toyota',    modelo:'Corolla',  anio:'2022', patente:'ABCD12', polizaVigente:true,  primaVigente:'180000', deducibleActual:'200000', fechaCotizacion:'2026-05-21', accionSeguimiento:'Enviar cotización HDI', cierre:false, comentarios:'Interesada, muy amable. Comparando precios.', fechaEmision:'',           primaNeta:'',       compania:'',      createdAt:1748000000000, updatedAt:1748000000000 },
+  { id:'ex_2', columna:'cotizando',   orden:100, fecha:'2026-05-22', fuente:'Referido',   asegurado:'Carlos Pérez',    rut:'11.222.333-4', telefono:'+56 9 7654 3210', marca:'Kia',       modelo:'Sportage', anio:'2021', patente:'EFGH34', polizaVigente:false, primaVigente:'',       deducibleActual:'',        fechaCotizacion:'2026-05-22', accionSeguimiento:'Esperar respuesta del cliente',  cierre:false, comentarios:'Lo refirió Andrea del trabajo.',           fechaEmision:'',           primaNeta:'165000', compania:'Mapfre',  createdAt:1748100000000, updatedAt:1748100000000 },
+  { id:'ex_3', columna:'emitida',     orden:100, fecha:'2026-05-10', fuente:'Facebook',   asegurado:'Roberto Muñoz',   rut:'15.432.100-8', telefono:'+56 9 6543 2109', marca:'Hyundai',   modelo:'Tucson',   anio:'2020', patente:'MNOP78', polizaVigente:false, primaVigente:'',       deducibleActual:'',        fechaCotizacion:'2026-05-11', accionSeguimiento:'',                              cierre:true,  comentarios:'Cliente muy satisfecho, renovará el año que viene.', fechaEmision:'2026-05-15', primaNeta:'220000', compania:'HDI',     createdAt:1747200000000, updatedAt:1747200000000 },
+];
+
+const EXAMPLE_LEADS_COM = [
+  { id:'ec_1', columna:'nuevo',     orden:100, fecha:'2026-05-20', fuente:'Referido',  edificio:'Condominio Los Aromos',  administrador:'Patricia Vera',   telefono:'+56 9 8765 4321', direccion:'Av. Las Condes 1234, Las Condes',       unidades:'48',  cierre:false, comentarios:'Referido por corredor Jorge Soto.', fechaEmision:'', primaNeta:'',       compania:'',       accionSeguimiento:'Solicitar lista de bienes',    fechaSeguimiento:'', notas:[], historial:[], createdAt:1748000000000, updatedAt:1748000000000 },
+  { id:'ec_2', columna:'cotizando', orden:100, fecha:'2026-05-22', fuente:'Instagram', edificio:'Torre Balmaceda 450',    administrador:'Ricardo Fuentes',  telefono:'+56 9 7654 3210', direccion:'Balmaceda 450, Providencia',            unidades:'32',  cierre:false, comentarios:'Buscan renovar póliza anual.',       fechaEmision:'', primaNeta:'340000', compania:'Mapfre', accionSeguimiento:'Enviar propuesta definitiva', fechaSeguimiento:'2026-05-28', notas:[], historial:[], createdAt:1748100000000, updatedAt:1748100000000 },
+  { id:'ec_3', columna:'emitida',   orden:100, fecha:'2026-05-10', fuente:'Referido',  edificio:'Villa Esperanza',        administrador:'Carmen Rojas',     telefono:'+56 9 6543 2109', direccion:'Camino Lo Barnechea 560, Lo Barnechea', unidades:'120', cierre:true,  comentarios:'Renuevan el próximo año.',           fechaEmision:'2026-05-18', primaNeta:'580000', compania:'HDI',    accionSeguimiento:'', fechaSeguimiento:'', notas:[], historial:[], createdAt:1747200000000, updatedAt:1747200000000 },
+];
+
+function initLocalStorage() {
+  USE_FIREBASE = false;
+  const key = VERTICAL_CONFIG[VERTICAL].storageKey;
+  try { STATE = JSON.parse(localStorage.getItem(key) || '{}'); } catch { STATE = {}; }
+  if (!Object.keys(STATE).length) {
+    const examples = VERTICAL === 'comunidades' ? EXAMPLE_LEADS_COM : EXAMPLE_LEADS;
+    examples.forEach(l => { STATE[l.id] = l; });
+    localStorage.setItem(key, JSON.stringify(STATE));
+  }
+  appReady = true;
+  document.getElementById('loadingOverlay').style.display = 'none';
+  document.getElementById('syncDot').style.background = '#f59e0b';
+  document.getElementById('syncDot').title = 'Modo local (sin Firebase)';
+  renderAll();
+  startPresenceFlow();
+}
+
+function saveState() {
+  if (!USE_FIREBASE) {
+    try {
+      localStorage.setItem(VERTICAL_CONFIG[VERTICAL].storageKey, JSON.stringify(STATE));
+    } catch(e) {
+      if (e.name === 'QuotaExceededError' || e.code === 22) {
+        alert('⚠️ Almacenamiento local lleno. Los documentos adjuntos ocupan demasiado espacio. Elimina algunos documentos para continuar guardando cambios.');
+      } else {
+        console.error('saveState error:', e);
+      }
+    }
+  }
+}
+
+function fbWrite(id, data) {
+  if (USE_FIREBASE && DB_REF) {
+    setSyncing();
+    DB_REF.child(id).set(data).then(setSyncOnline).catch(setSyncOffline);
+  } else {
+    STATE[id] = data;
+    saveState();
+    renderAll();
+  }
+}
+
+function fbRemove(id) {
+  if (USE_FIREBASE && DB_REF) {
+    setSyncing();
+    DB_REF.child(id).remove().then(setSyncOnline).catch(setSyncOffline);
+  } else {
+    delete STATE[id];
+    saveState();
+    renderAll();
+  }
+}
+
+const syncDot = document.getElementById('syncDot');
+function setSyncing()  { syncDot.className = 'sync-dot syncing'; }
+function setSyncOnline() { syncDot.className = 'sync-dot online'; }
+function setSyncOffline() { syncDot.className = 'sync-dot'; syncDot.title = 'Error al guardar en Firebase'; }
+
+// ── Lead model ────────────────────────────────────────────
+function newLeadId() { return 'l_' + Date.now() + '_' + Math.random().toString(36).slice(2,6); }
+
+function defaultLead(overrides) {
+  const base = VERTICAL === 'comunidades' ? {
+    id: newLeadId(), columna:'nuevo', orden:Date.now(), fecha:today(),
+    fuente:'', edificio:'', administrador:'', telefono:'', direccion:'', unidades:'',
+    compania:'', primaNeta:'', fechaCotizacion:today(), accionSeguimiento:'', cierre:false,
+    comentarios:'', fechaEmision:'', fechaSeguimiento:'',
+    notas:[], historial:[], documentos:[], createdAt:Date.now(), updatedAt:Date.now()
+  } : {
+    id: newLeadId(), columna:'nuevo', orden:Date.now(), fecha:today(),
+    fuente:'', asegurado:'', rut:'', telefono:'', marca:'', modelo:'', anio:'', patente:'',
+    polizaVigente:false, primaVigente:'', deducibleActual:'', fechaCotizacion:today(),
+    accionSeguimiento:'', cierre:false, comentarios:'', fechaEmision:'', primaNeta:'',
+    compania:'', fechaSeguimiento:'', notas:[], historial:[], documentos:[],
+    createdAt:Date.now(), updatedAt:Date.now()
+  };
+  return Object.assign(base, overrides);
+}
+
+function today() {
+  return new Date().toISOString().slice(0,10);
+}
+
+function fmtPrima(v) {
+  if (!v && v !== 0) return null;
+  const n = parseFloat(String(v).replace(/[^0-9.]/g,''));
+  if (isNaN(n)) return null;
+  return '$' + Math.round(n).toLocaleString('es-CL');
+}
+
+function fmtDate(d) {
+  if (!d) return '';
+  const [y,m,day] = d.split('-');
+  const meses = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
+  return `${parseInt(day)} ${meses[parseInt(m)-1]}`;
+}
+
+// ── Filter state ──────────────────────────────────────────
+let filterSearch = '';
+let filterFuente = '';
+let filterCompania = '';
+let filterDesde = '';
+let filterHasta = '';
+
+function leadsVisible() {
+  return Object.values(STATE).filter(l => {
+    if (!l || !l.id) return false;
+    if (filterFuente && l.fuente !== filterFuente) return false;
+    if (filterCompania && l.compania !== filterCompania) return false;
+    if (filterDesde && (!l.fecha || l.fecha < filterDesde)) return false;
+    if (filterHasta && (!l.fecha || l.fecha > filterHasta)) return false;
+    if (filterSearch) {
+      const q = filterSearch.toLowerCase();
+      const haystack = VERTICAL === 'comunidades'
+        ? [l.edificio, l.administrador, l.direccion, l.compania, l.telefono].join(' ').toLowerCase()
+        : [l.asegurado, l.marca, l.modelo, l.patente, l.rut, l.compania, l.telefono].join(' ').toLowerCase();
+      if (!haystack.includes(q)) return false;
+    }
+    return true;
+  });
+}
+
+// ── Render ────────────────────────────────────────────────
+function renderAll() {
+  renderBoard();
+  renderStats();
+  updateCompaniaFilter();
+  renderTable();
+  renderDashboard();
+  renderTodayPanel();
+}
+
+function renderBoard() {
+  const board = document.getElementById('kanbanBoard');
+  const visible = leadsVisible();
+  const byCol = {};
+  COLUMNS.forEach(c => byCol[c.id] = []);
+  visible.forEach(l => {
+    const col = l.columna || 'nuevo';
+    if (byCol[col]) byCol[col].push(l);
+    else byCol['nuevo'].push(l);
+  });
+  COLUMNS.forEach(c => byCol[c.id].sort((a,b) => (a.orden||0)-(b.orden||0)));
+
+  // Rebuild columns or update existing
+  if (!board.querySelector('.column')) {
+    board.innerHTML = '';
+    COLUMNS.forEach(c => {
+      const col = document.createElement('div');
+      col.className = `column col-${c.id}`;
+      col.dataset.col = c.id;
+      col.innerHTML = `
+        <div class="col-header">
+          <div class="col-header-top">
+            <span class="col-title">${c.label}</span>
+            <span class="col-count" id="count-${c.id}">0</span>
+          </div>
+          <div class="col-prima" id="prima-${c.id}"></div>
+          <div class="col-bar"><div class="col-bar-fill" id="bar-${c.id}" style="width:0%"></div></div>
+        </div>
+        <div class="card-list" id="list-${c.id}"></div>
+        <button class="add-card-btn" data-col="${c.id}">+ Agregar lead</button>`;
+      board.appendChild(col);
+    });
+    initSortable();
+    board.addEventListener('click', e => {
+      if (e.target.classList.contains('add-card-btn')) {
+        openModal(null, e.target.dataset.col);
+      }
+    });
+  }
+
+  const totalAll = Object.values(STATE).filter(l=>l&&l.id).length;
+  COLUMNS.forEach(c => {
+    const list = document.getElementById(`list-${c.id}`);
+    const count = document.getElementById(`count-${c.id}`);
+    const primaEl = document.getElementById(`prima-${c.id}`);
+    const barEl = document.getElementById(`bar-${c.id}`);
+    if (!list) return;
+
+    const leads = byCol[c.id];
+    count.textContent = leads.length;
+
+    // Prima total for column
+    const primaSum = leads.reduce((s,l) => s + (parseFloat(l.primaNeta)||0), 0);
+    primaEl.textContent = primaSum > 0 ? '$' + Math.round(primaSum).toLocaleString('es-CL') : '';
+
+    // Bar width relative to total
+    const pct = totalAll > 0 ? Math.round(leads.length / totalAll * 100) : 0;
+    barEl.style.width = pct + '%';
+
+    // Reconcile cards (preserve drag state — only rebuild if IDs changed)
+    const existing = [...list.querySelectorAll('.card')].map(el => el.dataset.id);
+    const incoming = leads.map(l => l.id);
+    const same = existing.length === incoming.length && existing.every((id,i) => id === incoming[i]);
+    if (!same) {
+      list.innerHTML = '';
+      if (!leads.length) {
+        const empty = document.createElement('div');
+        empty.className = 'col-empty';
+        empty.textContent = 'Sin leads';
+        list.appendChild(empty);
+      } else {
+        leads.forEach(l => list.appendChild(buildCard(l)));
+      }
+    } else {
+      // Just refresh card data in place
+      leads.forEach(l => {
+        const el = list.querySelector(`.card[data-id="${l.id}"]`);
+        if (el) refreshCard(el, l);
+      });
+    }
+  });
+
+  // Filter count label
+  const fc = document.getElementById('filterCount');
+  if (filterSearch || filterFuente || filterCompania || filterDesde || filterHasta) {
+    const total = Object.values(STATE).filter(l=>l&&l.id).length;
+    fc.textContent = `${visible.length} de ${total}`;
+  } else {
+    fc.textContent = '';
+  }
+}
+
+function attachCardHandlers(card, l) {
+  card.onclick = () => openModal(l.id);
+  const waBtn = card.querySelector('.card-wa-btn');
+  if (waBtn) {
+    waBtn.onclick = e => {
+      e.stopPropagation();
+      const raw = (l.telefono || '').replace(/\D/g, '');
+      if (!raw) return;  // guard: no abrir si no hay dígitos
+      const num = raw.startsWith('56') ? raw : '56' + raw;
+      window.open(`https://wa.me/${num}`, '_blank');
+    };
+  }
+}
+
+function buildCard(l) {
+  const card = document.createElement('div');
+  card.className = 'card' + (coldDays(l) >= COLD_THRESHOLD && !['emitida','perdido'].includes(l.columna) ? ' fria' : '');
+  card.dataset.id = l.id;
+  card.draggable = false;
+  card.innerHTML = cardHTML(l);
+  attachCardHandlers(card, l);
+  return card;
+}
+
+function refreshCard(el, l) {
+  el.className = 'card' + (coldDays(l) >= COLD_THRESHOLD && !['emitida','perdido'].includes(l.columna) ? ' fria' : '');
+  el.innerHTML = cardHTML(l);
+  attachCardHandlers(el, l);
+}
+
+function coldDays(l) {
+  return Math.floor((Date.now() - (l.updatedAt || l.createdAt || Date.now())) / 86400000);
+}
+const COLD_THRESHOLD = 7;
+
+function cardHTMLCom(l) {
+  const primaFmt = fmtPrima(l.primaNeta);
+  const fuenteClass = FUENTE_CLASS[l.fuente] || 'fuente-otro';
+  const fuenteBadge = l.fuente ? `<span class="fuente-badge ${fuenteClass}">${l.fuente}</span>` : '';
+  const companyLine = l.compania ? `<div class="card-compania">${l.compania}</div>` : '';
+  const isCold = coldDays(l) >= COLD_THRESHOLD && !['emitida','perdido'].includes(l.columna);
+  const coldTag = isCold ? `<span class="card-fria-tag">❄ Sin movimiento ${coldDays(l)}d</span>` : '';
+  const tags = [];
+  if (l.unidades) tags.push(`${l.unidades} unid.`);
+  const tagsHTML = tags.length ? `<div class="card-tags">${tags.map(t=>`<span class="card-tag">${t}</span>`).join('')}</div>` : '';
+  let segHTML = '';
+  if (l.fechaSeguimiento) {
+    const now = new Date(); now.setHours(0,0,0,0);
+    const seg = new Date(l.fechaSeguimiento + 'T00:00:00');
+    const diff = Math.round((seg - now) / 86400000);
+    const cls = diff < 0 ? 'seg-vencida' : diff === 0 ? 'seg-hoy' : 'seg-proxima';
+    const lbl = diff < 0 ? `⚠ Seguimiento vencido` : diff === 0 ? `🔔 Seguimiento hoy` : `📅 ${fmtDate(l.fechaSeguimiento)}`;
+    segHTML = `<div class="card-seg ${cls}">${lbl}</div>`;
+  }
+  const waBtn = (l.telefono||'').trim().replace(/\D/g,'') ? `<button class="card-wa-btn" title="WhatsApp ${l.telefono}">💬</button>` : '';
+  return `
+    <div class="card-date">${fmtDate(l.fecha)}</div>
+    ${coldTag}
+    <div class="card-name">${esc(l.edificio) || 'Sin nombre'}</div>
+    <div class="card-vehicle">${l.administrador ? `👤 ${esc(l.administrador)}` : (esc(l.direccion) || '—')}</div>
+    <div class="card-row">
+      <span class="card-prima ${primaFmt?'':'empty'}">${primaFmt || 'Sin prima'}</span>
+      <span style="display:flex;align-items:center;gap:5px;">${waBtn}${fuenteBadge}</span>
+    </div>
+    ${companyLine}
+    ${tagsHTML}
+    ${segHTML}`;
+}
+
+function cardHTML(l) {
+  if (VERTICAL === 'comunidades') return cardHTMLCom(l);
+  const vehicle = [l.marca, l.modelo, l.anio].filter(Boolean).join(' ');
+  const primaFmt = fmtPrima(l.primaNeta);
+  const fuenteClass = FUENTE_CLASS[l.fuente] || 'fuente-otro';
+  const companyLine = l.compania ? `<div class="card-compania">${l.compania}</div>` : '';
+  const fuenteBadge = l.fuente ? `<span class="fuente-badge ${fuenteClass}">${l.fuente}</span>` : '';
+  const tags = [];
+  if (l.patente) tags.push(l.patente.toUpperCase());
+  if (l.polizaVigente) tags.push('Póliza vigente');
+  const tagsHTML = tags.length ? `<div class="card-tags">${tags.map(t=>`<span class="card-tag">${t}</span>`).join('')}</div>` : '';
+  // Cold tag
+  const isCold = coldDays(l) >= COLD_THRESHOLD && !['emitida','perdido'].includes(l.columna);
+  const coldTag = isCold ? `<span class="card-fria-tag">❄ Sin movimiento ${coldDays(l)}d</span>` : '';
+  // Seguimiento chip
+  let segHTML = '';
+  if (l.fechaSeguimiento) {
+    const now = new Date(); now.setHours(0,0,0,0);
+    const seg = new Date(l.fechaSeguimiento + 'T00:00:00');
+    const diff = Math.round((seg - now) / 86400000);
+    const cls = diff < 0 ? 'seg-vencida' : diff === 0 ? 'seg-hoy' : 'seg-proxima';
+    const lbl = diff < 0 ? `⚠ Seguimiento vencido` : diff === 0 ? `🔔 Seguimiento hoy` : `📅 ${fmtDate(l.fechaSeguimiento)}`;
+    segHTML = `<div class="card-seg ${cls}">${lbl}</div>`;
+  }
+  const waBtn = (l.telefono||'').trim().replace(/\D/g,'') ? `<button class="card-wa-btn" title="WhatsApp ${l.telefono}">💬</button>` : '';
+  return `
+    <div class="card-date">${fmtDate(l.fecha)}</div>
+    ${coldTag}
+    <div class="card-name">${esc(l.asegurado) || 'Sin nombre'}</div>
+    <div class="card-vehicle">${vehicle || '—'}</div>
+    <div class="card-row">
+      <span class="card-prima ${primaFmt?'':'empty'}">${primaFmt || 'Sin prima'}</span>
+      <span style="display:flex;align-items:center;gap:5px;">${waBtn}${fuenteBadge}</span>
+    </div>
+    ${companyLine}
+    ${tagsHTML}
+    ${segHTML}`;
+}
+
+function renderStats() {
+  const leads = Object.values(STATE).filter(l => l && l.id);
+  const activos = leads.filter(l => !['emitida','perdido'].includes(l.columna));
+  const emitidas = leads.filter(l => l.columna === 'emitida');
+  const perdidos = leads.filter(l => l.columna === 'perdido');
+  const cerrados = emitidas.length + perdidos.length;
+  const tasa = cerrados > 0 ? Math.round(emitidas.length / cerrados * 100) + '%' : '—';
+  const primaVals = emitidas.map(l => parseFloat(l.primaNeta)||0).filter(n=>n>0);
+  const primaAvg = primaVals.length ? fmtPrima(primaVals.reduce((a,b)=>a+b,0)/primaVals.length) : '—';
+  const pct = leads.length > 0 ? Math.round(emitidas.length / leads.length * 100) : 0;
+
+  document.getElementById('statTotal').textContent = leads.length;
+  document.getElementById('statActivos').textContent = activos.length;
+  document.getElementById('statEmitidas').textContent = emitidas.length;
+  document.getElementById('statTasa').textContent = tasa;
+  document.getElementById('statPrima').textContent = primaAvg;
+  document.getElementById('globalBar').style.width = pct + '%';
+}
+
+function updateCompaniaFilter() {
+  const sel = document.getElementById('filterCompania');
+  const current = sel.value;
+  const companies = [...new Set(Object.values(STATE).filter(l=>l&&l.compania).map(l=>l.compania))].sort();
+  sel.innerHTML = '<option value="">Todas las compañías</option>' + companies.map(c=>`<option${c===current?' selected':''}>${c}</option>`).join('');
+}
+
+// ── Sortable ──────────────────────────────────────────────
+function initSortable() {
+  COLUMNS.forEach(c => {
+    const list = document.getElementById(`list-${c.id}`);
+    if (!list) return;
+    Sortable.create(list, {
+      group: 'leads',
+      animation: 150,
+      ghostClass: 'sortable-ghost',
+      dragClass: 'sortable-drag',
+      onEnd(evt) {
+        const id = evt.item.dataset.id;
+        const toColId = evt.to.id.replace('list-','');
+        const toItems = [...evt.to.querySelectorAll('.card')].map(el => el.dataset.id);
+
+        // Update columna for the moved card
+        if (STATE[id]) {
+          STATE[id].columna = toColId;
+          STATE[id].updatedAt = Date.now();
+          // Update orden for all items in destination column
+          toItems.forEach((cid, i) => {
+            if (STATE[cid]) STATE[cid].orden = i * 100;
+          });
+          if (USE_FIREBASE && DB_REF) {
+            setSyncing();
+            const updates = {};
+            toItems.forEach((cid, i) => {
+              if (STATE[cid]) {
+                updates[cid + '/columna'] = STATE[cid].columna;
+                updates[cid + '/orden'] = i * 100;
+              }
+            });
+            DB_REF.update(updates).then(setSyncOnline).catch(setSyncOffline);
+          } else {
+            saveState();
+            renderStats();
+          }
+        }
+        // Remove empty state placeholder
+        evt.to.querySelectorAll('.col-empty').forEach(el => el.remove());
+        if (evt.from !== evt.to && !evt.from.querySelector('.card')) {
+          const empty = document.createElement('div');
+          empty.className = 'col-empty';
+          empty.textContent = 'Sin leads';
+          evt.from.appendChild(empty);
+        }
+        // Update counts/bars
+        renderStats();
+        COLUMNS.forEach(col => {
+          const cnt = document.getElementById(`count-${col.id}`);
+          const bar = document.getElementById(`bar-${col.id}`);
+          const list2 = document.getElementById(`list-${col.id}`);
+          if (!cnt || !list2) return;
+          const n = list2.querySelectorAll('.card').length;
+          cnt.textContent = n;
+          const total = Object.values(STATE).filter(l=>l&&l.id).length;
+          if (bar) bar.style.width = (total>0 ? Math.round(n/total*100) : 0) + '%';
+        });
+      }
+    });
+  });
+}
+
+// ── Modal add/edit ────────────────────────────────────────
+function openModal(id, defaultCol, activeTab) {
+  document.querySelectorAll('.modal-bg').forEach(el => el.remove());
+  const isEdit = !!id;
+  const lead = isEdit ? { ...STATE[id] } : defaultLead({ columna: defaultCol || 'nuevo' });
+
+  const bg = document.createElement('div');
+  bg.className = 'modal-bg';
+  const notasCount = (lead.notas||[]).length;
+  const histCount  = (lead.historial||[]).length;
+  const docsCount  = (lead.documentos||[]).length;
+  const colOptions = COLUMNS.map(c=>`<option value="${c.id}"${lead.columna===c.id?' selected':''}>${c.label}</option>`).join('');
+  const fuenteOptions = ['','Instagram','Facebook','Referido','WhatsApp','Web','Otro'].map(f=>`<option${lead.fuente===f?' selected':''}>${f}</option>`).join('');
+  const datosTabHTML = VERTICAL === 'comunidades' ? `
+      <div class="modal-section">Comunidad / Edificio</div>
+      <div class="form-2col">
+        <div class="form-row">
+          <label>Edificio / Condominio *</label>
+          <input id="mEdificio" type="text" value="${esc(lead.edificio||'')}" placeholder="Condominio Los Aromos" autocomplete="off">
+        </div>
+        <div class="form-row">
+          <label>Administrador / Contacto</label>
+          <input id="mAdministrador" type="text" value="${esc(lead.administrador||'')}" placeholder="Nombre del contacto">
+        </div>
+      </div>
+      <div class="form-2col">
+        <div class="form-row">
+          <label>Teléfono / WhatsApp</label>
+          <input id="mTelefono" type="tel" value="${esc(lead.telefono||'')}" placeholder="+56 9 1234 5678">
+        </div>
+        <div class="form-row">
+          <label>N° de unidades</label>
+          <input id="mUnidades" type="text" value="${esc(lead.unidades||'')}" placeholder="48">
+        </div>
+      </div>
+      <div class="form-row">
+        <label>Dirección</label>
+        <input id="mDireccion" type="text" value="${esc(lead.direccion||'')}" placeholder="Av. Las Condes 1234, Santiago">
+      </div>
+      <div class="form-2col">
+        <div class="form-row">
+          <label>Fuente lead</label>
+          <select id="mFuente">${fuenteOptions}</select>
+        </div>
+        <div class="form-row">
+          <label>Etapa</label>
+          <select id="mColumna">${colOptions}</select>
+        </div>
+      </div>
+      <div class="form-2col">
+        <div class="form-row">
+          <label>Fecha</label>
+          <input id="mFecha" type="date" value="${lead.fecha}">
+        </div>
+        <div class="form-row">
+          <label>Fecha cotización</label>
+          <input id="mFechaCot" type="date" value="${lead.fechaCotizacion||''}">
+        </div>
+      </div>
+      <div class="modal-section">Póliza</div>
+      <div class="form-2col">
+        <div class="form-row">
+          <label>Aseguradora</label>
+          <input id="mCompania" type="text" value="${esc(lead.compania||'')}" placeholder="Mapfre, HDI, Zurich...">
+        </div>
+        <div class="form-row">
+          <label>Prima neta</label>
+          <input id="mPrimaNeta" type="text" value="${esc(lead.primaNeta||'')}" placeholder="0">
+        </div>
+      </div>
+      <div class="form-2col">
+        <div class="form-row">
+          <label>Fecha emisión</label>
+          <input id="mFechaEmision" type="date" value="${lead.fechaEmision||''}">
+        </div>
+        <div class="form-row">
+          <label>Fecha de seguimiento</label>
+          <input id="mFechaSeg" type="date" value="${lead.fechaSeguimiento||''}">
+        </div>
+      </div>
+      <div class="form-2col">
+        <div class="form-row">
+          <label>Acción / Seguimiento</label>
+          <input id="mAccion" type="text" value="${esc(lead.accionSeguimiento||'')}" placeholder="Próximo paso...">
+        </div>
+        <div class="form-row checkbox-row" style="padding-top:18px;">
+          <input type="checkbox" id="mCierre" ${lead.cierre?'checked':''}>
+          <label for="mCierre">Marcado como cierre</label>
+        </div>
+      </div>
+      <div class="form-row">
+        <label>Comentarios</label>
+        <textarea id="mComentarios" placeholder="Notas adicionales...">${esc(lead.comentarios||'')}</textarea>
+      </div>` : `
+      <div class="modal-section">Datos del lead</div>
+      <div class="form-2col">
+        <div class="form-row">
+          <label>Asegurado *</label>
+          <input id="mAsegurado" type="text" value="${esc(lead.asegurado)}" placeholder="Nombre completo" autocomplete="off">
+        </div>
+        <div class="form-row">
+          <label>Teléfono / WhatsApp</label>
+          <input id="mTelefono" type="tel" value="${esc(lead.telefono||'')}" placeholder="+56 9 1234 5678">
+        </div>
+      </div>
+      <div class="form-2col">
+        <div class="form-row">
+          <label>RUT</label>
+          <input id="mRut" type="text" value="${esc(lead.rut)}" placeholder="12.345.678-9">
+        </div>
+        <div class="form-row">
+          <label>Fecha</label>
+          <input id="mFecha" type="date" value="${lead.fecha}">
+        </div>
+      </div>
+      <div class="form-2col">
+        <div class="form-row">
+          <label>Fuente lead</label>
+          <select id="mFuente">${fuenteOptions}</select>
+        </div>
+        <div class="form-row">
+          <label>Etapa</label>
+          <select id="mColumna">${colOptions}</select>
+        </div>
+      </div>
+      <div class="modal-section">Vehículo</div>
+      <div class="form-3col">
+        <div class="form-row">
+          <label>Marca</label>
+          <input id="mMarca" type="text" value="${esc(lead.marca)}" placeholder="Toyota">
+        </div>
+        <div class="form-row">
+          <label>Modelo</label>
+          <input id="mModelo" type="text" value="${esc(lead.modelo)}" placeholder="Corolla">
+        </div>
+        <div class="form-row">
+          <label>Año</label>
+          <input id="mAnio" type="text" value="${esc(lead.anio)}" placeholder="2022">
+        </div>
+      </div>
+      <div class="form-row">
+        <label>Patente</label>
+        <input id="mPatente" type="text" value="${esc(lead.patente)}" placeholder="ABCD12" style="text-transform:uppercase;">
+      </div>
+      <div class="modal-section">Póliza vigente</div>
+      <div class="form-row checkbox-row">
+        <input type="checkbox" id="mPolizaVigente" ${lead.polizaVigente?'checked':''}>
+        <label for="mPolizaVigente">Tiene póliza vigente</label>
+      </div>
+      <div class="form-2col">
+        <div class="form-row">
+          <label>Prima vigente</label>
+          <input id="mPrimaVigente" type="text" value="${esc(lead.primaVigente)}" placeholder="0">
+        </div>
+        <div class="form-row">
+          <label>Deducible actual</label>
+          <input id="mDeducible" type="text" value="${esc(lead.deducibleActual)}" placeholder="0">
+        </div>
+      </div>
+      <div class="modal-section">Cotización</div>
+      <div class="form-2col">
+        <div class="form-row">
+          <label>Fecha cotización</label>
+          <input id="mFechaCot" type="date" value="${lead.fechaCotizacion}">
+        </div>
+        <div class="form-row">
+          <label>Aseguradora</label>
+          <input id="mCompania" type="text" value="${esc(lead.compania)}" placeholder="Mapfre, HDI, Zurich...">
+        </div>
+      </div>
+      <div class="form-2col">
+        <div class="form-row">
+          <label>Prima neta</label>
+          <input id="mPrimaNeta" type="text" value="${esc(lead.primaNeta)}" placeholder="0">
+        </div>
+        <div class="form-row">
+          <label>Fecha emisión</label>
+          <input id="mFechaEmision" type="date" value="${lead.fechaEmision || ''}">
+        </div>
+      </div>
+      <div class="form-2col">
+        <div class="form-row">
+          <label>Acción / Seguimiento</label>
+          <input id="mAccion" type="text" value="${esc(lead.accionSeguimiento)}" placeholder="Próximo paso...">
+        </div>
+        <div class="form-row">
+          <label>Fecha de seguimiento</label>
+          <input id="mFechaSeg" type="date" value="${lead.fechaSeguimiento || ''}">
+        </div>
+      </div>
+      <div class="form-row checkbox-row">
+        <input type="checkbox" id="mCierre" ${lead.cierre?'checked':''}>
+        <label for="mCierre">Marcado como cierre</label>
+      </div>
+      <div class="form-row">
+        <label>Comentarios</label>
+        <textarea id="mComentarios" placeholder="Notas adicionales...">${esc(lead.comentarios)}</textarea>
+      </div>`;
+
+  bg.innerHTML = `
+    <div class="modal-box">
+      <h2>${isEdit ? 'Editar lead' : 'Nuevo lead'}</h2>
+      ${isEdit ? `
+      <div class="modal-tabs">
+        <button class="modal-tab-btn active" data-mtab="datos">Datos</button>
+        <button class="modal-tab-btn" data-mtab="notas">Notas${notasCount ? ` (${notasCount})` : ''}</button>
+        <button class="modal-tab-btn" data-mtab="historial">Historial${histCount ? ` (${histCount})` : ''}</button>
+        <button class="modal-tab-btn" data-mtab="documentos">Documentos${docsCount ? ` (${docsCount})` : ''}</button>
+      </div>` : ''}
+      <div class="modal-tab-panel active" id="mtab-datos">
+      ${datosTabHTML}
+      </div><!-- /mtab-datos -->
+
+      <div class="modal-tab-panel" id="mtab-notas">
+        ${(lead.notas||[]).length === 0 ? '<div class="panel-empty">Sin notas aún — agrega la primera abajo</div>' :
+          (lead.notas||[]).slice().reverse().map(n => `
+            <div class="nota-item">
+              <div class="nota-meta"><span class="hist-user">${esc(n.usuario||'Sistema')}</span><span class="hist-ts">${fmtTs(n.ts)}</span></div>
+              <div class="nota-texto">${esc(n.texto)}</div>
+            </div>`).join('')}
+        <div class="nota-input-row">
+          <textarea id="mNotaTexto" placeholder="Escribe una nota..."></textarea>
+          <button class="btn-add-nota" id="mAddNota">Agregar</button>
+        </div>
+      </div><!-- /mtab-notas -->
+
+      <div class="modal-tab-panel" id="mtab-historial">
+        ${(lead.historial||[]).length === 0 ? '<div class="panel-empty">Sin cambios registrados</div>' :
+          (lead.historial||[]).slice().reverse().map(h => `
+            <div class="hist-item">
+              <div class="hist-dot"></div>
+              <div class="hist-body"><span class="hist-user">${esc(h.usuario||'Sistema')}</span> — ${esc(h.desc)}</div>
+              <div class="hist-ts">${fmtTs(h.ts)}</div>
+            </div>`).join('')}
+      </div><!-- /mtab-historial -->
+
+      <div class="modal-tab-panel" id="mtab-documentos">
+        ${(lead.documentos||[]).length === 0 ? '<div class="panel-empty">Sin documentos adjuntos</div>' :
+          (lead.documentos||[]).slice().reverse().map(d => `
+            <div class="doc-item">
+              <span class="doc-icon">${docIcon(d.tipo)}</span>
+              <div class="doc-info">
+                <div class="doc-name">${esc(d.nombre)}</div>
+                <div class="doc-meta">${fmtSize(d.tamaño)} · ${fmtTs(d.ts)}${d.usuario ? ' · ' + esc(d.usuario) : ''}</div>
+              </div>
+              <div class="doc-actions">
+                <button class="btn-doc-action" data-doc-rename="${d.id}" title="Renombrar">✏</button>
+                <button class="btn-doc-action" data-doc-download="${d.id}" title="Descargar">⬇</button>
+                <button class="btn-doc-action danger" data-doc-delete="${d.id}" title="Eliminar">✕</button>
+              </div>
+            </div>`).join('')}
+        <div class="doc-upload-area" id="mDocUploadArea">
+          <input type="file" id="mDocInput" multiple style="display:none" accept="*/*">
+          <button class="btn-doc-upload" id="mDocUploadBtn">📎 Adjuntar documento</button>
+          <span class="doc-upload-hint">PDF, Word, Excel, imágenes · máx. ${USE_STORAGE ? '50' : '5'} MB por archivo</span>
+          <div id="mDocProgress" style="display:none;margin-top:8px;font-size:11px;color:#6366f1;"></div>
+        </div>
+      </div><!-- /mtab-documentos -->
+
+      <div class="modal-actions">
+        ${isEdit ? `<button class="btn-eliminar" id="mEliminar">Eliminar</button>` : ''}
+        <button class="btn-cancelar" id="mCancelar">Cancelar</button>
+        <button class="btn-guardar" id="mGuardar">${isEdit ? 'Guardar cambios' : 'Agregar lead'}</button>
+      </div>
+    </div>`;
+
+  // Insert live-viewers banner at top of modal box (only for existing leads)
+  if (isEdit) {
+    const box = bg.querySelector('.modal-box');
+    const banner = document.createElement('div');
+    banner.className = 'modal-viewing-banner';
+    banner.dataset.leadId = id;
+    banner.style.display = 'none';
+    box.insertBefore(banner, box.firstChild);
+    updateModalViewersBanner(PRESENCE_DATA);
+    // Announce I'm viewing this lead
+    if (myPresenceRef) myPresenceRef.update({ activeLead: id });
+  }
+
+  document.body.appendChild(bg);
+  (bg.querySelector('#mAsegurado') || bg.querySelector('#mEdificio') || bg.querySelector('input')).focus();
+
+  // Dirty tracking — warn before discarding unsaved changes
+  let _dirty = false;
+  bg.querySelectorAll('input,select,textarea').forEach(el => {
+    el.addEventListener('input', () => { _dirty = true; });
+    el.addEventListener('change', () => { _dirty = true; });
+  });
+  const tryClose = () => {
+    if (_dirty && !confirm('¿Descartar cambios sin guardar?')) return;
+    if (myPresenceRef) myPresenceRef.update({ activeLead: null });
+    bg.remove();
+  };
+  bg.querySelector('#mCancelar').addEventListener('click', tryClose);
+  bg.addEventListener('click', e => { if (e.target === bg) tryClose(); });
+
+  if (isEdit) {
+    bg.querySelector('#mEliminar').addEventListener('click', () => {
+      const name = VERTICAL === 'comunidades' ? (lead.edificio||'lead') : (lead.asegurado||'lead');
+      if (!confirm(`¿Eliminar lead de "${name}"?`)) return;
+      if (myPresenceRef) myPresenceRef.update({ activeLead: null });
+      bg.remove();
+      fbRemove(id);
+    });
+  }
+
+  bg.querySelector('#mGuardar').addEventListener('click', () => {
+    let updated;
+    if (VERTICAL === 'comunidades') {
+      const edificio = bg.querySelector('#mEdificio').value.trim();
+      if (!edificio) { bg.querySelector('#mEdificio').focus(); return; }
+      updated = Object.assign({}, lead, {
+        edificio,
+        administrador:     bg.querySelector('#mAdministrador').value.trim(),
+        telefono:          bg.querySelector('#mTelefono').value.trim(),
+        unidades:          bg.querySelector('#mUnidades').value.trim(),
+        direccion:         bg.querySelector('#mDireccion').value.trim(),
+        fuente:            bg.querySelector('#mFuente').value,
+        fecha:             bg.querySelector('#mFecha').value,
+        columna:           bg.querySelector('#mColumna').value,
+        fechaCotizacion:   bg.querySelector('#mFechaCot').value,
+        compania:          bg.querySelector('#mCompania').value.trim(),
+        primaNeta:         bg.querySelector('#mPrimaNeta').value.trim(),
+        fechaEmision:      bg.querySelector('#mFechaEmision').value,
+        accionSeguimiento: bg.querySelector('#mAccion').value.trim(),
+        fechaSeguimiento:  bg.querySelector('#mFechaSeg').value,
+        cierre:            bg.querySelector('#mCierre').checked,
+        comentarios:       bg.querySelector('#mComentarios').value.trim(),
+        updatedAt:         Date.now(),
+      });
+    } else {
+      const asegurado = bg.querySelector('#mAsegurado').value.trim();
+      if (!asegurado) { bg.querySelector('#mAsegurado').focus(); return; }
+      updated = Object.assign({}, lead, {
+        asegurado,
+        telefono:          bg.querySelector('#mTelefono').value.trim(),
+        rut:               bg.querySelector('#mRut').value.trim(),
+        fuente:            bg.querySelector('#mFuente').value,
+        fecha:             bg.querySelector('#mFecha').value,
+        columna:           bg.querySelector('#mColumna').value,
+        marca:             bg.querySelector('#mMarca').value.trim(),
+        modelo:            bg.querySelector('#mModelo').value.trim(),
+        anio:              bg.querySelector('#mAnio').value.trim(),
+        patente:           bg.querySelector('#mPatente').value.trim().toUpperCase(),
+        polizaVigente:     bg.querySelector('#mPolizaVigente').checked,
+        primaVigente:      bg.querySelector('#mPrimaVigente').value.trim(),
+        deducibleActual:   bg.querySelector('#mDeducible').value.trim(),
+        fechaCotizacion:   bg.querySelector('#mFechaCot').value,
+        compania:          bg.querySelector('#mCompania').value.trim(),
+        primaNeta:         bg.querySelector('#mPrimaNeta').value.trim(),
+        fechaEmision:      bg.querySelector('#mFechaEmision').value,
+        accionSeguimiento: bg.querySelector('#mAccion').value.trim(),
+        fechaSeguimiento:  bg.querySelector('#mFechaSeg').value,
+        cierre:            bg.querySelector('#mCierre').checked,
+        comentarios:       bg.querySelector('#mComentarios').value.trim(),
+        updatedAt:         Date.now(),
+      });
+    }
+
+    // Detect changes for history
+    const changes = [];
+    const TRACK = VERTICAL === 'comunidades'
+      ? { edificio:'Edificio', columna:'Etapa', primaNeta:'Prima neta', compania:'Aseguradora', fuente:'Fuente', cierre:'Cierre' }
+      : { asegurado:'Asegurado', columna:'Etapa', primaNeta:'Prima neta', compania:'Aseguradora', fuente:'Fuente', cierre:'Cierre' };
+    Object.entries(TRACK).forEach(([k, label]) => {
+      if (String(lead[k]||'') !== String(updated[k]||'')) changes.push(`${label} → ${updated[k]||'—'}`);
+    });
+    if (changes.length) {
+      updated.historial = [...(lead.historial||[]).slice(-49), { ts: Date.now(), usuario: getMyName()||'Usuario', desc: changes.join(' · ') }];
+    }
+
+    if (myPresenceRef) myPresenceRef.update({ activeLead: null });
+    bg.remove();
+    STATE[updated.id] = updated;
+    fbWrite(updated.id, updated);
+    showToast(isEdit ? '✓ Guardado' : '✓ Lead creado');
+  });
+
+  // Modal tab switching
+  bg.querySelectorAll('.modal-tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      bg.querySelectorAll('.modal-tab-btn').forEach(b => b.classList.toggle('active', b === btn));
+      bg.querySelectorAll('.modal-tab-panel').forEach(p => p.classList.toggle('active', p.id === 'mtab-' + btn.dataset.mtab));
+    });
+  });
+
+  // Add nota
+  const addNotaBtn = bg.querySelector('#mAddNota');
+  if (addNotaBtn) {
+    addNotaBtn.addEventListener('click', () => {
+      const texto = bg.querySelector('#mNotaTexto').value.trim();
+      if (!texto) return;
+      const nota = { id: Date.now(), ts: Date.now(), usuario: getMyName()||'Usuario', texto };
+      const l = STATE[lead.id] || lead;
+      l.notas = [...(l.notas||[]), nota];
+      l.historial = [...(l.historial||[]).slice(-49), { ts: Date.now(), usuario: nota.usuario, desc: 'Nota agregada' }];
+      saveLead(l);
+      if (myPresenceRef) myPresenceRef.update({ activeLead: null });
+      bg.remove();
+      openModal(lead.id, null, 'notas');
+    });
+    bg.querySelector('#mNotaTexto').addEventListener('keydown', e => {
+      if (e.key === 'Enter' && e.metaKey) addNotaBtn.click();
+    });
+  }
+
+  // ── Documentos ───────────────────────────────────────────
+  const docUploadBtn = bg.querySelector('#mDocUploadBtn');
+  const docInput     = bg.querySelector('#mDocInput');
+  const docArea      = bg.querySelector('#mDocUploadArea');
+  if (docUploadBtn) {
+    docUploadBtn.onclick = () => docInput.click();
+    // Drag & drop
+    docArea.addEventListener('dragover', e => { e.preventDefault(); docArea.classList.add('drag-over'); });
+    docArea.addEventListener('dragleave', () => docArea.classList.remove('drag-over'));
+    docArea.addEventListener('drop', e => {
+      e.preventDefault(); docArea.classList.remove('drag-over');
+      handleDocFiles([...e.dataTransfer.files]);
+    });
+    docInput.addEventListener('change', e => {
+      handleDocFiles([...e.target.files]);
+      docInput.value = '';
+    });
+  }
+  function handleDocFiles(files) {
+    const MAX = USE_STORAGE ? 50 * 1024 * 1024 : 5 * 1024 * 1024;
+    const oversized = files.filter(f => f.size > MAX);
+    if (oversized.length) showToast(`⚠ Archivo demasiado grande (máx. ${USE_STORAGE?'50':'5'} MB): ${oversized.map(f=>f.name).join(', ')}`, 'error', 4000);
+    const valid = files.filter(f => f.size <= MAX);
+    if (!valid.length) return;
+
+    const newDocs = new Array(valid.length);
+    const progressEl = bg.querySelector('#mDocProgress');
+
+    function finalize(uploadedDocs) {
+      const l = STATE[lead.id] || lead;
+      l.documentos = [...(l.documentos||[]), ...uploadedDocs];
+      l.historial  = [...(l.historial||[]).slice(-49), { ts:Date.now(), usuario:uploadedDocs[0].usuario, desc:`Documento${uploadedDocs.length>1?'s':''} adjuntado${uploadedDocs.length>1?'s':''}: ${uploadedDocs.map(d=>d.nombre).join(', ')}` }];
+      saveLead(l);
+      if (myPresenceRef) myPresenceRef.update({ activeLead: null });
+      bg.remove();
+      openModal(lead.id, null, 'documentos');
+    }
+
+    if (USE_STORAGE && STORAGE) {
+      // ── Firebase Storage path ──────────────────────────────
+      if (progressEl) { progressEl.style.display = 'block'; progressEl.textContent = '⏫ Subiendo 0/' + valid.length + '...'; }
+      if (docUploadBtn) docUploadBtn.disabled = true;
+      let uploaded = 0;
+      valid.forEach((file, i) => {
+        const docId = (Date.now()+i)+'_'+Math.random().toString(36).slice(2,6);
+        const storagePath = `documentos/${VERTICAL}/${lead.id}/${docId}/${file.name}`;
+        const ref = STORAGE.ref(storagePath);
+        ref.put(file)
+          .then(snap => snap.ref.getDownloadURL())
+          .then(url => {
+            newDocs[i] = { id:docId, nombre:file.name, tipo:file.type||'application/octet-stream', tamaño:file.size, url, storagePath, ts:Date.now(), usuario:getMyName()||'Usuario' };
+            uploaded++;
+            if (progressEl) progressEl.textContent = `⏫ Subiendo ${uploaded}/${valid.length}...`;
+            if (uploaded === valid.length) finalize(newDocs);
+          })
+          .catch(err => {
+            if (docUploadBtn) docUploadBtn.disabled = false;
+            if (progressEl) progressEl.style.display = 'none';
+            showToast('⚠ Error al subir "' + file.name + '": ' + err.message, 'error', 5000);
+          });
+      });
+    } else {
+      // ── Fallback: base64 en localStorage ──────────────────
+      let loaded = 0;
+      valid.forEach((file, i) => {
+        const reader = new FileReader();
+        reader.onload = ev => {
+          newDocs[i] = { id:(Date.now()+i)+'_'+Math.random().toString(36).slice(2,6), nombre:file.name, tipo:file.type||'application/octet-stream', tamaño:file.size, data:ev.target.result, ts:Date.now(), usuario:getMyName()||'Usuario' };
+          if (++loaded === valid.length) finalize(newDocs);
+        };
+        reader.readAsDataURL(file);
+      });
+    }
+  }
+  // Download
+  bg.querySelectorAll('[data-doc-download]').forEach(btn => {
+    btn.onclick = () => {
+      const doc = (lead.documentos||[]).find(d => String(d.id) === String(btn.dataset.docDownload));
+      if (!doc) return;
+      if (doc.url) {
+        // Firebase Storage URL — open in new tab (avoids CORS issues with download attr)
+        window.open(doc.url, '_blank');
+      } else if (doc.data) {
+        // Legacy base64
+        Object.assign(document.createElement('a'), { href:doc.data, download:doc.nombre }).click();
+      }
+    };
+  });
+  // Delete doc
+  bg.querySelectorAll('[data-doc-delete]').forEach(btn => {
+    btn.onclick = () => {
+      const doc = (lead.documentos||[]).find(d => String(d.id) === String(btn.dataset.docDelete));
+      if (!doc || !confirm(`¿Eliminar "${doc.nombre}"?`)) return;
+      // Remove from Firebase Storage (best-effort, don't block UI)
+      if (USE_STORAGE && STORAGE && doc.storagePath) {
+        STORAGE.ref(doc.storagePath).delete().catch(() => {});
+      }
+      const l = STATE[lead.id] || lead;
+      l.documentos = (l.documentos||[]).filter(d => String(d.id) !== String(btn.dataset.docDelete));
+      l.historial  = [...(l.historial||[]).slice(-49), { ts:Date.now(), usuario:getMyName()||'Sistema', desc:`Documento eliminado: ${doc.nombre}` }];
+      saveLead(l); if (myPresenceRef) myPresenceRef.update({ activeLead: null }); bg.remove(); openModal(lead.id, null, 'documentos');
+    };
+  });
+  // Rename doc — inline edit on doc-name
+  bg.querySelectorAll('[data-doc-rename]').forEach(btn => {
+    btn.onclick = () => {
+      const docId = btn.dataset.docRename;
+      const doc = (lead.documentos||[]).find(d => String(d.id) === String(docId));
+      if (!doc) return;
+      const nameEl = btn.closest('.doc-item').querySelector('.doc-name');
+      const original = doc.nombre;
+      nameEl.contentEditable = true;
+      nameEl.style.cssText = 'outline:1.5px solid #111;border-radius:3px;padding:0 3px;';
+      nameEl.focus();
+      // Select all
+      const range = document.createRange(); range.selectNodeContents(nameEl);
+      const sel = window.getSelection(); sel.removeAllRanges(); sel.addRange(range);
+      const save = () => {
+        const newName = nameEl.textContent.trim() || original;
+        nameEl.contentEditable = false; nameEl.style.cssText = '';
+        nameEl.textContent = newName;
+        if (newName === original) return;
+        const l = STATE[lead.id] || lead;
+        const docObj = (l.documentos||[]).find(d => String(d.id) === String(docId));
+        if (docObj) {
+          docObj.nombre = newName;
+          doc.nombre = newName; // update local copy
+          l.historial = [...(l.historial||[]).slice(-49), { ts:Date.now(), usuario:getMyName()||'Sistema', desc:`Documento renombrado: ${original} → ${newName}` }];
+          saveLead(l);
+        }
+      };
+      nameEl.addEventListener('blur', save, { once:true });
+      nameEl.addEventListener('keydown', e => {
+        if (e.key === 'Enter') { e.preventDefault(); nameEl.blur(); }
+        if (e.key === 'Escape') { nameEl.textContent = original; nameEl.blur(); }
+      });
+    };
+  });
+
+  // Activate tab (for reopening on a specific tab)
+  if (activeTab && isEdit) {
+    const tabBtn = bg.querySelector(`.modal-tab-btn[data-mtab="${activeTab}"]`);
+    if (tabBtn) {
+      bg.querySelectorAll('.modal-tab-btn').forEach(b => b.classList.toggle('active', b === tabBtn));
+      bg.querySelectorAll('.modal-tab-panel').forEach(p => p.classList.toggle('active', p.id === 'mtab-' + activeTab));
+    }
+  }
+
+  bg.addEventListener('keydown', e => { if (e.key === 'Escape') { e.preventDefault(); tryClose(); } });
+}
+
+function docIcon(tipo) {
+  if (!tipo) return '📎';
+  if (tipo.includes('pdf')) return '📄';
+  if (tipo.startsWith('image')) return '🖼️';
+  if (tipo.includes('spreadsheet')||tipo.includes('excel')||tipo.includes('csv')) return '📊';
+  if (tipo.includes('word')||tipo.includes('document')) return '📝';
+  if (tipo.includes('zip')||tipo.includes('compress')) return '📦';
+  return '📎';
+}
+
+function fmtSize(b) {
+  if (!b && b !== 0) return '';
+  if (b < 1024) return b + ' B';
+  if (b < 1024*1024) return (b/1024).toFixed(1) + ' KB';
+  return (b/1024/1024).toFixed(1) + ' MB';
+}
+
+function esc(v) {
+  if (!v && v !== 0) return '';
+  return String(v).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+// ── Filters ───────────────────────────────────────────────
+document.getElementById('searchInput').addEventListener('input', e => { filterSearch = e.target.value.trim(); renderAll(); });
+document.getElementById('filterFuente').addEventListener('change', e => { filterFuente = e.target.value; renderAll(); });
+document.getElementById('filterCompania').addEventListener('change', e => { filterCompania = e.target.value; renderAll(); });
+document.getElementById('filterDesde').addEventListener('change', e => { filterDesde = e.target.value; renderAll(); });
+document.getElementById('filterHasta').addEventListener('change', e => { filterHasta = e.target.value; renderAll(); });
+document.getElementById('btnNuevo').addEventListener('click', () => openModal(null));
+document.getElementById('btnRapido').addEventListener('click', openQuickAdd);
+
+// ── Export CSV ────────────────────────────────────────────
+document.getElementById('btnExport').addEventListener('click', () => {
+  const leads = Object.values(STATE).filter(l => l && l.id);
+  let headers, rows;
+  if (VERTICAL === 'comunidades') {
+    headers = ['Fecha','Edificio','Teléfono','Administrador','Dirección','Unidades','Fuente','Aseguradora','Prima neta','Acción','F. Seguimiento','Cierre','F. Emisión','Comentarios','Etapa'];
+    rows = leads.map(l => [l.fecha,l.edificio,l.telefono||'',l.administrador||'',l.direccion||'',l.unidades||'',l.fuente,l.compania,l.primaNeta,l.accionSeguimiento,l.fechaSeguimiento,l.cierre?'Sí':'No',l.fechaEmision,l.comentarios,l.columna]);
+  } else {
+    headers = ['Fecha','Asegurado','Teléfono','RUT','Fuente','Marca','Modelo','Año','Patente','Póliza vigente','Prima vigente','Deducible','F. Cotización','Aseguradora','Prima neta','Acción','F. Seguimiento','Cierre','F. Emisión','Comentarios','Etapa'];
+    rows = leads.map(l => [l.fecha,l.asegurado,l.telefono||'',l.rut,l.fuente,l.marca,l.modelo,l.anio,l.patente,l.polizaVigente?'Sí':'No',l.primaVigente,l.deducibleActual,l.fechaCotizacion,l.compania,l.primaNeta,l.accionSeguimiento,l.fechaSeguimiento,l.cierre?'Sí':'No',l.fechaEmision,l.comentarios,l.columna]);
+  }
+  const csv = [headers,...rows].map(r => r.map(v => `"${(v||'').toString().replace(/"/g,'""')}"`).join(',')).join('\n');
+  const label = VERTICAL === 'comunidades' ? 'CRM_Comunidades' : 'CRM_Flotas';
+  const a = Object.assign(document.createElement('a'), { href: URL.createObjectURL(new Blob(['﻿'+csv],{type:'text/csv;charset=utf-8'})), download: `${label}_${today()}.csv` });
+  a.click();
+});
+
+// ── Import Excel ──────────────────────────────────────────
+document.getElementById('btnImport').addEventListener('click', () => document.getElementById('importFileInput').click());
+document.getElementById('importFileInput').addEventListener('change', e => {
+  const file = e.target.files[0]; if (!file) return;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    try {
+      const wb = XLSX.read(ev.target.result, {type:'array', cellDates:true});
+      const ws = wb.Sheets[wb.SheetNames[0]];
+      const data = XLSX.utils.sheet_to_json(ws, {defval:''});
+      let imported = 0;
+      data.forEach(row => {
+        const toDate = v => { try { const d = new Date(v); return isNaN(d)?'':`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; } catch { return ''; }};
+        const toNum  = v => String(v||'').replace(/[^\d]/g,'');
+        const esCierre = /si/i.test(String(row['Cierre (SI/NO)']||row['Cierre']||''));
+        let lead;
+        if (VERTICAL === 'comunidades') {
+          lead = defaultLead({
+            fecha:             toDate(row['Fecha']) || today(),
+            fuente:            String(row['Fuente lead']||row['Fuente']||''),
+            edificio:          String(row['Edificio']||row['Edificio / Condominio']||'').trim(),
+            administrador:     String(row['Administrador']||row['Administrador / Contacto']||'').trim(),
+            telefono:          String(row['Teléfono']||row['Telefono']||row['Celular']||'').trim(),
+            direccion:         String(row['Dirección']||row['Direccion']||''),
+            unidades:          String(row['Unidades']||row['N° Unidades']||''),
+            compania:          String(row['Compañía']||row['Compania']||''),
+            primaNeta:         toNum(row['Prima neta']),
+            accionSeguimiento: String(row['Acción / Seguimiento']||row['Accion / Seguimiento']||''),
+            comentarios:       String(row['Comentarios']||''),
+            fechaEmision:      toDate(row['F. Emisión']||row['Fecha emisión']||row['Fecha emision']||''),
+            cierre:            esCierre,
+            columna:           esCierre ? 'emitida' : 'nuevo',
+          });
+          if (lead.edificio) { STATE[lead.id] = lead; imported++; }
+        } else {
+          lead = defaultLead({
+            fecha:             toDate(row['Fecha']) || today(),
+            fuente:            row['Fuente lead']||'',
+            asegurado:         String(row['Asegurado']||'').trim(),
+            telefono:          String(row['Teléfono']||row['Telefono']||row['Celular']||row['Fono']||'').trim(),
+            rut:               String(row['Rut']||row['RUT']||''),
+            marca:             String(row['Marca']||''),
+            modelo:            String(row['Modelo']||''),
+            anio:              String(row['Año']||row['Ano']||''),
+            patente:           String(row['Patente']||'').toUpperCase(),
+            polizaVigente:     /si/i.test(String(row['Poliza vigente (SI/NO)']||'')),
+            primaVigente:      toNum(row['Prima vigente']),
+            deducibleActual:   toNum(row['Deducible actual']),
+            fechaCotizacion:   toDate(row['Fecha cotizacion']||row['Fecha cotización']),
+            accionSeguimiento: String(row['Accion / Seguimiento']||row['Acción / Seguimiento']||''),
+            cierre:            esCierre,
+            comentarios:       String(row['Comentarios']||''),
+            fechaEmision:      toDate(row['Fecha emisión']||row['Fecha emision']),
+            primaNeta:         toNum(row['Prima neta']),
+            compania:          String(row['Compañía']||row['Compania']||''),
+            columna:           esCierre ? 'emitida' : 'nuevo',
+          });
+          if (lead.asegurado) { STATE[lead.id] = lead; imported++; }
+        }
+      });
+      if (USE_FIREBASE && DB_REF) {
+        setSyncing();
+        const updates = {};
+        Object.values(STATE).forEach(l => { updates[l.id] = l; });
+        DB_REF.update(updates).then(setSyncOnline).catch(setSyncOffline);
+      } else {
+        saveState();
+      }
+      renderAll();
+      alert(`✓ ${imported} leads importados correctamente`);
+    } catch(err) { alert('Error al leer el archivo: ' + err.message); }
+    e.target.value = '';
+  };
+  reader.readAsArrayBuffer(file);
+});
+
+// ── fmtTs helper ─────────────────────────────────────────
+function fmtTs(ts) {
+  if (!ts) return '';
+  const d = new Date(ts);
+  const meses = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
+  return `${d.getDate()} ${meses[d.getMonth()]} ${String(d.getFullYear()).slice(2)}, ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
+}
+
+// ── Presence (Firebase only) ──────────────────────────────
+const COLORS = ['#6366f1','#f59e0b','#10b981','#ef4444','#8b5cf6','#0ea5e9','#f97316'];
+const SESSION_ID = Math.random().toString(36).slice(2);
+let myPresenceRef = null;
+let PRESENCE_REF = null;
+let PRESENCE_DATA = {};
+const remoteCursors = {};
+
+function getMyColor() {
+  let c = localStorage.getItem('crm_color');
+  if (!c) { c = COLORS[Math.floor(Math.random()*COLORS.length)]; localStorage.setItem('crm_color',c); }
+  return c;
+}
+function getMyName() { return localStorage.getItem('crm_name') || ''; }
+function saveMyName(n) { localStorage.setItem('crm_name', n); }
+
+function initPresence(name) {
+  if (!USE_FIREBASE) return;
+  const db = firebase.database();
+  PRESENCE_REF = db.ref('crm_cotizaciones/presence');
+  myPresenceRef = PRESENCE_REF.child(SESSION_ID);
+  myPresenceRef.set({ name, color: getMyColor(), ts: Date.now() });
+  myPresenceRef.onDisconnect().remove();
+  setInterval(() => myPresenceRef && myPresenceRef.update({ ts: Date.now() }), 30000);
+
+  PRESENCE_REF.on('value', snap => renderPresence(snap.val() || {}));
+
+  document.addEventListener('mousemove', e => {
+    if (!myPresenceRef) return;
+    if (Date.now() - (initPresence._last||0) < 100) return;
+    initPresence._last = Date.now();
+    myPresenceRef.update({ cursor: { x: Math.round(e.clientX), y: Math.round(e.clientY) } });
+  });
+  document.addEventListener('mouseleave', () => {
+    if (myPresenceRef) myPresenceRef.update({ cursor: null });
+  });
+}
+
+function renderPresence(data) {
+  PRESENCE_DATA = data;
+  const wrap = document.getElementById('presenceWrap');
+  wrap.innerHTML = '';
+  const users = Object.entries(data);
+  if (users.length > 1) {
+    const lbl = document.createElement('span');
+    lbl.className = 'presence-label';
+    lbl.textContent = 'Online:';
+    wrap.appendChild(lbl);
+  }
+  users.forEach(([sid, u]) => {
+    const av = document.createElement('div');
+    av.className = 'avatar';
+    av.style.background = u.color || '#6366f1';
+    av.textContent = (u.name || '?')[0].toUpperCase();
+    av.dataset.name = u.name + (sid===SESSION_ID ? ' (tú)' : '');
+    wrap.appendChild(av);
+  });
+  updateRemoteCursors(data);
+  updateCardViewers(data);
+  updateModalViewersBanner(data);
+}
+
+function updateCardViewers(data) {
+  document.querySelectorAll('.card-viewers').forEach(el => el.remove());
+  Object.entries(data).forEach(([sid, u]) => {
+    if (sid === SESSION_ID || !u.activeLead) return;
+    const card = document.querySelector(`.card[data-id="${u.activeLead}"]`);
+    if (!card) return;
+    let viewers = card.querySelector('.card-viewers');
+    if (!viewers) {
+      viewers = document.createElement('div');
+      viewers.className = 'card-viewers';
+      card.appendChild(viewers);
+    }
+    const av = document.createElement('div');
+    av.className = 'card-viewer-av';
+    av.style.background = u.color || '#6366f1';
+    av.textContent = (u.name || '?')[0].toUpperCase();
+    av.dataset.name = (u.name || '?') + ' está viendo';
+    viewers.appendChild(av);
+  });
+}
+
+function updateModalViewersBanner(data) {
+  const banner = document.querySelector('.modal-viewing-banner');
+  if (!banner) return;
+  const leadId = banner.dataset.leadId;
+  const viewers = Object.entries(data).filter(([sid, u]) => sid !== SESSION_ID && u.activeLead === leadId);
+  if (viewers.length === 0) { banner.style.display = 'none'; return; }
+  banner.style.display = 'flex';
+  banner.innerHTML = viewers.map(([, u]) =>
+    `<div class="viewing-av" style="background:${u.color||'#6366f1'}">${(u.name||'?')[0].toUpperCase()}</div>`
+  ).join('') + `<span><strong>${viewers.map(([,u])=>u.name||'?').join(', ')}</strong> también ${viewers.length===1?'está':'están'} viendo este lead</span>`;
+}
+
+function updateRemoteCursors(data) {
+  Object.keys(remoteCursors).forEach(sid => {
+    if (!data[sid]) { remoteCursors[sid].el.remove(); delete remoteCursors[sid]; }
+  });
+  Object.entries(data).forEach(([sid, u]) => {
+    if (sid === SESSION_ID) return;
+    const color = u.color || '#6366f1';
+    if (!remoteCursors[sid]) {
+      const el = document.createElement('div');
+      el.className = 'remote-cursor';
+      el.innerHTML = `<svg width="14" height="20" viewBox="0 0 14 20" fill="none"><path d="M0 0L0 16L4.5 11.5L7.5 18.5L9.5 17.5L6.5 10.5L12 10.5Z" fill="${color}" stroke="white" stroke-width="1.2" stroke-linejoin="round"/></svg><span class="cursor-label" style="background:${color}">${u.name||'?'}</span>`;
+      document.body.appendChild(el);
+      remoteCursors[sid] = { el, timeout: null };
+    }
+    if (u.cursor) {
+      const c = remoteCursors[sid];
+      c.el.style.left = u.cursor.x + 'px';
+      c.el.style.top  = u.cursor.y + 'px';
+      c.el.style.display = 'block';
+      clearTimeout(c.timeout);
+      c.timeout = setTimeout(() => { c.el.style.display = 'none'; }, 4000);
+    }
+  });
+}
+
+function showNameModal() {
+  const bg = document.createElement('div');
+  bg.className = 'name-modal-bg';
+  bg.innerHTML = `
+    <div class="name-modal">
+      <h2>¿Cómo te llamas?</h2>
+      <p>Para mostrar quién está conectado en tiempo real.</p>
+      <input id="nameInput" type="text" placeholder="Tu nombre" maxlength="20" autocomplete="off">
+      <button id="nameBtn">Entrar al CRM</button>
+    </div>`;
+  document.body.appendChild(bg);
+  const input = bg.querySelector('#nameInput');
+  input.focus();
+  function submit() {
+    const val = input.value.trim();
+    if (!val) { input.focus(); return; }
+    saveMyName(val);
+    bg.remove();
+    initPresence(val);
+  }
+  bg.querySelector('#nameBtn').addEventListener('click', submit);
+  input.addEventListener('keydown', e => { if (e.key==='Enter') submit(); });
+}
+
+function startPresenceFlow() {
+  if (!USE_FIREBASE) return;
+  const name = getMyName();
+  if (name) initPresence(name); else showNameModal();
+}
+
+// ── Tab switching ─────────────────────────────────────────
+let activeTab = 'kanban';
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    activeTab = btn.dataset.tab;
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b === btn));
+    document.getElementById('viewKanban').classList.toggle('hidden', activeTab !== 'kanban');
+    document.getElementById('viewTabla').classList.toggle('active', activeTab === 'tabla');
+    document.getElementById('viewDashboard').classList.toggle('active', activeTab === 'dashboard');
+    if (activeTab === 'tabla') renderTable();
+    if (activeTab === 'dashboard') renderDashboard();
+  });
+});
+
+// ── Table view ────────────────────────────────────────────
+const TABLE_COLS_FLOTAS = [
+  { key:'fecha',             label:'Fecha',       sort:true  },
+  { key:'asegurado',         label:'Asegurado',   sort:true  },
+  { key:'telefono',          label:'Teléfono',    sort:false },
+  { key:'rut',               label:'RUT',         sort:false },
+  { key:'fuente',            label:'Fuente',      sort:true  },
+  { key:'_vehicle',          label:'Vehículo',    sort:true  },
+  { key:'patente',           label:'Patente',     sort:false },
+  { key:'polizaVigente',     label:'Póliza vig.', sort:false },
+  { key:'primaVigente',      label:'Prima vig.',  sort:false },
+  { key:'deducibleActual',   label:'Deducible',   sort:false },
+  { key:'fechaCotizacion',   label:'F. Cotiz.',   sort:false },
+  { key:'compania',          label:'Aseguradora', sort:true  },
+  { key:'primaNeta',         label:'Prima neta',  sort:true  },
+  { key:'accionSeguimiento', label:'Acción',      sort:false },
+  { key:'cierre',            label:'Cierre',      sort:false },
+  { key:'fechaEmision',      label:'F. Emisión',  sort:false },
+  { key:'comentarios',       label:'Comentarios', sort:false },
+  { key:'columna',           label:'Etapa',       sort:true  },
+];
+const TABLE_COLS_COM = [
+  { key:'fecha',             label:'Fecha',         sort:true  },
+  { key:'edificio',          label:'Edificio',      sort:true  },
+  { key:'telefono',          label:'Teléfono',      sort:false },
+  { key:'administrador',     label:'Administrador', sort:true  },
+  { key:'direccion',         label:'Dirección',     sort:false },
+  { key:'unidades',          label:'Unidades',      sort:false },
+  { key:'fuente',            label:'Fuente',        sort:true  },
+  { key:'compania',          label:'Aseguradora',   sort:true  },
+  { key:'primaNeta',         label:'Prima neta',    sort:true  },
+  { key:'accionSeguimiento', label:'Acción',        sort:false },
+  { key:'fechaSeguimiento',  label:'F. Seguimiento',sort:false },
+  { key:'cierre',            label:'Cierre',        sort:false },
+  { key:'fechaEmision',      label:'F. Emisión',    sort:false },
+  { key:'comentarios',       label:'Comentarios',   sort:false },
+  { key:'columna',           label:'Etapa',         sort:true  },
+];
+function getTableCols() { return VERTICAL === 'comunidades' ? TABLE_COLS_COM : TABLE_COLS_FLOTAS; }
+
+const STAGE_LABELS = { nuevo:'Nuevo Lead', cotizando:'Cotizando', propuesta:'Propuesta enviada', seguimiento:'Seguimiento', emitida:'Emitida', perdido:'Perdido' };
+let sortCol = 'fecha';
+let sortDir = -1;
+
+function sortedLeads() {
+  return leadsVisible().sort((a, b) => {
+    let va = sortCol === '_vehicle' ? [a.marca,a.modelo,a.anio].join(' ') : (a[sortCol] ?? '');
+    let vb = sortCol === '_vehicle' ? [b.marca,b.modelo,b.anio].join(' ') : (b[sortCol] ?? '');
+    // Ensure sort column is valid for current vertical
+    const cols = getTableCols();
+    if (!cols.find(c => c.key === sortCol)) { va = a.fecha||''; vb = b.fecha||''; }
+    if (sortCol === 'primaNeta' || sortCol === 'primaVigente') { va = parseFloat(va)||0; vb = parseFloat(vb)||0; }
+    if (va < vb) return -1 * sortDir;
+    if (va > vb) return 1 * sortDir;
+    return 0;
+  });
+}
+
+// ── Save lead without full table re-render (preserves focus) ─
+function saveLead(l, histDesc) {
+  l.updatedAt = Date.now();
+  if (histDesc) {
+    l.historial = [...(l.historial || []).slice(-49), {
+      ts: Date.now(), usuario: getMyName() || 'Sistema', desc: histDesc
+    }];
+  }
+  STATE[l.id] = l;
+  if (USE_FIREBASE && DB_REF) {
+    setSyncing();
+    DB_REF.child(l.id).set(l).then(setSyncOnline).catch(setSyncOffline);
+  } else {
+    saveState();
+    renderStats();
+    updateCompaniaFilter();
+  }
+}
+
+// ── Inline-editable row builder ───────────────────────────
+const FUENTE_OPTIONS = ['', 'Instagram', 'Facebook', 'Referido', 'WhatsApp', 'Web', 'Otro'];
+function buildEditableRowCom(lead) {
+  const l = STATE[lead.id] || lead;
+  const tr = document.createElement('tr');
+  tr.dataset.leadId = l.id;
+  tr.className = l.columna === 'emitida' ? 'row-emitida' : l.columna === 'perdido' ? 'row-perdido' : '';
+  const DASH = '<span style="color:#ddd;pointer-events:none">—</span>';
+  const tdBtn = document.createElement('td');
+  tdBtn.className = 't-actions';
+  const btn = document.createElement('button');
+  btn.className = 't-edit-btn'; btn.title = 'Editar todo'; btn.textContent = '✏';
+  btn.addEventListener('click', () => openModal(l.id));
+  tdBtn.appendChild(btn);
+  tr.appendChild(tdBtn);
+  function textTd(field, cls, style) {
+    const td = document.createElement('td');
+    if (cls) td.className = cls;
+    if (style) td.style.cssText = style;
+    td.contentEditable = true; td.spellcheck = false; td.style.outline = 'none';
+    const show = () => { td.innerHTML = l[field] ? esc(l[field]) : DASH; }; show();
+    td.addEventListener('focus', () => { td.textContent = l[field] || ''; });
+    td.addEventListener('blur', () => { l[field] = td.textContent.trim(); show(); saveLead(l); });
+    td.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); td.blur(); } });
+    return td;
+  }
+  function numTd(field) {
+    const td = document.createElement('td');
+    td.className = 't-prima'; td.contentEditable = true; td.spellcheck = false; td.style.outline = 'none';
+    const fmt = v => { const p = fmtPrima(v); return p ? `<strong>${p}</strong>` : DASH; };
+    td.innerHTML = fmt(l[field]);
+    td.addEventListener('focus', () => { td.textContent = l[field] || ''; });
+    td.addEventListener('blur', () => { l[field] = td.textContent.replace(/[^\d]/g,''); td.innerHTML = fmt(l[field]); saveLead(l); });
+    td.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); td.blur(); } });
+    return td;
+  }
+  function dateTd(field) {
+    const td = document.createElement('td');
+    td.className = 'td-click t-muted';
+    const show = () => { td.innerHTML = fmtDate(l[field]) || DASH; }; show();
+    td.addEventListener('click', () => {
+      if (td.querySelector('input')) return;
+      const inp = document.createElement('input');
+      inp.type = 'date'; inp.value = l[field]||'';
+      inp.style.cssText = 'font-size:11px;border:1.5px solid #111;border-radius:5px;padding:2px 4px;font-family:inherit;outline:none;';
+      td.innerHTML=''; td.appendChild(inp); inp.focus();
+      inp.addEventListener('change', () => { l[field]=inp.value; saveLead(l); show(); });
+      inp.addEventListener('blur', () => { if (!td.querySelector('input[type=date]:focus')) show(); });
+    });
+    return td;
+  }
+  function fuenteTd() {
+    const td = document.createElement('td'); td.className = 'td-click';
+    const show = () => { const cls=FUENTE_CLASS[l.fuente]||'fuente-otro'; td.innerHTML=l.fuente?`<span class="t-badge ${cls}" style="cursor:pointer">${l.fuente}</span>`:DASH; }; show();
+    td.addEventListener('click', () => {
+      if (td.querySelector('select')) return;
+      const sel = document.createElement('select');
+      sel.style.cssText='font-size:11px;border:1.5px solid #111;border-radius:5px;padding:2px 4px;font-family:inherit;outline:none;background:#fff;';
+      FUENTE_OPTIONS.forEach(f=>{ const o=document.createElement('option'); o.value=f; o.textContent=f||'—'; if(f===l.fuente)o.selected=true; sel.appendChild(o); });
+      td.innerHTML=''; td.appendChild(sel); sel.focus();
+      sel.addEventListener('change', ()=>{ l.fuente=sel.value; saveLead(l); show(); });
+      sel.addEventListener('blur', show);
+    });
+    return td;
+  }
+  function stageTd() {
+    const td = document.createElement('td'); td.className = 'td-click';
+    const show = () => { const cls='stage-'+(l.columna||'nuevo'); td.innerHTML=`<span class="t-stage ${cls}" style="cursor:pointer">${STAGE_LABELS[l.columna]||l.columna}</span>`; }; show();
+    td.addEventListener('click', () => {
+      if (td.querySelector('select')) return;
+      const sel = document.createElement('select');
+      sel.style.cssText='font-size:11px;border:1.5px solid #111;border-radius:5px;padding:2px 4px;font-family:inherit;outline:none;background:#fff;';
+      COLUMNS.forEach(c=>{ const o=document.createElement('option'); o.value=c.id; o.textContent=c.label; if(c.id===l.columna)o.selected=true; sel.appendChild(o); });
+      td.innerHTML=''; td.appendChild(sel); sel.focus();
+      sel.addEventListener('change', ()=>{ l.columna=sel.value; tr.className=l.columna==='emitida'?'row-emitida':l.columna==='perdido'?'row-perdido':''; saveLead(l); renderStats(); show(); });
+      sel.addEventListener('blur', show);
+    });
+    return td;
+  }
+  function boolTd(field) {
+    const td = document.createElement('td'); td.className = 't-check td-click'; td.title='Click para cambiar';
+    const show = () => { td.innerHTML = l[field] ? '✓' : DASH; }; show();
+    td.addEventListener('click', ()=>{ l[field]=!l[field]; show(); saveLead(l); });
+    return td;
+  }
+  function telefonTd() {
+    const td = document.createElement('td'); td.className='t-muted'; td.style.cssText='font-size:11px;white-space:nowrap;';
+    const show = () => {
+      if (l.telefono) { const raw=l.telefono.replace(/\D/g,''); const num=raw.startsWith('56')?raw:'56'+raw; td.innerHTML=`${esc(l.telefono)} <a href="https://wa.me/${num}" target="_blank" title="WhatsApp" style="color:#15803d;text-decoration:none;font-size:13px;vertical-align:middle;" onclick="event.stopPropagation()">💬</a>`; }
+      else { td.innerHTML='<span style="color:#ddd">—</span>'; }
+    }; show();
+    td.addEventListener('click', ()=>{
+      if (td.querySelector('input')) return;
+      const inp=document.createElement('input'); inp.type='tel'; inp.value=l.telefono||'';
+      inp.style.cssText='font-size:11px;border:1.5px solid #111;border-radius:5px;padding:2px 4px;font-family:inherit;outline:none;width:130px;';
+      td.innerHTML=''; td.appendChild(inp); inp.focus();
+      inp.addEventListener('blur',()=>{ l.telefono=inp.value.trim(); saveLead(l); show(); });
+      inp.addEventListener('keydown',e=>{ if(e.key==='Enter'){e.preventDefault();inp.blur();} });
+    });
+    return td;
+  }
+  tr.appendChild(dateTd('fecha'));
+  tr.appendChild(textTd('edificio','t-asegurado'));
+  tr.appendChild(telefonTd());
+  tr.appendChild(textTd('administrador','t-muted','font-size:11px'));
+  tr.appendChild(textTd('direccion','t-muted','font-size:11px;max-width:160px'));
+  tr.appendChild(textTd('unidades','t-muted','font-size:11px;text-align:center'));
+  tr.appendChild(fuenteTd());
+  tr.appendChild(textTd('compania',''));
+  tr.appendChild(numTd('primaNeta'));
+  tr.appendChild(textTd('accionSeguimiento','','max-width:140px'));
+  tr.appendChild(dateTd('fechaSeguimiento'));
+  tr.appendChild(boolTd('cierre'));
+  tr.appendChild(dateTd('fechaEmision'));
+  tr.appendChild(textTd('comentarios','','max-width:160px;color:#aaa'));
+  tr.appendChild(stageTd());
+  return tr;
+}
+const DASH = '<span style="color:#ddd;pointer-events:none">—</span>';
+
+function buildEditableRow(lead) {
+  if (VERTICAL === 'comunidades') return buildEditableRowCom(lead);
+  // Work on a live reference so mutations are reflected
+  const l = STATE[lead.id] || lead;
+  const tr = document.createElement('tr');
+  tr.dataset.leadId = l.id;
+  tr.className = l.columna === 'emitida' ? 'row-emitida' : l.columna === 'perdido' ? 'row-perdido' : '';
+
+  // ✏ button
+  const tdBtn = document.createElement('td');
+  tdBtn.className = 't-actions';
+  const btn = document.createElement('button');
+  btn.className = 't-edit-btn'; btn.title = 'Editar todo'; btn.textContent = '✏';
+  btn.addEventListener('click', () => openModal(l.id));
+  tdBtn.appendChild(btn);
+  tr.appendChild(tdBtn);
+
+  // TEXT cell — contenteditable
+  function textTd(field, cls, style) {
+    const td = document.createElement('td');
+    if (cls) td.className = cls;
+    if (style) td.style.cssText = style;
+    td.contentEditable = true;
+    td.spellcheck = false;
+    td.style.outline = 'none';
+    const show = () => { td.innerHTML = l[field] ? esc(l[field]) : DASH; };
+    show();
+    td.addEventListener('focus', () => { td.textContent = l[field] || ''; });
+    td.addEventListener('blur', () => {
+      const v = td.textContent.trim();
+      l[field] = v;
+      show();
+      saveLead(l);
+    });
+    td.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); td.blur(); } });
+    return td;
+  }
+
+  // NUMBER cell — raw input, formatted display
+  function numTd(field, bold) {
+    const td = document.createElement('td');
+    if (bold) td.className = 't-prima';
+    td.contentEditable = true;
+    td.spellcheck = false;
+    td.style.outline = 'none';
+    const fmt = v => { const p = fmtPrima(v); return p ? (bold ? `<strong>${p}</strong>` : p) : DASH; };
+    td.innerHTML = fmt(l[field]);
+    td.addEventListener('focus', () => { td.textContent = l[field] || ''; });
+    td.addEventListener('blur', () => {
+      const raw = td.textContent.replace(/[^\d]/g, '');
+      l[field] = raw;
+      td.innerHTML = fmt(raw);
+      saveLead(l);
+    });
+    td.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); td.blur(); } });
+    return td;
+  }
+
+  // DATE cell — click shows date input
+  function dateTd(field, cls) {
+    const td = document.createElement('td');
+    td.className = ('td-click ' + (cls || 't-muted')).trim();
+    const show = () => { td.innerHTML = fmtDate(l[field]) || DASH; };
+    show();
+    td.addEventListener('click', () => {
+      if (td.querySelector('input')) return;
+      const inp = document.createElement('input');
+      inp.type = 'date'; inp.value = l[field] || '';
+      inp.style.cssText = 'font-size:11px;border:1.5px solid #111;border-radius:5px;padding:2px 4px;font-family:inherit;outline:none;';
+      td.innerHTML = ''; td.appendChild(inp); inp.focus();
+      inp.addEventListener('change', () => { l[field] = inp.value; saveLead(l); show(); });
+      inp.addEventListener('blur', () => { if (!td.querySelector('input[type=date]:focus')) show(); });
+    });
+    return td;
+  }
+
+  // SELECT cell — fuente badge
+  function fuenteTd() {
+    const td = document.createElement('td');
+    td.className = 'td-click';
+    const show = () => {
+      const cls = FUENTE_CLASS[l.fuente] || 'fuente-otro';
+      td.innerHTML = l.fuente ? `<span class="t-badge ${cls}" style="cursor:pointer">${l.fuente}</span>` : DASH;
+    };
+    show();
+    td.addEventListener('click', () => {
+      if (td.querySelector('select')) return;
+      const sel = document.createElement('select');
+      sel.style.cssText = 'font-size:11px;border:1.5px solid #111;border-radius:5px;padding:2px 4px;font-family:inherit;outline:none;background:#fff;';
+      FUENTE_OPTIONS.forEach(f => {
+        const o = document.createElement('option');
+        o.value = f; o.textContent = f || '—';
+        if (f === l.fuente) o.selected = true;
+        sel.appendChild(o);
+      });
+      td.innerHTML = ''; td.appendChild(sel); sel.focus();
+      sel.addEventListener('change', () => { l.fuente = sel.value; saveLead(l); show(); });
+      sel.addEventListener('blur', show);
+    });
+    return td;
+  }
+
+  // SELECT cell — etapa/stage
+  function stageTd() {
+    const td = document.createElement('td');
+    td.className = 'td-click';
+    const show = () => {
+      const cls = 'stage-' + (l.columna || 'nuevo');
+      td.innerHTML = `<span class="t-stage ${cls}" style="cursor:pointer">${STAGE_LABELS[l.columna] || l.columna}</span>`;
+    };
+    show();
+    td.addEventListener('click', () => {
+      if (td.querySelector('select')) return;
+      const sel = document.createElement('select');
+      sel.style.cssText = 'font-size:11px;border:1.5px solid #111;border-radius:5px;padding:2px 4px;font-family:inherit;outline:none;background:#fff;';
+      COLUMNS.forEach(c => {
+        const o = document.createElement('option');
+        o.value = c.id; o.textContent = c.label;
+        if (c.id === l.columna) o.selected = true;
+        sel.appendChild(o);
+      });
+      td.innerHTML = ''; td.appendChild(sel); sel.focus();
+      sel.addEventListener('change', () => {
+        l.columna = sel.value;
+        tr.className = l.columna === 'emitida' ? 'row-emitida' : l.columna === 'perdido' ? 'row-perdido' : '';
+        saveLead(l);
+        renderStats();
+        show();
+      });
+      sel.addEventListener('blur', show);
+    });
+    return td;
+  }
+
+  // BOOL cell — toggle on click
+  function boolTd(field) {
+    const td = document.createElement('td');
+    td.className = 't-check td-click'; td.title = 'Click para cambiar';
+    const show = () => { td.innerHTML = l[field] ? '✓' : DASH; };
+    show();
+    td.addEventListener('click', () => { l[field] = !l[field]; show(); saveLead(l); });
+    return td;
+  }
+
+  // Vehicle (composite) — opens modal for Marca/Modelo/Año
+  function vehicleTd() {
+    const td = document.createElement('td');
+    td.className = 't-vehicle td-click'; td.title = 'Editar con ✏';
+    td.style.color = '#888';
+    td.textContent = [l.marca, l.modelo, l.anio].filter(Boolean).join(' ') || '—';
+    td.addEventListener('click', () => openModal(l.id));
+    return td;
+  }
+
+  // TELEFONO cell with inline WA button
+  function telefonTd() {
+    const td = document.createElement('td');
+    td.className = 't-muted';
+    td.style.cssText = 'font-size:11px;white-space:nowrap;';
+    const show = () => {
+      if (l.telefono) {
+        const raw = l.telefono.replace(/\D/g,'');
+        const num = raw.startsWith('56') ? raw : '56' + raw;
+        td.innerHTML = `${esc(l.telefono)} <a href="https://wa.me/${num}" target="_blank" title="WhatsApp" style="color:#15803d;text-decoration:none;font-size:13px;vertical-align:middle;" onclick="event.stopPropagation()">💬</a>`;
+      } else {
+        td.innerHTML = '<span style="color:#ddd">—</span>';
+      }
+    };
+    show();
+    td.addEventListener('click', () => {
+      if (td.querySelector('input')) return;
+      const inp = document.createElement('input');
+      inp.type = 'tel'; inp.value = l.telefono || '';
+      inp.style.cssText = 'font-size:11px;border:1.5px solid #111;border-radius:5px;padding:2px 4px;font-family:inherit;outline:none;width:130px;';
+      td.innerHTML = ''; td.appendChild(inp); inp.focus();
+      inp.addEventListener('blur', () => { l.telefono = inp.value.trim(); saveLead(l); show(); });
+      inp.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); inp.blur(); } });
+    });
+    return td;
+  }
+
+  tr.appendChild(dateTd('fecha'));
+  tr.appendChild(textTd('asegurado', 't-asegurado'));
+  tr.appendChild(telefonTd());
+  tr.appendChild(textTd('rut', 't-muted', 'font-size:11px'));
+  tr.appendChild(fuenteTd());
+  tr.appendChild(vehicleTd());
+  tr.appendChild(textTd('patente', ''));
+  tr.appendChild(boolTd('polizaVigente'));
+  tr.appendChild(numTd('primaVigente', false));
+  tr.appendChild(numTd('deducibleActual', false));
+  tr.appendChild(dateTd('fechaCotizacion'));
+  tr.appendChild(textTd('compania', ''));
+  tr.appendChild(numTd('primaNeta', true));
+  tr.appendChild(textTd('accionSeguimiento', '', 'max-width:140px'));
+  tr.appendChild(boolTd('cierre'));
+  tr.appendChild(dateTd('fechaEmision'));
+  tr.appendChild(textTd('comentarios', '', 'max-width:160px;color:#aaa'));
+  tr.appendChild(stageTd());
+
+  return tr;
+}
+
+function renderTable() {
+  if (activeTab !== 'tabla') return;
+  const leads = sortedLeads();
+  const tbody = document.getElementById('leadsTableBody');
+  const thead = document.querySelector('#leadsTable thead');
+  if (!tbody || !thead) return;
+
+  // Build header (rebuild when switching vertical)
+  if (!thead.children.length) {
+    const cols = getTableCols();
+    const tr = document.createElement('tr');
+    tr.innerHTML = '<th class="t-actions no-sort"></th>' +
+      cols.map(c =>
+        `<th data-key="${c.key}" class="${!c.sort ? 'no-sort' : ''}">
+          ${c.label}${c.sort ? `<span class="sort-arrow">↕</span>` : ''}
+        </th>`
+      ).join('');
+    thead.appendChild(tr);
+    thead.querySelectorAll('th[data-key]').forEach(th => {
+      th.addEventListener('click', () => {
+        const col = getTableCols().find(c => c.key === th.dataset.key);
+        if (!col?.sort) return;
+        if (sortCol === th.dataset.key) sortDir *= -1;
+        else { sortCol = th.dataset.key; sortDir = 1; }
+        renderTable();
+      });
+    });
+  }
+
+  // Update sort indicators
+  thead.querySelectorAll('th[data-key]').forEach(th => {
+    th.classList.toggle('sort-active', th.dataset.key === sortCol);
+    const arrow = th.querySelector('.sort-arrow');
+    if (arrow) arrow.textContent = th.dataset.key === sortCol ? (sortDir > 0 ? '↑' : '↓') : '↕';
+  });
+
+  document.getElementById('tableCount').textContent = `${leads.length} lead${leads.length !== 1 ? 's' : ''}`;
+  tbody.innerHTML = '';
+
+  if (!leads.length) {
+    tbody.innerHTML = `<tr><td colspan="${getTableCols().length + 1}" class="table-empty">Sin leads — agrega el primero con el botón de abajo</td></tr>`;
+    return;
+  }
+
+  leads.forEach(l => tbody.appendChild(buildEditableRow(l)));
+}
+
+document.getElementById('addRowBtn').addEventListener('click', () => openModal(null));
+
+// ── Dashboard ─────────────────────────────────────────────
+let _charts = {};
+function renderDashboard() {
+  if (activeTab !== 'dashboard') return;
+  const all  = Object.values(STATE).filter(l => l && l.id);
+  const emit = all.filter(l => l.columna === 'emitida');
+  const perd = all.filter(l => l.columna === 'perdido');
+  const cerr = emit.length + perd.length;
+  const primaTotal = emit.reduce((s,l) => s+(parseFloat(l.primaNeta)||0), 0);
+
+  document.getElementById('dTotal').textContent     = all.length;
+  document.getElementById('dEmitidas').textContent  = emit.length;
+  document.getElementById('dPrimaTotal').textContent= fmtPrima(primaTotal) || '$0';
+  document.getElementById('dTasa').textContent      = cerr ? Math.round(emit.length/cerr*100)+'%' : '—';
+
+  const mkChart = (id, type, data, opts={}) => {
+    if (_charts[id]) _charts[id].destroy();
+    const ctx = document.getElementById(id);
+    if (!ctx) return;
+    _charts[id] = new Chart(ctx, { type, data, options: { responsive:true, plugins:{ legend:{ labels:{ font:{size:11} } } }, ...opts } });
+  };
+
+  // Leads por fuente (donut)
+  const byFuente = {};
+  all.forEach(l => { const f = l.fuente||'Sin fuente'; byFuente[f] = (byFuente[f]||0)+1; });
+  mkChart('chartFuente','doughnut',{
+    labels: Object.keys(byFuente),
+    datasets:[{ data:Object.values(byFuente), backgroundColor:['#6366f1','#f59e0b','#10b981','#ef4444','#8b5cf6','#0ea5e9','#f97316'] }]
+  },{ cutout:'58%', plugins:{ legend:{ position:'right', labels:{ font:{size:10} } } } });
+
+  // Embudo (horizontal bar)
+  const stgOrder = ['nuevo','cotizando','propuesta','seguimiento','emitida','perdido'];
+  mkChart('chartEmbudo','bar',{
+    labels: stgOrder.map(s => STAGE_LABELS[s]),
+    datasets:[{ data:stgOrder.map(s=>all.filter(l=>l.columna===s).length), backgroundColor:['#9ca3af','#3b82f6','#7c3aed','#f59e0b','#22c55e','#ef4444'], borderRadius:4 }]
+  },{ indexAxis:'y', plugins:{ legend:{display:false} }, scales:{ x:{ ticks:{font:{size:10}} }, y:{ ticks:{font:{size:10}} } } });
+
+  // Prima emitida por mes (bar)
+  const primaByM = {};
+  emit.forEach(l => { const m=(l.fechaEmision||l.fecha||'').slice(0,7); if(m) primaByM[m]=(primaByM[m]||0)+(parseFloat(l.primaNeta)||0); });
+  const pm = Object.keys(primaByM).sort();
+  const mLabel = m => { const [y,mo]=m.split('-'); return ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'][+mo-1]+' '+y.slice(2); };
+  mkChart('chartPrima','bar',{
+    labels: pm.map(mLabel),
+    datasets:[{ data:pm.map(m=>Math.round(primaByM[m]/1000)), backgroundColor:'#22c55e', borderRadius:4, label:'Prima (miles $)' }]
+  },{ plugins:{ legend:{display:false} }, scales:{ y:{ ticks:{font:{size:10}, callback:v=>'$'+v+'k'} }, x:{ ticks:{font:{size:10}} } } });
+
+  // Leads por mes (line)
+  const leadsByM = {};
+  all.forEach(l => { const m=(l.fecha||'').slice(0,7); if(m) leadsByM[m]=(leadsByM[m]||0)+1; });
+  const lm = Object.keys(leadsByM).sort();
+  mkChart('chartLeads','line',{
+    labels: lm.map(mLabel),
+    datasets:[{ data:lm.map(m=>leadsByM[m]), borderColor:'#6366f1', backgroundColor:'rgba(99,102,241,0.08)', fill:true, tension:0.35, pointRadius:4 }]
+  },{ plugins:{ legend:{display:false} }, scales:{ y:{ ticks:{font:{size:10}} }, x:{ ticks:{font:{size:10}} } } });
+}
+
+// ── Toast ─────────────────────────────────────────────────
+function showToast(msg, type = 'success', duration = 2500) {
+  const t = document.createElement('div');
+  t.className = `toast ${type}`;
+  t.textContent = msg;
+  document.body.appendChild(t);
+  setTimeout(() => {
+    t.classList.add('out');
+    setTimeout(() => t.remove(), 230);
+  }, duration);
+}
+
+// ── Panel "Para hoy" ──────────────────────────────────────
+function renderTodayPanel() {
+  const panel = document.getElementById('todayPanel');
+  if (!panel) return;
+  const now = today();
+  const active = Object.values(STATE).filter(l => l && l.id && !['emitida','perdido'].includes(l.columna));
+  const vencidos = active.filter(l => l.fechaSeguimiento && l.fechaSeguimiento < now);
+  const hoy = active.filter(l => l.fechaSeguimiento && l.fechaSeguimiento === now);
+  const frios = active.filter(l => coldDays(l) >= COLD_THRESHOLD);
+
+  if (!vencidos.length && !hoy.length && !frios.length) {
+    panel.classList.add('hidden'); return;
+  }
+  panel.classList.remove('hidden');
+  let html = '<span class="today-panel-lbl">🗓 Para hoy</span>';
+  const leadName = VERTICAL_CONFIG[VERTICAL].leadName;
+  vencidos.forEach(l => {
+    const days = Math.round((new Date(now+'T00:00:00') - new Date(l.fechaSeguimiento+'T00:00:00')) / 86400000);
+    html += `<button class="today-chip vencida" data-id="${l.id}">⚠ ${esc(leadName(l))} — seguimiento vencido hace ${days}d</button>`;
+  });
+  hoy.forEach(l => {
+    html += `<button class="today-chip hoy" data-id="${l.id}">🔔 ${esc(leadName(l))} — seguimiento hoy</button>`;
+  });
+  if (frios.length) {
+    html += `<button class="today-chip fria" data-id="__frios">❄ ${frios.length} lead${frios.length!==1?'s':''} sin movimiento</button>`;
+  }
+  panel.innerHTML = html;
+  panel.querySelectorAll('.today-chip').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const lid = btn.dataset.id;
+      if (lid === '__frios') {
+        document.querySelector('[data-tab="kanban"]').click();
+      } else {
+        openModal(lid);
+      }
+    });
+  });
+}
+
+// ── Quick-add rápido ──────────────────────────────────────
+function openQuickAdd() {
+  document.querySelectorAll('.modal-bg,.quick-modal-bg').forEach(el => el.remove());
+  const bg = document.createElement('div');
+  bg.className = 'quick-modal-bg';
+  const fuenteOpts = ['','Instagram','Facebook','Referido','WhatsApp','Web','Otro'].map(f=>`<option value="${f}">${f||'— Sin fuente'}</option>`).join('');
+  const isCom = VERTICAL === 'comunidades';
+  bg.innerHTML = `
+    <div class="quick-modal">
+      <h2>⚡ Lead rápido</h2>
+      <p>Agrega lo básico ahora — puedes completar los detalles después haciendo clic en la tarjeta.</p>
+      ${isCom ? `
+      <div class="form-row"><label>Edificio / Condominio *</label><input id="qNombre" type="text" placeholder="Condominio Los Aromos" autocomplete="off"></div>
+      <div class="form-row"><label>Administrador / Contacto</label><input id="qAdministrador" type="text" placeholder="Nombre del contacto"></div>
+      <div class="form-row"><label>Teléfono / WhatsApp</label><input id="qTelefono" type="tel" placeholder="+56 9 1234 5678"></div>` : `
+      <div class="form-row"><label>Nombre asegurado *</label><input id="qNombre" type="text" placeholder="Juan Pérez" autocomplete="off"></div>
+      <div class="form-row"><label>Teléfono / WhatsApp</label><input id="qTelefono" type="tel" placeholder="+56 9 1234 5678"></div>
+      <div class="form-2col">
+        <div class="form-row"><label>Marca</label><input id="qMarca" type="text" placeholder="Toyota"></div>
+        <div class="form-row"><label>Modelo</label><input id="qModelo" type="text" placeholder="Corolla"></div>
+      </div>`}
+      <div class="form-row"><label>Fuente</label><select id="qFuente">${fuenteOpts}</select></div>
+      <div class="quick-modal-actions">
+        <button class="btn-cancelar" id="qCancelar">Cancelar</button>
+        <button class="btn-guardar" id="qGuardar">Guardar lead</button>
+      </div>
+    </div>`;
+  document.body.appendChild(bg);
+  bg.querySelector('#qNombre').focus();
+  bg.querySelector('#qCancelar').onclick = () => bg.remove();
+  bg.addEventListener('click', e => { if (e.target === bg) bg.remove(); });
+  bg.addEventListener('keydown', e => { if (e.key === 'Escape') bg.remove(); });
+  bg.querySelector('#qGuardar').onclick = () => {
+    const nombre = bg.querySelector('#qNombre').value.trim();
+    if (!nombre) { bg.querySelector('#qNombre').focus(); return; }
+    const lead = isCom ? defaultLead({
+      edificio:      nombre,
+      administrador: bg.querySelector('#qAdministrador').value.trim(),
+      telefono:      bg.querySelector('#qTelefono').value.trim(),
+      fuente:        bg.querySelector('#qFuente').value,
+    }) : defaultLead({
+      asegurado: nombre,
+      telefono:  bg.querySelector('#qTelefono').value.trim(),
+      marca:     (bg.querySelector('#qMarca')||{}).value?.trim()||'',
+      modelo:    (bg.querySelector('#qModelo')||{}).value?.trim()||'',
+      fuente:    bg.querySelector('#qFuente').value,
+    });
+    bg.remove();
+    STATE[lead.id] = lead;
+    fbWrite(lead.id, lead);
+    showToast('✓ Lead agregado');
+  };
+  bg.querySelector('#qNombre').addEventListener('keydown', e => {
+    if (e.key === 'Enter') { e.preventDefault(); bg.querySelector('#qTelefono').focus(); }
+  });
+}
+
+// ── Vertical switcher ─────────────────────────────────────
+function switchVertical(v) {
+  if (v === VERTICAL) return;
+  VERTICAL = v;
+  localStorage.setItem('crm_vertical', v);
+
+  // Update active button
+  document.querySelectorAll('.vert-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.v === v);
+  });
+
+  // Update search placeholder
+  document.getElementById('searchInput').placeholder = VERTICAL_CONFIG[v].searchPlaceholder;
+
+  // Reset filters
+  filterSearch=''; filterFuente=''; filterCompania=''; filterDesde=''; filterHasta='';
+  document.getElementById('searchInput').value = '';
+  document.getElementById('filterFuente').value = '';
+  document.getElementById('filterCompania').value = '';
+  document.getElementById('filterDesde').value = '';
+  document.getElementById('filterHasta').value = '';
+
+  // Reset table header so it rebuilds for new columns
+  const thead = document.querySelector('#leadsTable thead');
+  if (thead) thead.innerHTML = '';
+  sortCol = 'fecha'; sortDir = -1;
+
+  // Reset Kanban board so it rebuilds columns
+  document.getElementById('kanbanBoard').innerHTML = '';
+
+  // Switch data source
+  const cfg = VERTICAL_CONFIG[v];
+  if (USE_FIREBASE && DB_REF) {
+    DB_REF.off();
+    DB_REF = firebase.database().ref(cfg.firebasePath);
+    STATE = {};
+    DB_REF.on('value', snap => {
+      STATE = snap.val() || {};
+      renderAll();
+    });
+  } else {
+    try { STATE = JSON.parse(localStorage.getItem(cfg.storageKey) || '{}'); } catch { STATE = {}; }
+    if (!Object.keys(STATE).length) {
+      const examples = v === 'comunidades' ? EXAMPLE_LEADS_COM : EXAMPLE_LEADS;
+      examples.forEach(l => { STATE[l.id] = l; });
+      localStorage.setItem(cfg.storageKey, JSON.stringify(STATE));
+    }
+    renderAll();
+  }
+}
+
+document.getElementById('verticalSwitcher').addEventListener('click', e => {
+  const btn = e.target.closest('.vert-btn');
+  if (btn) switchVertical(btn.dataset.v);
+});
+
+// ── Boot ──────────────────────────────────────────────────
+// Set initial active button
+document.querySelectorAll('.vert-btn').forEach(btn => {
+  btn.classList.toggle('active', btn.dataset.v === VERTICAL);
+});
+document.getElementById('searchInput').placeholder = VERTICAL_CONFIG[VERTICAL].searchPlaceholder;
+initStorage();
+</script>
+</body>
+</html>
