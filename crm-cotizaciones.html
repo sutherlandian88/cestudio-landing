@@ -560,12 +560,20 @@ function initStorage() {
             DB_REF = firebase.database().ref(VERTICAL_CONFIG[VERTICAL].firebasePath);
             DB_REF.on('value', snap => {
               STATE = snap.val() || {};
+              // Seed example data into Firebase when database is empty on first login
+              if (!appReady && !Object.keys(STATE).length) {
+                const examples = VERTICAL === 'comunidades' ? EXAMPLE_LEADS_COM : EXAMPLE_LEADS;
+                const seed = {};
+                examples.forEach(l => { seed[l.id] = l; });
+                DB_REF.set(seed); // triggers on('value') again with seeded data
+                return;
+              }
               renderAll();
               if (!appReady) {
                 appReady = true;
                 document.getElementById('loadingOverlay').style.display = 'none';
                 startPresenceFlow();
-                setSyncOnline(); // only mark online once Firebase delivers real data
+                setSyncOnline();
               }
             });
           }
@@ -2996,6 +3004,14 @@ function switchVertical(v) {
     STATE = {};
     DB_REF.on('value', snap => {
       STATE = snap.val() || {};
+      // Seed examples into Firebase if this vertical's path is empty
+      if (!Object.keys(STATE).length) {
+        const examples = v === 'comunidades' ? EXAMPLE_LEADS_COM : EXAMPLE_LEADS;
+        const seed = {};
+        examples.forEach(l => { seed[l.id] = l; });
+        DB_REF.set(seed);
+        return;
+      }
       renderAll();
     });
   } else {
