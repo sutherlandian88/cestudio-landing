@@ -531,6 +531,12 @@ function initStorage() {
       if (FIREBASE_CONFIG.storageBucket) { STORAGE = firebase.storage(); USE_STORAGE = true; }
       document.getElementById('loadingMsg').textContent = 'Verificando acceso...';
 
+      // ── Real-time connection monitor ──────────────────
+      firebase.database().ref('.info/connected').on('value', snap => {
+        if (snap.val() === true) setSyncOnline();
+        else if (appReady) setSyncOffline(); // only show offline after app is loaded
+      });
+
       // ── Google login button ───────────────────────────
       document.getElementById('btnGoogleLogin').addEventListener('click', () => {
         const provider = new firebase.auth.GoogleAuthProvider();
@@ -558,12 +564,16 @@ function initStorage() {
           // Connect to DB
           if (!DB_REF) {
             DB_REF = firebase.database().ref(VERTICAL_CONFIG[VERTICAL].firebasePath);
+            DB_REF.keepSynced(true); // cache data locally for offline resilience
             DB_REF.on('value', snap => {
-              STATE = snap.val() || {};
-              // Seed example data into Firebase when database is empty on first login
-              if (!appReady && !Object.keys(STATE).length) {
+              const raw = snap.val() || {};
+              // _seeded is metadata — filter it out of STATE to avoid polluting lead lists
+              const { _seeded, ...leads } = raw;
+              STATE = leads;
+              // Seed example data into Firebase only on first-ever login (never re-seed)
+              if (!appReady && !_seeded) {
                 const examples = VERTICAL === 'comunidades' ? EXAMPLE_LEADS_COM : EXAMPLE_LEADS;
-                const seed = {};
+                const seed = { _seeded: true };
                 examples.forEach(l => { seed[l.id] = l; });
                 DB_REF.set(seed); // triggers on('value') again with seeded data
                 return;
@@ -573,7 +583,6 @@ function initStorage() {
                 appReady = true;
                 document.getElementById('loadingOverlay').style.display = 'none';
                 startPresenceFlow();
-                setSyncOnline();
               }
             });
           }
@@ -608,12 +617,12 @@ const EXAMPLE_LEADS = [
     comentarios:'Llegó por aviso de Instagram Stories. Tiene el RAV4 recién comprado, nunca ha tenido seguro propio — venía en el seguro del marido. Muy interesada, preguntó por cobertura de rayado y robo.',
     fechaEmision:'', primaNeta:'', compania:'',
     notas:[
-      { texto:'Prefiere que la llamemos entre 12–13 hrs. WhatsApp activo.', autor:'Ian S.', fecha:'2026-05-26' }
+      { id:1779804000000, ts:1779804000000, usuario:'Ian S.', texto:'Prefiere que la llamemos entre 12–13 hrs. WhatsApp activo.' }
     ],
     historial:[
-      { accion:'Lead creado desde Instagram', fecha:'2026-05-26', autor:'Ian S.' }
+      { ts:1779800400000, usuario:'Ian S.', desc:'Lead creado desde Instagram' }
     ],
-    documentos:[], createdAt:1779753600000, updatedAt:1779753600000
+    documentos:[], createdAt:1779800400000, updatedAt:1779804000000
   },
   {
     id:'ex_2', columna:'cotizando', orden:100, fecha:'2026-05-20', fuente:'Referido',
@@ -625,14 +634,14 @@ const EXAMPLE_LEADS = [
     comentarios:'Referido por Claudia Vega (cliente emitida abril). Actualmente con HDI a $287.000/año, deducible $300k UF. Quiere bajar prima o deducible. CX-5 2022 en buen estado, sin siniestros.',
     fechaEmision:'', primaNeta:'', compania:'',
     notas:[
-      { texto:'Tiene póliza vigente hasta el 15 de julio — hay margen para comparar sin apuro.', autor:'Ian S.', fecha:'2026-05-21' },
-      { texto:'Cotización HDI: $261.000 / deducible $200k. Mapfre: $248.000 / deducible $250k. Aún comparando.', autor:'Ian S.', fecha:'2026-05-23' }
+      { id:1779375600000, ts:1779375600000, usuario:'Ian S.', texto:'Tiene póliza vigente hasta el 15 de julio — hay margen para comparar sin apuro.' },
+      { id:1779559200000, ts:1779559200000, usuario:'Ian S.', texto:'Cotización HDI: $261.000 / deducible $200k. Mapfre: $248.000 / deducible $250k. Aún comparando.' }
     ],
     historial:[
-      { accion:'Lead creado — referido por Claudia Vega', fecha:'2026-05-20', autor:'Ian S.' },
-      { accion:'Llamada inicial. Enviadas condiciones actuales para comparar.', fecha:'2026-05-21', autor:'Ian S.' }
+      { ts:1779282000000, usuario:'Ian S.', desc:'Lead creado — referido por Claudia Vega' },
+      { ts:1779377400000, usuario:'Ian S.', desc:'Llamada inicial. Enviadas condiciones actuales para comparar.' }
     ],
-    documentos:[], createdAt:1779148800000, updatedAt:1779408000000
+    documentos:[], createdAt:1779282000000, updatedAt:1779559200000
   },
   {
     id:'ex_3', columna:'cotizando', orden:200, fecha:'2026-05-18', fuente:'Facebook',
@@ -644,13 +653,13 @@ const EXAMPLE_LEADS = [
     comentarios:'Llegó por aviso de Facebook. Tiene póliza vigente con BCI Seguros, vence 30 junio. Cotización enviada con Zurich a $274.000, deducible $250k. Dijo que lo iba a hablar con su pareja.',
     fechaEmision:'', primaNeta:'274000', compania:'Zurich',
     notas:[
-      { texto:'Cotización Zurich enviada por WhatsApp el 19/05. Dejó en visto.', autor:'Ian S.', fecha:'2026-05-19' }
+      { id:1779201000000, ts:1779201000000, usuario:'Ian S.', texto:'Cotización Zurich enviada por WhatsApp el 19/05. Dejó en visto.' }
     ],
     historial:[
-      { accion:'Lead creado desde Facebook Ads', fecha:'2026-05-18', autor:'Ian S.' },
-      { accion:'Llamada. Interesada. Se le envió cotización Zurich.', fecha:'2026-05-19', autor:'Ian S.' }
+      { ts:1779109200000, usuario:'Ian S.', desc:'Lead creado desde Facebook Ads' },
+      { ts:1779199200000, usuario:'Ian S.', desc:'Llamada. Interesada. Se le envió cotización Zurich.' }
     ],
-    documentos:[], createdAt:1778976000000, updatedAt:1779235200000
+    documentos:[], createdAt:1779109200000, updatedAt:1779201000000
   },
   {
     id:'ex_4', columna:'propuesta', orden:100, fecha:'2026-05-12', fuente:'WhatsApp',
@@ -662,15 +671,15 @@ const EXAMPLE_LEADS = [
     comentarios:'Llegó por WhatsApp directo al número del negocio. Explorer 2020 con 62.000 km, sin siniestros. Propuesta enviada: HDI Todo Riesgo $338.000/año, deducible UF 10. Preguntó si podía agregar cobertura de accesorios.',
     fechaEmision:'', primaNeta:'338000', compania:'HDI',
     notas:[
-      { texto:'Agregada cobertura de accesorios hasta $500k sin costo extra en HDI. Propuesta actualizada.', autor:'Ian S.', fecha:'2026-05-14' },
-      { texto:'Llamó el 20/05: quiere revisar el tema del deducible en UF vs pesos. Explicado.', autor:'Ian S.', fecha:'2026-05-20' }
+      { id:1778765400000, ts:1778765400000, usuario:'Ian S.', texto:'Agregada cobertura de accesorios hasta $500k sin costo extra en HDI. Propuesta actualizada.' },
+      { id:1779289200000, ts:1779289200000, usuario:'Ian S.', texto:'Llamó el 20/05: quiere revisar el tema del deducible en UF vs pesos. Explicado.' }
     ],
     historial:[
-      { accion:'Lead creado — contacto directo WhatsApp', fecha:'2026-05-12', autor:'Ian S.' },
-      { accion:'Cotización realizada y propuesta enviada por correo', fecha:'2026-05-13', autor:'Ian S.' },
-      { accion:'Propuesta actualizada con cobertura de accesorios', fecha:'2026-05-14', autor:'Ian S.' }
+      { ts:1778590800000, usuario:'Ian S.', desc:'Lead creado — contacto directo WhatsApp' },
+      { ts:1778680800000, usuario:'Ian S.', desc:'Cotización realizada y propuesta enviada por correo' },
+      { ts:1778763600000, usuario:'Ian S.', desc:'Propuesta actualizada con cobertura de accesorios' }
     ],
-    documentos:[], createdAt:1778544000000, updatedAt:1779235200000
+    documentos:[], createdAt:1778590800000, updatedAt:1779289200000
   },
   {
     id:'ex_5', columna:'seguimiento', orden:100, fecha:'2026-05-05', fuente:'Web',
@@ -682,14 +691,14 @@ const EXAMPLE_LEADS = [
     comentarios:'Llegó desde el formulario web. Tiguan 2022 recién adquirido, sin seguro activo. Propuesta aceptada verbalmente: Mapfre Todo Riesgo $296.000/año. Esperando pago para emitir. Muy buena disposición.',
     fechaEmision:'', primaNeta:'296000', compania:'Mapfre',
     notas:[
-      { texto:'Propuesta aceptada el 22/05. Coordinar emisión para el 30/05 cuando recibe sueldo.', autor:'Ian S.', fecha:'2026-05-22' }
+      { id:1779456600000, ts:1779456600000, usuario:'Ian S.', texto:'Propuesta aceptada el 22/05. Coordinar emisión para el 30/05 cuando recibe sueldo.' }
     ],
     historial:[
-      { accion:'Lead creado desde formulario web', fecha:'2026-05-05', autor:'Ian S.' },
-      { accion:'Llamada. Cotización realizada y propuesta enviada.', fecha:'2026-05-06', autor:'Ian S.' },
-      { accion:'Propuesta aceptada. Esperando fecha de pago.', fecha:'2026-05-22', autor:'Ian S.' }
+      { ts:1777986000000, usuario:'Ian S.', desc:'Lead creado desde formulario web' },
+      { ts:1778076000000, usuario:'Ian S.', desc:'Llamada. Cotización realizada y propuesta enviada.' },
+      { ts:1779454800000, usuario:'Ian S.', desc:'Propuesta aceptada. Esperando fecha de pago.' }
     ],
-    documentos:[], createdAt:1778025600000, updatedAt:1779408000000
+    documentos:[], createdAt:1777986000000, updatedAt:1779456600000
   },
   {
     id:'ex_6', columna:'emitida', orden:100, fecha:'2026-04-28', fuente:'Referido',
@@ -701,14 +710,14 @@ const EXAMPLE_LEADS = [
     comentarios:'Referido por Pedro Fernández (hermano, cliente 2024). Qashqai 2022 sin seguro vigente. Muy decidido desde el primer llamado. Emitido sin contratiempos.',
     fechaEmision:'2026-05-05', primaNeta:'251000', compania:'HDI',
     notas:[
-      { texto:'Agradeció por la atención, prometió referir a su cuñada que tiene Corolla 2023.', autor:'Ian S.', fecha:'2026-05-05' }
+      { id:1777987800000, ts:1777987800000, usuario:'Ian S.', texto:'Agradeció por la atención, prometió referir a su cuñada que tiene Corolla 2023.' }
     ],
     historial:[
-      { accion:'Lead creado — referido por Pedro Fernández', fecha:'2026-04-28', autor:'Ian S.' },
-      { accion:'Cotización y propuesta enviadas el mismo día', fecha:'2026-04-29', autor:'Ian S.' },
-      { accion:'Póliza emitida HDI Todo Riesgo $251.000/año', fecha:'2026-05-05', autor:'Ian S.' }
+      { ts:1777381200000, usuario:'Ian S.', desc:'Lead creado — referido por Pedro Fernández' },
+      { ts:1777471200000, usuario:'Ian S.', desc:'Cotización y propuesta enviadas el mismo día' },
+      { ts:1777986000000, usuario:'Ian S.', desc:'Póliza emitida HDI Todo Riesgo $251.000/año' }
     ],
-    documentos:[], createdAt:1777296000000, updatedAt:1778025600000
+    documentos:[], createdAt:1777381200000, updatedAt:1777987800000
   },
   {
     id:'ex_7', columna:'emitida', orden:200, fecha:'2026-04-15', fuente:'Instagram',
@@ -720,14 +729,14 @@ const EXAMPLE_LEADS = [
     comentarios:'Llegó por Instagram. Hilux 2023 con seguro de concesionaria vencido. Gran ahorro: venía pagando $480k con deducible $500k, emitimos a $412k con deducible $300k. Muy contenta.',
     fechaEmision:'2026-04-22', primaNeta:'412000', compania:'Mapfre',
     notas:[
-      { texto:'Dejó reseña 5 estrellas en Google. Recomendar para referidos activos.', autor:'Ian S.', fecha:'2026-04-23' }
+      { id:1776949200000, ts:1776949200000, usuario:'Ian S.', texto:'Dejó reseña 5 estrellas en Google. Recomendar para referidos activos.' }
     ],
     historial:[
-      { accion:'Lead creado desde Instagram DM', fecha:'2026-04-15', autor:'Ian S.' },
-      { accion:'Cotización realizada. Ahorro demostrado vs póliza vigente.', fecha:'2026-04-16', autor:'Ian S.' },
-      { accion:'Póliza emitida Mapfre $412.000/año', fecha:'2026-04-22', autor:'Ian S.' }
+      { ts:1776258000000, usuario:'Ian S.', desc:'Lead creado desde Instagram DM' },
+      { ts:1776348000000, usuario:'Ian S.', desc:'Cotización realizada. Ahorro demostrado vs póliza vigente.' },
+      { ts:1776862800000, usuario:'Ian S.', desc:'Póliza emitida Mapfre $412.000/año' }
     ],
-    documentos:[], createdAt:1776124800000, updatedAt:1776729600000
+    documentos:[], createdAt:1776258000000, updatedAt:1776949200000
   },
   {
     id:'ex_8', columna:'perdido', orden:100, fecha:'2026-04-08', fuente:'Facebook',
@@ -739,14 +748,14 @@ const EXAMPLE_LEADS = [
     comentarios:'Llegó por Facebook. Tracker 2021. Cotizamos $218.000 con Zurich. Finalmente renovó con su compañía actual porque el ejecutivo le ofreció el mismo precio y no quiso hacer el cambio. Sin malas intenciones, quedó abierto a futuro.',
     fechaEmision:'', primaNeta:'218000', compania:'Zurich',
     notas:[
-      { texto:'Dejarlo para retomar en octubre cuando vence nuevamente su póliza.', autor:'Ian S.', fecha:'2026-04-20' }
+      { id:1776709800000, ts:1776709800000, usuario:'Ian S.', texto:'Dejarlo para retomar en octubre cuando vence nuevamente su póliza.' }
     ],
     historial:[
-      { accion:'Lead creado desde Facebook Ads', fecha:'2026-04-08', autor:'Ian S.' },
-      { accion:'Cotización enviada. Precio competitivo vs actual.', fecha:'2026-04-09', autor:'Ian S.' },
-      { accion:'Decidió renovar con compañía actual. Caso cerrado como perdido.', fecha:'2026-04-20', autor:'Ian S.' }
+      { ts:1775653200000, usuario:'Ian S.', desc:'Lead creado desde Facebook Ads' },
+      { ts:1775743200000, usuario:'Ian S.', desc:'Cotización enviada. Precio competitivo vs actual.' },
+      { ts:1776708000000, usuario:'Ian S.', desc:'Decidió renovar con compañía actual. Caso cerrado como perdido.' }
     ],
-    documentos:[], createdAt:1775520000000, updatedAt:1776211200000
+    documentos:[], createdAt:1775653200000, updatedAt:1776709800000
   },
 ];
 
@@ -763,17 +772,17 @@ const EXAMPLE_LEADS_COM = [
     comentarios:'Referido por el corredor Luis Bravo (socio). Edificio 2015, 8 pisos, 64 dptos. Nunca han tenido seguro de comunidad formal, solo seguro de incendio básico del banco. Patricia es muy ordenada, preguntó qué documentos necesita.',
     fechaEmision:'',
     notas:[
-      { texto:'Edificio sin MAEC ni MAU activos. Oportunidad de venta completa (incendio + RC + MAEC).', autor:'Ian S.', fecha:'2026-05-25' }
+      { id:1779717600000, ts:1779717600000, usuario:'Ian S.', texto:'Edificio sin MAEC ni MAU activos. Oportunidad de venta completa (incendio + RC + MAEC).' }
     ],
     historial:[
-      { accion:'Lead creado — referido por Luis Bravo', fecha:'2026-05-25', autor:'Ian S.' }
+      { ts:1779714000000, usuario:'Ian S.', desc:'Lead creado — referido por Luis Bravo' }
     ],
-    documentos:[], createdAt:1779667200000, updatedAt:1779667200000
+    documentos:[], createdAt:1779714000000, updatedAt:1779717600000
   },
   {
     id:'ec_2', columna:'cotizando', orden:100, fecha:'2026-05-16', fuente:'Web',
     edificio:'Edificio Pacífico Torre A', tipoContacto:'Administrador',
-    administrador:'Ricardo Fuentes Araya', telefono:'+56 9 7234 8810', correo:'rfuentes@admpacífico.cl',
+    administrador:'Ricardo Fuentes Araya', telefono:'+56 9 7234 8810', correo:'rfuentes@admpacifico.cl',
     rutComunidad:'76.889.002-K', direccion:'Huérfanos 1234 piso 3', comuna:'Santiago', unidades:'48',
     polizaVigente:true, cartaAsignacion:true, maec:'HDI', mau:'Zurich',
     compania:'HDI', primaNeta:'', fechaCotizacion:'2026-05-17',
@@ -782,20 +791,20 @@ const EXAMPLE_LEADS_COM = [
     comentarios:'Llegó desde el formulario web. Torre 2012, 12 pisos, 48 dptos, Santiago Centro. Tienen póliza HDI vigente hasta el 15 de junio. Quieren comparar antes de renovar automático. Ricardo pide ver diferencia de coberturas RC y sismo.',
     fechaEmision:'',
     notas:[
-      { texto:'HDI actual: prima $1.240.000/año. Cotizamos Mapfre a $1.090.000 con mejor cobertura RC. Diferencia $150k.', autor:'Ian S.', fecha:'2026-05-18' },
-      { texto:'Pendiente: Ricardo pide incluir cobertura de cristales en propuesta — agregar a Mapfre.', autor:'Ian S.', fecha:'2026-05-22' }
+      { id:1779111000000, ts:1779111000000, usuario:'Ian S.', texto:'HDI actual: prima $1.240.000/año. Cotizamos Mapfre a $1.090.000 con mejor cobertura RC. Diferencia $150k.' },
+      { id:1779472800000, ts:1779472800000, usuario:'Ian S.', texto:'Pendiente: Ricardo pide incluir cobertura de cristales en propuesta — agregar a Mapfre.' }
     ],
     historial:[
-      { accion:'Lead creado desde formulario web', fecha:'2026-05-16', autor:'Ian S.' },
-      { accion:'Llamada. Solicitud de cotización. Datos de póliza vigente recopilados.', fecha:'2026-05-17', autor:'Ian S.' },
-      { accion:'Cotización Mapfre enviada por correo con comparativa vs HDI actual.', fecha:'2026-05-18', autor:'Ian S.' }
+      { ts:1778936400000, usuario:'Ian S.', desc:'Lead creado desde formulario web' },
+      { ts:1779026400000, usuario:'Ian S.', desc:'Llamada. Solicitud de cotización. Datos de póliza vigente recopilados.' },
+      { ts:1779109200000, usuario:'Ian S.', desc:'Cotización Mapfre enviada por correo con comparativa vs HDI actual.' }
     ],
-    documentos:[], createdAt:1778889600000, updatedAt:1779408000000
+    documentos:[], createdAt:1778936400000, updatedAt:1779472800000
   },
   {
     id:'ec_3', columna:'cotizando', orden:200, fecha:'2026-05-14', fuente:'Instagram',
     edificio:'Plaza Mayor Condominio', tipoContacto:'Comité',
-    administrador:'Mónica Salinas Cortés', telefono:'+56 9 6612 3304', correo:'monicasalinas@gmil.com',
+    administrador:'Mónica Salinas Cortés', telefono:'+56 9 6612 3304', correo:'monicasalinas@gmail.com',
     rutComunidad:'76.120.445-3', direccion:'Av. Larraín 4560', comuna:'La Florida', unidades:'96',
     polizaVigente:true, cartaAsignacion:false, maec:'Seguros Vida Cámara', mau:'',
     compania:'Seguros Vida Cámara', primaNeta:'', fechaCotizacion:'2026-05-15',
@@ -804,15 +813,15 @@ const EXAMPLE_LEADS_COM = [
     comentarios:'Llegó por Instagram. Condominio grande, 6 torres, 96 dptos, La Florida. Comité activo y exigente. Póliza vigente con Vida Cámara, vence agosto. Quieren mejorar cobertura de incendio y agregar cobertura de equipos de uso común (calderas, ascensores).',
     fechaEmision:'',
     notas:[
-      { texto:'Propuesta enviada incluye cobertura de maquinaria hasta UF 2.000. Diferente a lo que tienen hoy.', autor:'Ian S.', fecha:'2026-05-16' },
-      { texto:'Comité reúne el primer martes de cada mes. Próxima reunión 2 de junio.', autor:'Ian S.', fecha:'2026-05-20' }
+      { id:1778940000000, ts:1778940000000, usuario:'Ian S.', texto:'Propuesta enviada incluye cobertura de maquinaria hasta UF 2.000. Diferente a lo que tienen hoy.' },
+      { id:1779289200000, ts:1779289200000, usuario:'Ian S.', texto:'Comité reúne el primer martes de cada mes. Próxima reunión 2 de junio.' }
     ],
     historial:[
-      { accion:'Lead creado desde Instagram DM', fecha:'2026-05-14', autor:'Ian S.' },
-      { accion:'Video llamada con Mónica. Datos del edificio levantados.', fecha:'2026-05-15', autor:'Ian S.' },
-      { accion:'Propuesta enviada por correo para presentar al comité.', fecha:'2026-05-16', autor:'Ian S.' }
+      { ts:1778763600000, usuario:'Ian S.', desc:'Lead creado desde Instagram DM' },
+      { ts:1778853600000, usuario:'Ian S.', desc:'Video llamada con Mónica. Datos del edificio levantados.' },
+      { ts:1778936400000, usuario:'Ian S.', desc:'Propuesta enviada por correo para presentar al comité.' }
     ],
-    documentos:[], createdAt:1778716800000, updatedAt:1779321600000
+    documentos:[], createdAt:1778763600000, updatedAt:1779289200000
   },
   {
     id:'ec_4', columna:'propuesta', orden:100, fecha:'2026-05-06', fuente:'Referido',
@@ -826,16 +835,16 @@ const EXAMPLE_LEADS_COM = [
     comentarios:'Referido por Constanza Mena (administradora amiga de Jorge). Condominio premium, 120 dptos, Ñuñoa. AXA actual: $3.200.000/año. Propuesta enviada Mapfre: $2.850.000 con coberturas equivalentes más RC ampliada. Comité ya aprobó en principio, esperando firma del presidente del comité.',
     fechaEmision:'',
     notas:[
-      { texto:'Ahorro vs AXA actual: $350.000/año. Argumento central de la propuesta.', autor:'Ian S.', fecha:'2026-05-08' },
-      { texto:'Comité aprobó en reunión del 20/05. Solo falta firma de Carlos Donoso (presidente).', autor:'Ian S.', fecha:'2026-05-21' }
+      { id:1778247000000, ts:1778247000000, usuario:'Ian S.', texto:'Ahorro vs AXA actual: $350.000/año. Argumento central de la propuesta.' },
+      { id:1779370200000, ts:1779370200000, usuario:'Ian S.', texto:'Comité aprobó en reunión del 20/05. Solo falta firma de Carlos Donoso (presidente).' }
     ],
     historial:[
-      { accion:'Lead creado — referido por Constanza Mena', fecha:'2026-05-06', autor:'Ian S.' },
-      { accion:'Reunión presencial. Presentación comparativa AXA vs Mapfre.', fecha:'2026-05-07', autor:'Ian S.' },
-      { accion:'Propuesta formal enviada por correo con carta de presentación.', fecha:'2026-05-08', autor:'Ian S.' },
-      { accion:'Comité aprobó propuesta. Pendiente firma del presidente.', fecha:'2026-05-21', autor:'Ian S.' }
+      { ts:1778072400000, usuario:'Ian S.', desc:'Lead creado — referido por Constanza Mena' },
+      { ts:1778162400000, usuario:'Ian S.', desc:'Reunión presencial. Presentación comparativa AXA vs Mapfre.' },
+      { ts:1778245200000, usuario:'Ian S.', desc:'Propuesta formal enviada por correo con carta de presentación.' },
+      { ts:1779368400000, usuario:'Ian S.', desc:'Comité aprobó propuesta. Pendiente firma del presidente.' }
     ],
-    documentos:[], createdAt:1778112000000, updatedAt:1779408000000
+    documentos:[], createdAt:1778072400000, updatedAt:1779370200000
   },
   {
     id:'ec_5', columna:'seguimiento', orden:100, fecha:'2026-04-28', fuente:'WhatsApp',
@@ -849,15 +858,15 @@ const EXAMPLE_LEADS_COM = [
     comentarios:'Llegó por WhatsApp directo. Edificio boutique Vitacura, 36 dptos de alto estándar. Propuesta aceptada: Mapfre Todo Riesgo Comunidad $980.000/año. Fernanda dice que requiere aprobación de banco para liberar fondos del fondo común. En proceso.',
     fechaEmision:'',
     notas:[
-      { texto:'Propuesta aceptada el 15/05. Trámite bancario puede tomar 10 días hábiles.', autor:'Ian S.', fecha:'2026-05-15' },
-      { texto:'Banco confirmó disponibilidad de fondos el 22/05. Fernanda coordinando firma de cheque.', autor:'Ian S.', fecha:'2026-05-22' }
+      { id:1778851800000, ts:1778851800000, usuario:'Ian S.', texto:'Propuesta aceptada el 15/05. Trámite bancario puede tomar 10 días hábiles.' },
+      { id:1779454800000, ts:1779454800000, usuario:'Ian S.', texto:'Banco confirmó disponibilidad de fondos el 22/05. Fernanda coordinando firma de cheque.' }
     ],
     historial:[
-      { accion:'Lead creado — WhatsApp directo', fecha:'2026-04-28', autor:'Ian S.' },
-      { accion:'Reunión Zoom. Cotización presentada y aceptada en principio.', fecha:'2026-04-29', autor:'Ian S.' },
-      { accion:'Propuesta aceptada formalmente. Coordina pago con banco.', fecha:'2026-05-15', autor:'Ian S.' }
+      { ts:1777381200000, usuario:'Ian S.', desc:'Lead creado — WhatsApp directo' },
+      { ts:1777471200000, usuario:'Ian S.', desc:'Reunión Zoom. Cotización presentada y aceptada en principio.' },
+      { ts:1778850000000, usuario:'Ian S.', desc:'Propuesta aceptada formalmente. Coordina pago con banco.' }
     ],
-    documentos:[], createdAt:1777296000000, updatedAt:1779494400000
+    documentos:[], createdAt:1777381200000, updatedAt:1779454800000
   },
   {
     id:'ec_6', columna:'emitida', orden:100, fecha:'2026-04-10', fuente:'Referido',
@@ -871,16 +880,16 @@ const EXAMPLE_LEADS_COM = [
     comentarios:'Referido por Luis Bravo. Comunidad grande, 200 dptos, Maipú. Venían con RSA a $4.100.000/año. Emitimos con HDI a $3.400.000, ahorro de $700.000 anuales. Carmen Gloria encantada. Proceso muy ordenado.',
     fechaEmision:'2026-05-02',
     notas:[
-      { texto:'Póliza emitida sin observaciones. Carmen Gloria feliz, nos recomendará a otras comunidades del sector.', autor:'Ian S.', fecha:'2026-05-02' }
+      { id:1777728600000, ts:1777728600000, usuario:'Ian S.', texto:'Póliza emitida sin observaciones. Carmen Gloria feliz, nos recomendará a otras comunidades del sector.' }
     ],
     historial:[
-      { accion:'Lead creado — referido por Luis Bravo', fecha:'2026-04-10', autor:'Ian S.' },
-      { accion:'Reunión presencial. Lista de bienes y plano revisados.', fecha:'2026-04-11', autor:'Ian S.' },
-      { accion:'Propuesta HDI enviada. Ahorro de $700.000 vs RSA actual.', fecha:'2026-04-14', autor:'Ian S.' },
-      { accion:'Propuesta aprobada en asamblea de copropietarios.', fecha:'2026-04-22', autor:'Ian S.' },
-      { accion:'Póliza emitida HDI Todo Riesgo Comunidad $3.400.000/año.', fecha:'2026-05-02', autor:'Ian S.' }
+      { ts:1775826000000, usuario:'Ian S.', desc:'Lead creado — referido por Luis Bravo' },
+      { ts:1775916000000, usuario:'Ian S.', desc:'Reunión presencial. Lista de bienes y plano revisados.' },
+      { ts:1776171600000, usuario:'Ian S.', desc:'Propuesta HDI enviada. Ahorro de $700.000 vs RSA actual.' },
+      { ts:1776891600000, usuario:'Ian S.', desc:'Propuesta aprobada en asamblea de copropietarios.' },
+      { ts:1777726800000, usuario:'Ian S.', desc:'Póliza emitida HDI Todo Riesgo Comunidad $3.400.000/año.' }
     ],
-    documentos:[], createdAt:1775779200000, updatedAt:1777814400000
+    documentos:[], createdAt:1775826000000, updatedAt:1777728600000
   },
   {
     id:'ec_7', columna:'perdido', orden:100, fecha:'2026-03-20', fuente:'Web',
@@ -894,14 +903,14 @@ const EXAMPLE_LEADS_COM = [
     comentarios:'Llegó desde web. 80 dptos, La Florida. Cotizamos a $1.600.000. Su corredor de siempre (externo) llegó con Zurich a $1.550.000 y lo retuvieron. Héctor fue transparente: "me cuesta cambiar de alguien de 10 años". Sin resentimientos, quedó en contactar si algo cambia.',
     fechaEmision:'',
     notas:[
-      { texto:'Retomar en marzo 2027 cuando vence su póliza anual. Agregar a recordatorio.', autor:'Ian S.', fecha:'2026-04-05' }
+      { id:1775413800000, ts:1775413800000, usuario:'Ian S.', texto:'Retomar en marzo 2027 cuando vence su póliza anual. Agregar a recordatorio.' }
     ],
     historial:[
-      { accion:'Lead creado desde formulario web', fecha:'2026-03-20', autor:'Ian S.' },
-      { accion:'Cotización enviada $1.600.000. Competitiva vs actual.', fecha:'2026-03-21', autor:'Ian S.' },
-      { accion:'Retenido por corredor actual con precio levemente menor. Caso perdido.', fecha:'2026-04-05', autor:'Ian S.' }
+      { ts:1774011600000, usuario:'Ian S.', desc:'Lead creado desde formulario web' },
+      { ts:1774101600000, usuario:'Ian S.', desc:'Cotización enviada $1.600.000. Competitiva vs actual.' },
+      { ts:1775412000000, usuario:'Ian S.', desc:'Retenido por corredor actual con precio levemente menor. Caso perdido.' }
     ],
-    documentos:[], createdAt:1773993600000, updatedAt:1775174400000
+    documentos:[], createdAt:1774011600000, updatedAt:1775413800000
   },
 ];
 
@@ -959,9 +968,14 @@ function fbRemove(id) {
 }
 
 const syncDot = document.getElementById('syncDot');
-function setSyncing()  { syncDot.className = 'sync-dot syncing'; }
-function setSyncOnline() { syncDot.className = 'sync-dot online'; }
-function setSyncOffline() { syncDot.className = 'sync-dot'; syncDot.title = 'Error al guardar en Firebase'; }
+function setSyncing()   { syncDot.className = 'sync-dot syncing'; }
+function setSyncOnline() { syncDot.className = 'sync-dot online'; syncDot.title = 'Sincronizado con Firebase'; }
+function setSyncOffline(err) {
+  syncDot.className = 'sync-dot';
+  syncDot.title = 'Sin conexión con Firebase';
+  if (appReady) showToast('⚠️ Error al guardar — verifica tu conexión a internet', 'error', 4000);
+  if (err) console.error('[CRM Firebase write error]', err);
+}
 
 // ── Lead model ────────────────────────────────────────────
 function newLeadId() { return 'l_' + Date.now() + '_' + Math.random().toString(36).slice(2,6); }
@@ -1600,8 +1614,8 @@ function openModal(id, defaultCol, activeTab) {
         ${(lead.notas||[]).length === 0 ? '<div class="panel-empty">Sin notas aún — agrega la primera abajo</div>' :
           (lead.notas||[]).slice().reverse().map(n => `
             <div class="nota-item">
-              <div class="nota-meta"><span class="hist-user">${esc(n.usuario||'Sistema')}</span><span class="hist-ts">${fmtTs(n.ts)}</span></div>
-              <div class="nota-texto">${esc(n.texto)}</div>
+              <div class="nota-meta"><span class="hist-user">${esc(n.usuario||n.autor||'Sistema')}</span><span class="hist-ts">${fmtTs(n.ts||(n.fecha?new Date(n.fecha).getTime():0))}</span></div>
+              <div class="nota-texto">${esc(n.texto||'')}</div>
             </div>`).join('')}
         <div class="nota-input-row">
           <textarea id="mNotaTexto" placeholder="Escribe una nota..."></textarea>
@@ -1614,8 +1628,8 @@ function openModal(id, defaultCol, activeTab) {
           (lead.historial||[]).slice().reverse().map(h => `
             <div class="hist-item">
               <div class="hist-dot"></div>
-              <div class="hist-body"><span class="hist-user">${esc(h.usuario||'Sistema')}</span> — ${esc(h.desc)}</div>
-              <div class="hist-ts">${fmtTs(h.ts)}</div>
+              <div class="hist-body"><span class="hist-user">${esc(h.usuario||h.autor||'Sistema')}</span> — ${esc(h.desc||h.accion||'')}</div>
+              <div class="hist-ts">${fmtTs(h.ts||(h.fecha?new Date(h.fecha).getTime():0))}</div>
             </div>`).join('')}
       </div><!-- /mtab-historial -->
 
@@ -3001,13 +3015,16 @@ function switchVertical(v) {
   if (USE_FIREBASE && DB_REF) {
     DB_REF.off();
     DB_REF = firebase.database().ref(cfg.firebasePath);
+    DB_REF.keepSynced(true);
     STATE = {};
     DB_REF.on('value', snap => {
-      STATE = snap.val() || {};
-      // Seed examples into Firebase if this vertical's path is empty
-      if (!Object.keys(STATE).length) {
+      const raw = snap.val() || {};
+      const { _seeded, ...leads } = raw;
+      STATE = leads;
+      // Seed examples into Firebase only if this vertical has never been initialized
+      if (!_seeded) {
         const examples = v === 'comunidades' ? EXAMPLE_LEADS_COM : EXAMPLE_LEADS;
-        const seed = {};
+        const seed = { _seeded: true };
         examples.forEach(l => { seed[l.id] = l; });
         DB_REF.set(seed);
         return;
