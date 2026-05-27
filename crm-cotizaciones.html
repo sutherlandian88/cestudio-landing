@@ -590,15 +590,311 @@ function initStorage() {
 }
 
 const EXAMPLE_LEADS = [
-  { id:'ex_1', columna:'nuevo',       orden:100, fecha:'2026-05-20', fuente:'Instagram',  asegurado:'María González',  rut:'12.345.678-9', telefono:'+56 9 8765 4321', marca:'Toyota',    modelo:'Corolla',  anio:'2022', patente:'ABCD12', polizaVigente:true,  primaVigente:'180000', deducibleActual:'200000', fechaCotizacion:'2026-05-21', accionSeguimiento:'Enviar cotización HDI', cierre:false, comentarios:'Interesada, muy amable. Comparando precios.', fechaEmision:'',           primaNeta:'',       compania:'',      createdAt:1748000000000, updatedAt:1748000000000 },
-  { id:'ex_2', columna:'cotizando',   orden:100, fecha:'2026-05-22', fuente:'Referido',   asegurado:'Carlos Pérez',    rut:'11.222.333-4', telefono:'+56 9 7654 3210', marca:'Kia',       modelo:'Sportage', anio:'2021', patente:'EFGH34', polizaVigente:false, primaVigente:'',       deducibleActual:'',        fechaCotizacion:'2026-05-22', accionSeguimiento:'Esperar respuesta del cliente',  cierre:false, comentarios:'Lo refirió Andrea del trabajo.',           fechaEmision:'',           primaNeta:'165000', compania:'Mapfre',  createdAt:1748100000000, updatedAt:1748100000000 },
-  { id:'ex_3', columna:'emitida',     orden:100, fecha:'2026-05-10', fuente:'Facebook',   asegurado:'Roberto Muñoz',   rut:'15.432.100-8', telefono:'+56 9 6543 2109', marca:'Hyundai',   modelo:'Tucson',   anio:'2020', patente:'MNOP78', polizaVigente:false, primaVigente:'',       deducibleActual:'',        fechaCotizacion:'2026-05-11', accionSeguimiento:'',                              cierre:true,  comentarios:'Cliente muy satisfecho, renovará el año que viene.', fechaEmision:'2026-05-15', primaNeta:'220000', compania:'HDI',     createdAt:1747200000000, updatedAt:1747200000000 },
+  {
+    id:'ex_1', columna:'nuevo', orden:100, fecha:'2026-05-26', fuente:'Instagram',
+    asegurado:'Andrea Soto Reyes', rut:'16.872.341-5', telefono:'+56 9 8234 7761',
+    marca:'Toyota', modelo:'RAV4', anio:'2023', patente:'FKRP23',
+    polizaVigente:false, primaVigente:'', deducibleActual:'',
+    fechaCotizacion:'2026-05-26', accionSeguimiento:'Llamar mañana para confirmar interés y pedir datos del vehículo',
+    fechaSeguimiento:'2026-05-28', cierre:false,
+    comentarios:'Llegó por aviso de Instagram Stories. Tiene el RAV4 recién comprado, nunca ha tenido seguro propio — venía en el seguro del marido. Muy interesada, preguntó por cobertura de rayado y robo.',
+    fechaEmision:'', primaNeta:'', compania:'',
+    notas:[
+      { texto:'Prefiere que la llamemos entre 12–13 hrs. WhatsApp activo.', autor:'Ian S.', fecha:'2026-05-26' }
+    ],
+    historial:[
+      { accion:'Lead creado desde Instagram', fecha:'2026-05-26', autor:'Ian S.' }
+    ],
+    documentos:[], createdAt:1779753600000, updatedAt:1779753600000
+  },
+  {
+    id:'ex_2', columna:'cotizando', orden:100, fecha:'2026-05-20', fuente:'Referido',
+    asegurado:'Sebastián Morales Díaz', rut:'14.209.887-K', telefono:'+56 9 6712 4490',
+    marca:'Mazda', modelo:'CX-5', anio:'2022', patente:'GLPD44',
+    polizaVigente:true, primaVigente:'287000', deducibleActual:'300000',
+    fechaCotizacion:'2026-05-21', accionSeguimiento:'Enviar comparativa HDI vs Mapfre con diferencia de deducible',
+    fechaSeguimiento:'2026-05-28', cierre:false,
+    comentarios:'Referido por Claudia Vega (cliente emitida abril). Actualmente con HDI a $287.000/año, deducible $300k UF. Quiere bajar prima o deducible. CX-5 2022 en buen estado, sin siniestros.',
+    fechaEmision:'', primaNeta:'', compania:'',
+    notas:[
+      { texto:'Tiene póliza vigente hasta el 15 de julio — hay margen para comparar sin apuro.', autor:'Ian S.', fecha:'2026-05-21' },
+      { texto:'Cotización HDI: $261.000 / deducible $200k. Mapfre: $248.000 / deducible $250k. Aún comparando.', autor:'Ian S.', fecha:'2026-05-23' }
+    ],
+    historial:[
+      { accion:'Lead creado — referido por Claudia Vega', fecha:'2026-05-20', autor:'Ian S.' },
+      { accion:'Llamada inicial. Enviadas condiciones actuales para comparar.', fecha:'2026-05-21', autor:'Ian S.' }
+    ],
+    documentos:[], createdAt:1779148800000, updatedAt:1779408000000
+  },
+  {
+    id:'ex_3', columna:'cotizando', orden:200, fecha:'2026-05-18', fuente:'Facebook',
+    asegurado:'Valentina Herrera López', rut:'17.554.002-3', telefono:'+56 9 9341 8820',
+    marca:'Hyundai', modelo:'Tucson', anio:'2021', patente:'BNWT91',
+    polizaVigente:true, primaVigente:'310000', deducibleActual:'400000',
+    fechaCotizacion:'2026-05-19', accionSeguimiento:'Esperar respuesta — revisando con su pareja antes de decidir',
+    fechaSeguimiento:'2026-05-29', cierre:false,
+    comentarios:'Llegó por aviso de Facebook. Tiene póliza vigente con BCI Seguros, vence 30 junio. Cotización enviada con Zurich a $274.000, deducible $250k. Dijo que lo iba a hablar con su pareja.',
+    fechaEmision:'', primaNeta:'274000', compania:'Zurich',
+    notas:[
+      { texto:'Cotización Zurich enviada por WhatsApp el 19/05. Dejó en visto.', autor:'Ian S.', fecha:'2026-05-19' }
+    ],
+    historial:[
+      { accion:'Lead creado desde Facebook Ads', fecha:'2026-05-18', autor:'Ian S.' },
+      { accion:'Llamada. Interesada. Se le envió cotización Zurich.', fecha:'2026-05-19', autor:'Ian S.' }
+    ],
+    documentos:[], createdAt:1778976000000, updatedAt:1779235200000
+  },
+  {
+    id:'ex_4', columna:'propuesta', orden:100, fecha:'2026-05-12', fuente:'WhatsApp',
+    asegurado:'Diego Ramírez Contreras', rut:'13.988.456-7', telefono:'+56 9 7823 5501',
+    marca:'Ford', modelo:'Explorer', anio:'2020', patente:'CPJH67',
+    polizaVigente:true, primaVigente:'395000', deducibleActual:'500000',
+    fechaCotizacion:'2026-05-13', accionSeguimiento:'Confirmar si acepta propuesta HDI o quiere ajustar cobertura',
+    fechaSeguimiento:'2026-05-27', cierre:false,
+    comentarios:'Llegó por WhatsApp directo al número del negocio. Explorer 2020 con 62.000 km, sin siniestros. Propuesta enviada: HDI Todo Riesgo $338.000/año, deducible UF 10. Preguntó si podía agregar cobertura de accesorios.',
+    fechaEmision:'', primaNeta:'338000', compania:'HDI',
+    notas:[
+      { texto:'Agregada cobertura de accesorios hasta $500k sin costo extra en HDI. Propuesta actualizada.', autor:'Ian S.', fecha:'2026-05-14' },
+      { texto:'Llamó el 20/05: quiere revisar el tema del deducible en UF vs pesos. Explicado.', autor:'Ian S.', fecha:'2026-05-20' }
+    ],
+    historial:[
+      { accion:'Lead creado — contacto directo WhatsApp', fecha:'2026-05-12', autor:'Ian S.' },
+      { accion:'Cotización realizada y propuesta enviada por correo', fecha:'2026-05-13', autor:'Ian S.' },
+      { accion:'Propuesta actualizada con cobertura de accesorios', fecha:'2026-05-14', autor:'Ian S.' }
+    ],
+    documentos:[], createdAt:1778544000000, updatedAt:1779235200000
+  },
+  {
+    id:'ex_5', columna:'seguimiento', orden:100, fecha:'2026-05-05', fuente:'Web',
+    asegurado:'Catalina Vega Romero', rut:'15.123.890-1', telefono:'+56 9 5567 3312',
+    marca:'Volkswagen', modelo:'Tiguan', anio:'2022', patente:'DRXM88',
+    polizaVigente:false, primaVigente:'', deducibleActual:'',
+    fechaCotizacion:'2026-05-06', accionSeguimiento:'Seguimiento — recibe sueldo el 30, pagará ese día',
+    fechaSeguimiento:'2026-05-30', cierre:false,
+    comentarios:'Llegó desde el formulario web. Tiguan 2022 recién adquirido, sin seguro activo. Propuesta aceptada verbalmente: Mapfre Todo Riesgo $296.000/año. Esperando pago para emitir. Muy buena disposición.',
+    fechaEmision:'', primaNeta:'296000', compania:'Mapfre',
+    notas:[
+      { texto:'Propuesta aceptada el 22/05. Coordinar emisión para el 30/05 cuando recibe sueldo.', autor:'Ian S.', fecha:'2026-05-22' }
+    ],
+    historial:[
+      { accion:'Lead creado desde formulario web', fecha:'2026-05-05', autor:'Ian S.' },
+      { accion:'Llamada. Cotización realizada y propuesta enviada.', fecha:'2026-05-06', autor:'Ian S.' },
+      { accion:'Propuesta aceptada. Esperando fecha de pago.', fecha:'2026-05-22', autor:'Ian S.' }
+    ],
+    documentos:[], createdAt:1778025600000, updatedAt:1779408000000
+  },
+  {
+    id:'ex_6', columna:'emitida', orden:100, fecha:'2026-04-28', fuente:'Referido',
+    asegurado:'Rodrigo Fernández Bravo', rut:'12.670.345-8', telefono:'+56 9 4421 9987',
+    marca:'Nissan', modelo:'Qashqai', anio:'2022', patente:'HVKL55',
+    polizaVigente:false, primaVigente:'', deducibleActual:'',
+    fechaCotizacion:'2026-04-29', accionSeguimiento:'',
+    fechaSeguimiento:'', cierre:true,
+    comentarios:'Referido por Pedro Fernández (hermano, cliente 2024). Qashqai 2022 sin seguro vigente. Muy decidido desde el primer llamado. Emitido sin contratiempos.',
+    fechaEmision:'2026-05-05', primaNeta:'251000', compania:'HDI',
+    notas:[
+      { texto:'Agradeció por la atención, prometió referir a su cuñada que tiene Corolla 2023.', autor:'Ian S.', fecha:'2026-05-05' }
+    ],
+    historial:[
+      { accion:'Lead creado — referido por Pedro Fernández', fecha:'2026-04-28', autor:'Ian S.' },
+      { accion:'Cotización y propuesta enviadas el mismo día', fecha:'2026-04-29', autor:'Ian S.' },
+      { accion:'Póliza emitida HDI Todo Riesgo $251.000/año', fecha:'2026-05-05', autor:'Ian S.' }
+    ],
+    documentos:[], createdAt:1777296000000, updatedAt:1778025600000
+  },
+  {
+    id:'ex_7', columna:'emitida', orden:200, fecha:'2026-04-15', fuente:'Instagram',
+    asegurado:'Alejandra Castro Muñoz', rut:'18.234.567-K', telefono:'+56 9 3312 7760',
+    marca:'Toyota', modelo:'Hilux', anio:'2023', patente:'TPQZ02',
+    polizaVigente:true, primaVigente:'480000', deducibleActual:'500000',
+    fechaCotizacion:'2026-04-16', accionSeguimiento:'',
+    fechaSeguimiento:'', cierre:true,
+    comentarios:'Llegó por Instagram. Hilux 2023 con seguro de concesionaria vencido. Gran ahorro: venía pagando $480k con deducible $500k, emitimos a $412k con deducible $300k. Muy contenta.',
+    fechaEmision:'2026-04-22', primaNeta:'412000', compania:'Mapfre',
+    notas:[
+      { texto:'Dejó reseña 5 estrellas en Google. Recomendar para referidos activos.', autor:'Ian S.', fecha:'2026-04-23' }
+    ],
+    historial:[
+      { accion:'Lead creado desde Instagram DM', fecha:'2026-04-15', autor:'Ian S.' },
+      { accion:'Cotización realizada. Ahorro demostrado vs póliza vigente.', fecha:'2026-04-16', autor:'Ian S.' },
+      { accion:'Póliza emitida Mapfre $412.000/año', fecha:'2026-04-22', autor:'Ian S.' }
+    ],
+    documentos:[], createdAt:1776124800000, updatedAt:1776729600000
+  },
+  {
+    id:'ex_8', columna:'perdido', orden:100, fecha:'2026-04-08', fuente:'Facebook',
+    asegurado:'Felipe Muñoz Salas', rut:'13.441.220-6', telefono:'+56 9 2209 4453',
+    marca:'Chevrolet', modelo:'Tracker', anio:'2021', patente:'RJMB39',
+    polizaVigente:true, primaVigente:'245000', deducibleActual:'300000',
+    fechaCotizacion:'2026-04-09', accionSeguimiento:'',
+    fechaSeguimiento:'', cierre:false,
+    comentarios:'Llegó por Facebook. Tracker 2021. Cotizamos $218.000 con Zurich. Finalmente renovó con su compañía actual porque el ejecutivo le ofreció el mismo precio y no quiso hacer el cambio. Sin malas intenciones, quedó abierto a futuro.',
+    fechaEmision:'', primaNeta:'218000', compania:'Zurich',
+    notas:[
+      { texto:'Dejarlo para retomar en octubre cuando vence nuevamente su póliza.', autor:'Ian S.', fecha:'2026-04-20' }
+    ],
+    historial:[
+      { accion:'Lead creado desde Facebook Ads', fecha:'2026-04-08', autor:'Ian S.' },
+      { accion:'Cotización enviada. Precio competitivo vs actual.', fecha:'2026-04-09', autor:'Ian S.' },
+      { accion:'Decidió renovar con compañía actual. Caso cerrado como perdido.', fecha:'2026-04-20', autor:'Ian S.' }
+    ],
+    documentos:[], createdAt:1775520000000, updatedAt:1776211200000
+  },
 ];
 
 const EXAMPLE_LEADS_COM = [
-  { id:'ec_1', columna:'nuevo',     orden:100, fecha:'2026-05-20', fuente:'Referido',  edificio:'Condominio Los Aromos',  administrador:'Patricia Vera',   telefono:'+56 9 8765 4321', direccion:'Av. Las Condes 1234, Las Condes',       unidades:'48',  cierre:false, comentarios:'Referido por corredor Jorge Soto.', fechaEmision:'', primaNeta:'',       compania:'',       accionSeguimiento:'Solicitar lista de bienes',    fechaSeguimiento:'', notas:[], historial:[], createdAt:1748000000000, updatedAt:1748000000000 },
-  { id:'ec_2', columna:'cotizando', orden:100, fecha:'2026-05-22', fuente:'Instagram', edificio:'Torre Balmaceda 450',    administrador:'Ricardo Fuentes',  telefono:'+56 9 7654 3210', direccion:'Balmaceda 450, Providencia',            unidades:'32',  cierre:false, comentarios:'Buscan renovar póliza anual.',       fechaEmision:'', primaNeta:'340000', compania:'Mapfre', accionSeguimiento:'Enviar propuesta definitiva', fechaSeguimiento:'2026-05-28', notas:[], historial:[], createdAt:1748100000000, updatedAt:1748100000000 },
-  { id:'ec_3', columna:'emitida',   orden:100, fecha:'2026-05-10', fuente:'Referido',  edificio:'Villa Esperanza',        administrador:'Carmen Rojas',     telefono:'+56 9 6543 2109', direccion:'Camino Lo Barnechea 560, Lo Barnechea', unidades:'120', cierre:true,  comentarios:'Renuevan el próximo año.',           fechaEmision:'2026-05-18', primaNeta:'580000', compania:'HDI',    accionSeguimiento:'', fechaSeguimiento:'', notas:[], historial:[], createdAt:1747200000000, updatedAt:1747200000000 },
+  {
+    id:'ec_1', columna:'nuevo', orden:100, fecha:'2026-05-25', fuente:'Referido',
+    edificio:'Condominio Los Almendros', tipoContacto:'Administrador',
+    administrador:'Patricia Vera Leal', telefono:'+56 9 8821 4430', correo:'pvera@admlosamendros.cl',
+    rutComunidad:'76.234.891-2', direccion:'Av. Ossa 1450', comuna:'La Reina', unidades:'64',
+    polizaVigente:false, cartaAsignacion:false, maec:'', mau:'',
+    compania:'', primaNeta:'', fechaCotizacion:'2026-05-25',
+    accionSeguimiento:'Solicitar lista de bienes y plano del edificio para cotizar',
+    fechaSeguimiento:'2026-05-29', cierre:false,
+    comentarios:'Referido por el corredor Luis Bravo (socio). Edificio 2015, 8 pisos, 64 dptos. Nunca han tenido seguro de comunidad formal, solo seguro de incendio básico del banco. Patricia es muy ordenada, preguntó qué documentos necesita.',
+    fechaEmision:'',
+    notas:[
+      { texto:'Edificio sin MAEC ni MAU activos. Oportunidad de venta completa (incendio + RC + MAEC).', autor:'Ian S.', fecha:'2026-05-25' }
+    ],
+    historial:[
+      { accion:'Lead creado — referido por Luis Bravo', fecha:'2026-05-25', autor:'Ian S.' }
+    ],
+    documentos:[], createdAt:1779667200000, updatedAt:1779667200000
+  },
+  {
+    id:'ec_2', columna:'cotizando', orden:100, fecha:'2026-05-16', fuente:'Web',
+    edificio:'Edificio Pacífico Torre A', tipoContacto:'Administrador',
+    administrador:'Ricardo Fuentes Araya', telefono:'+56 9 7234 8810', correo:'rfuentes@admpacífico.cl',
+    rutComunidad:'76.889.002-K', direccion:'Huérfanos 1234 piso 3', comuna:'Santiago', unidades:'48',
+    polizaVigente:true, cartaAsignacion:true, maec:'HDI', mau:'Zurich',
+    compania:'HDI', primaNeta:'', fechaCotizacion:'2026-05-17',
+    accionSeguimiento:'Enviar comparativa HDI vs Mapfre — póliza vence el 15 junio',
+    fechaSeguimiento:'2026-05-30', cierre:false,
+    comentarios:'Llegó desde el formulario web. Torre 2012, 12 pisos, 48 dptos, Santiago Centro. Tienen póliza HDI vigente hasta el 15 de junio. Quieren comparar antes de renovar automático. Ricardo pide ver diferencia de coberturas RC y sismo.',
+    fechaEmision:'',
+    notas:[
+      { texto:'HDI actual: prima $1.240.000/año. Cotizamos Mapfre a $1.090.000 con mejor cobertura RC. Diferencia $150k.', autor:'Ian S.', fecha:'2026-05-18' },
+      { texto:'Pendiente: Ricardo pide incluir cobertura de cristales en propuesta — agregar a Mapfre.', autor:'Ian S.', fecha:'2026-05-22' }
+    ],
+    historial:[
+      { accion:'Lead creado desde formulario web', fecha:'2026-05-16', autor:'Ian S.' },
+      { accion:'Llamada. Solicitud de cotización. Datos de póliza vigente recopilados.', fecha:'2026-05-17', autor:'Ian S.' },
+      { accion:'Cotización Mapfre enviada por correo con comparativa vs HDI actual.', fecha:'2026-05-18', autor:'Ian S.' }
+    ],
+    documentos:[], createdAt:1778889600000, updatedAt:1779408000000
+  },
+  {
+    id:'ec_3', columna:'cotizando', orden:200, fecha:'2026-05-14', fuente:'Instagram',
+    edificio:'Plaza Mayor Condominio', tipoContacto:'Comité',
+    administrador:'Mónica Salinas Cortés', telefono:'+56 9 6612 3304', correo:'monicasalinas@gmil.com',
+    rutComunidad:'76.120.445-3', direccion:'Av. Larraín 4560', comuna:'La Florida', unidades:'96',
+    polizaVigente:true, cartaAsignacion:false, maec:'Seguros Vida Cámara', mau:'',
+    compania:'Seguros Vida Cámara', primaNeta:'', fechaCotizacion:'2026-05-15',
+    accionSeguimiento:'Reenviar propuesta — Mónica dice que el comité la revisará el martes 2 junio',
+    fechaSeguimiento:'2026-06-02', cierre:false,
+    comentarios:'Llegó por Instagram. Condominio grande, 6 torres, 96 dptos, La Florida. Comité activo y exigente. Póliza vigente con Vida Cámara, vence agosto. Quieren mejorar cobertura de incendio y agregar cobertura de equipos de uso común (calderas, ascensores).',
+    fechaEmision:'',
+    notas:[
+      { texto:'Propuesta enviada incluye cobertura de maquinaria hasta UF 2.000. Diferente a lo que tienen hoy.', autor:'Ian S.', fecha:'2026-05-16' },
+      { texto:'Comité reúne el primer martes de cada mes. Próxima reunión 2 de junio.', autor:'Ian S.', fecha:'2026-05-20' }
+    ],
+    historial:[
+      { accion:'Lead creado desde Instagram DM', fecha:'2026-05-14', autor:'Ian S.' },
+      { accion:'Video llamada con Mónica. Datos del edificio levantados.', fecha:'2026-05-15', autor:'Ian S.' },
+      { accion:'Propuesta enviada por correo para presentar al comité.', fecha:'2026-05-16', autor:'Ian S.' }
+    ],
+    documentos:[], createdAt:1778716800000, updatedAt:1779321600000
+  },
+  {
+    id:'ec_4', columna:'propuesta', orden:100, fecha:'2026-05-06', fuente:'Referido',
+    edificio:'Condominio Vista Cordillera', tipoContacto:'Administrador',
+    administrador:'Jorge Soto Ibáñez', telefono:'+56 9 5509 2278', correo:'jsoto@vistacordillera.cl',
+    rutComunidad:'77.003.112-9', direccion:'Camino Las Flores 890', comuna:'Ñuñoa', unidades:'120',
+    polizaVigente:true, cartaAsignacion:true, maec:'AXA', mau:'AXA',
+    compania:'AXA', primaNeta:'2850000', fechaCotizacion:'2026-05-07',
+    accionSeguimiento:'Llamar el lunes — Jorge dijo que el comité aprobó avanzar, falta firma del presidente',
+    fechaSeguimiento:'2026-06-01', cierre:false,
+    comentarios:'Referido por Constanza Mena (administradora amiga de Jorge). Condominio premium, 120 dptos, Ñuñoa. AXA actual: $3.200.000/año. Propuesta enviada Mapfre: $2.850.000 con coberturas equivalentes más RC ampliada. Comité ya aprobó en principio, esperando firma del presidente del comité.',
+    fechaEmision:'',
+    notas:[
+      { texto:'Ahorro vs AXA actual: $350.000/año. Argumento central de la propuesta.', autor:'Ian S.', fecha:'2026-05-08' },
+      { texto:'Comité aprobó en reunión del 20/05. Solo falta firma de Carlos Donoso (presidente).', autor:'Ian S.', fecha:'2026-05-21' }
+    ],
+    historial:[
+      { accion:'Lead creado — referido por Constanza Mena', fecha:'2026-05-06', autor:'Ian S.' },
+      { accion:'Reunión presencial. Presentación comparativa AXA vs Mapfre.', fecha:'2026-05-07', autor:'Ian S.' },
+      { accion:'Propuesta formal enviada por correo con carta de presentación.', fecha:'2026-05-08', autor:'Ian S.' },
+      { accion:'Comité aprobó propuesta. Pendiente firma del presidente.', fecha:'2026-05-21', autor:'Ian S.' }
+    ],
+    documentos:[], createdAt:1778112000000, updatedAt:1779408000000
+  },
+  {
+    id:'ec_5', columna:'seguimiento', orden:100, fecha:'2026-04-28', fuente:'WhatsApp',
+    edificio:'Edificio Altamira', tipoContacto:'Administrador',
+    administrador:'Fernanda Riquelme Torres', telefono:'+56 9 4481 6650', correo:'friquelme@altamira.cl',
+    rutComunidad:'76.541.339-0', direccion:'Av. Vitacura 3450', comuna:'Vitacura', unidades:'36',
+    polizaVigente:false, cartaAsignacion:false, maec:'', mau:'',
+    compania:'Mapfre', primaNeta:'980000', fechaCotizacion:'2026-04-29',
+    accionSeguimiento:'Confirmar pago — Fernanda coordina con el banco de la comunidad',
+    fechaSeguimiento:'2026-05-28', cierre:false,
+    comentarios:'Llegó por WhatsApp directo. Edificio boutique Vitacura, 36 dptos de alto estándar. Propuesta aceptada: Mapfre Todo Riesgo Comunidad $980.000/año. Fernanda dice que requiere aprobación de banco para liberar fondos del fondo común. En proceso.',
+    fechaEmision:'',
+    notas:[
+      { texto:'Propuesta aceptada el 15/05. Trámite bancario puede tomar 10 días hábiles.', autor:'Ian S.', fecha:'2026-05-15' },
+      { texto:'Banco confirmó disponibilidad de fondos el 22/05. Fernanda coordinando firma de cheque.', autor:'Ian S.', fecha:'2026-05-22' }
+    ],
+    historial:[
+      { accion:'Lead creado — WhatsApp directo', fecha:'2026-04-28', autor:'Ian S.' },
+      { accion:'Reunión Zoom. Cotización presentada y aceptada en principio.', fecha:'2026-04-29', autor:'Ian S.' },
+      { accion:'Propuesta aceptada formalmente. Coordina pago con banco.', fecha:'2026-05-15', autor:'Ian S.' }
+    ],
+    documentos:[], createdAt:1777296000000, updatedAt:1779494400000
+  },
+  {
+    id:'ec_6', columna:'emitida', orden:100, fecha:'2026-04-10', fuente:'Referido',
+    edificio:'Villa San Sebastián', tipoContacto:'Administrador',
+    administrador:'Carmen Gloria Rojas', telefono:'+56 9 3345 7789', correo:'cgrojas@villasansebastian.cl',
+    rutComunidad:'76.782.004-5', direccion:'Av. 5 de Abril 2340', comuna:'Maipú', unidades:'200',
+    polizaVigente:true, cartaAsignacion:true, maec:'RSA', mau:'RSA',
+    compania:'HDI', primaNeta:'3400000', fechaCotizacion:'2026-04-11',
+    accionSeguimiento:'',
+    fechaSeguimiento:'', cierre:true,
+    comentarios:'Referido por Luis Bravo. Comunidad grande, 200 dptos, Maipú. Venían con RSA a $4.100.000/año. Emitimos con HDI a $3.400.000, ahorro de $700.000 anuales. Carmen Gloria encantada. Proceso muy ordenado.',
+    fechaEmision:'2026-05-02',
+    notas:[
+      { texto:'Póliza emitida sin observaciones. Carmen Gloria feliz, nos recomendará a otras comunidades del sector.', autor:'Ian S.', fecha:'2026-05-02' }
+    ],
+    historial:[
+      { accion:'Lead creado — referido por Luis Bravo', fecha:'2026-04-10', autor:'Ian S.' },
+      { accion:'Reunión presencial. Lista de bienes y plano revisados.', fecha:'2026-04-11', autor:'Ian S.' },
+      { accion:'Propuesta HDI enviada. Ahorro de $700.000 vs RSA actual.', fecha:'2026-04-14', autor:'Ian S.' },
+      { accion:'Propuesta aprobada en asamblea de copropietarios.', fecha:'2026-04-22', autor:'Ian S.' },
+      { accion:'Póliza emitida HDI Todo Riesgo Comunidad $3.400.000/año.', fecha:'2026-05-02', autor:'Ian S.' }
+    ],
+    documentos:[], createdAt:1775779200000, updatedAt:1777814400000
+  },
+  {
+    id:'ec_7', columna:'perdido', orden:100, fecha:'2026-03-20', fuente:'Web',
+    edificio:'Torres del Parque', tipoContacto:'Comité',
+    administrador:'Héctor Aguirre Molina', telefono:'+56 9 2218 5566', correo:'haguirre@torresdelparque.cl',
+    rutComunidad:'76.330.778-1', direccion:'Av. Departamental 3210', comuna:'La Florida', unidades:'80',
+    polizaVigente:true, cartaAsignacion:false, maec:'', mau:'',
+    compania:'Zurich', primaNeta:'1600000', fechaCotizacion:'2026-03-21',
+    accionSeguimiento:'',
+    fechaSeguimiento:'', cierre:false,
+    comentarios:'Llegó desde web. 80 dptos, La Florida. Cotizamos a $1.600.000. Su corredor de siempre (externo) llegó con Zurich a $1.550.000 y lo retuvieron. Héctor fue transparente: "me cuesta cambiar de alguien de 10 años". Sin resentimientos, quedó en contactar si algo cambia.',
+    fechaEmision:'',
+    notas:[
+      { texto:'Retomar en marzo 2027 cuando vence su póliza anual. Agregar a recordatorio.', autor:'Ian S.', fecha:'2026-04-05' }
+    ],
+    historial:[
+      { accion:'Lead creado desde formulario web', fecha:'2026-03-20', autor:'Ian S.' },
+      { accion:'Cotización enviada $1.600.000. Competitiva vs actual.', fecha:'2026-03-21', autor:'Ian S.' },
+      { accion:'Retenido por corredor actual con precio levemente menor. Caso perdido.', fecha:'2026-04-05', autor:'Ian S.' }
+    ],
+    documentos:[], createdAt:1773993600000, updatedAt:1775174400000
+  },
 ];
 
 function initLocalStorage() {
