@@ -1634,7 +1634,7 @@ function openModal(id, defaultCol, activeTab) {
         <div class="form-row">
           <label>Teléfono / WhatsApp</label>
           <div style="display:flex;gap:6px;align-items:center;">
-            <input id="mTelefono" type="tel" value="${esc(lead.telefono||'')}" placeholder="+56 9 1234 5678" style="flex:1;">
+            <input id="mTelefono" type="tel" value="${esc(lead.telefono||'')}" placeholder="—" style="flex:1;">
             <div class="wa-dropdown-wrap" id="mWaWrap" style="${(lead.telefono||'').trim().replace(/\D/g,'')?'':'display:none;'}">
               <button type="button" id="mWaBtn" style="background:#dcfce7;color:#15803d;border:none;border-radius:7px;padding:6px 10px;font-size:12px;cursor:pointer;white-space:nowrap;font-family:inherit;">💬 WA</button>
               <div class="wa-dropdown" id="mWaDropdown"></div>
@@ -1743,7 +1743,7 @@ function openModal(id, defaultCol, activeTab) {
       <div class="form-2col">
         <div class="form-row">
           <label>N° de póliza</label>
-          <input id="mNumPoliza" type="text" value="${esc(lead.numPoliza||'')}" placeholder="12345678-9">
+          <input id="mNumPoliza" type="text" value="${esc(lead.numPoliza||'')}" placeholder="—">
         </div>
         <div class="form-row">
           <label>Fecha vencimiento</label>
@@ -1783,7 +1783,7 @@ function openModal(id, defaultCol, activeTab) {
         <div class="form-row">
           <label>Teléfono / WhatsApp</label>
           <div style="display:flex;gap:6px;align-items:center;">
-            <input id="mTelefono" type="tel" value="${esc(lead.telefono||'')}" placeholder="+56 9 1234 5678" style="flex:1;">
+            <input id="mTelefono" type="tel" value="${esc(lead.telefono||'')}" placeholder="—" style="flex:1;">
             <div class="wa-dropdown-wrap" id="mWaWrap" style="${(lead.telefono||'').trim().replace(/\D/g,'')?'':'display:none;'}">
               <button type="button" id="mWaBtn" style="background:#dcfce7;color:#15803d;border:none;border-radius:7px;padding:6px 10px;font-size:12px;cursor:pointer;white-space:nowrap;font-family:inherit;">💬 WA</button>
               <div class="wa-dropdown" id="mWaDropdown"></div>
@@ -1866,7 +1866,7 @@ function openModal(id, defaultCol, activeTab) {
         </div>
         <div class="form-row">
           <label>N° de póliza</label>
-          <input id="mNumPoliza" type="text" value="${esc(lead.numPoliza||'')}" placeholder="12345678-9">
+          <input id="mNumPoliza" type="text" value="${esc(lead.numPoliza||'')}" placeholder="—">
         </div>
       </div>
       <div class="form-2col">
@@ -3739,9 +3739,9 @@ function openQuickAdd() {
       ${isCom ? `
       <div class="form-row"><label>Edificio / Condominio *</label><input id="qNombre" type="text" placeholder="Condominio Los Aromos" autocomplete="off"></div>
       <div class="form-row"><label>Administrador / Contacto</label><input id="qAdministrador" type="text" placeholder="Nombre del contacto"></div>
-      <div class="form-row"><label>Teléfono / WhatsApp</label><input id="qTelefono" type="tel" placeholder="+56 9 1234 5678"></div>` : `
+      <div class="form-row"><label>Teléfono / WhatsApp</label><input id="qTelefono" type="tel" placeholder="—"></div>` : `
       <div class="form-row"><label>Nombre asegurado *</label><input id="qNombre" type="text" placeholder="Juan Pérez" autocomplete="off"></div>
-      <div class="form-row"><label>Teléfono / WhatsApp</label><input id="qTelefono" type="tel" placeholder="+56 9 1234 5678"></div>
+      <div class="form-row"><label>Teléfono / WhatsApp</label><input id="qTelefono" type="tel" placeholder="—"></div>
       <div class="form-2col">
         <div class="form-row"><label>Marca</label><input id="qMarca" type="text" placeholder="Toyota"></div>
         <div class="form-row"><label>Modelo</label><input id="qModelo" type="text" placeholder="Corolla"></div>
