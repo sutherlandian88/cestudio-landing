@@ -1197,7 +1197,7 @@ function defaultLead(overrides) {
     id: newLeadId(), columna:'nuevo', orden:Date.now(), fecha:today(),
     fuente:'', edificio:'', tipoContacto:'Administrador', administrador:'', telefono:'', correo:'', rutComunidad:'', direccion:'', comuna:'', unidades:'',
     polizaVigente:false, cartaAsignacion:false, maec:'', mau:'',
-    compania:'', primaNeta:'', monedaPrima:'CLP', fechaCotizacion:today(), accionSeguimiento:'', cierre:false,
+    compania:'', primaNeta:'', monedaPrima:'UF', fechaCotizacion:today(), accionSeguimiento:'', cierre:false,
     comentarios:'', fechaEmision:'', fechaSeguimiento:'',
     numPoliza:'', fechaVencimiento:'', tipoSeguro:'', comisionPct:'',
     cotizaciones:[],
@@ -1208,7 +1208,7 @@ function defaultLead(overrides) {
     vehiculos:[],
     polizaVigente:false, primaVigente:'', deducibleActual:'', fechaCotizacion:today(),
     accionSeguimiento:'', cierre:false, comentarios:'', fechaEmision:'', primaNeta:'',
-    monedaPrima:'CLP', compania:'', fechaSeguimiento:'',
+    monedaPrima:'UF', compania:'', fechaSeguimiento:'',
     numPoliza:'', fechaVencimiento:'', tipoSeguro:'', comisionPct:'',
     cotizaciones:[],
     notas:[], historial:[], documentos:[],
@@ -1636,7 +1636,7 @@ function openModal(id, defaultCol, activeTab) {
           <div style="display:flex;gap:6px;align-items:center;">
             <input id="mTelefono" type="tel" value="${esc(lead.telefono||'')}" placeholder="—" style="flex:1;">
             <div class="wa-dropdown-wrap" id="mWaWrap" style="${(lead.telefono||'').trim().replace(/\D/g,'')?'':'display:none;'}">
-              <button type="button" id="mWaBtn" style="background:#dcfce7;color:#15803d;border:none;border-radius:7px;padding:6px 10px;font-size:12px;cursor:pointer;white-space:nowrap;font-family:inherit;">💬 WA</button>
+              <button type="button" id="mWaBtn" style="background:#dcfce7;border:none;border-radius:7px;padding:6px 8px;cursor:pointer;display:flex;align-items:center;justify-content:center;" title="Enviar WhatsApp"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" fill="#25D366"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></button>
               <div class="wa-dropdown" id="mWaDropdown"></div>
             </div>
           </div>
@@ -1646,7 +1646,7 @@ function openModal(id, defaultCol, activeTab) {
           <div style="display:flex;gap:6px;align-items:center;">
             <input id="mCorreo" type="email" value="${esc(lead.correo||'')}" placeholder="admin@edificio.cl" style="flex:1;">
             <div class="wa-dropdown-wrap" id="mMailWrap" style="${(lead.correo||'').trim()?'':'display:none;'}">
-              <button type="button" id="mMailBtn" style="background:#e0e7ff;color:#4338ca;border:none;border-radius:7px;padding:6px 10px;font-size:12px;cursor:pointer;white-space:nowrap;font-family:inherit;">📧 Mail</button>
+              <button type="button" id="mMailBtn" style="background:#e0e7ff;border:none;border-radius:7px;padding:6px 8px;cursor:pointer;display:flex;align-items:center;justify-content:center;" title="Enviar correo"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#4338ca" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg></button>
               <div class="wa-dropdown" id="mMailDropdown"></div>
             </div>
           </div>
@@ -1678,12 +1678,12 @@ function openModal(id, defaultCol, activeTab) {
       </div>
       <div class="form-2col">
         <div class="form-row">
-          <label>Monto Asegurado Espacios Comunes (MAEC)</label>
-          <input id="mMaec" type="text" value="${esc(lead.maec||'')}" placeholder="0">
+          <label>Monto Asegurado Espacios Comunes — MAEC (UF)</label>
+          <input id="mMaec" type="text" value="${esc(lead.maec||'')}" placeholder="—">
         </div>
         <div class="form-row">
-          <label>Monto Asegurado Unidades (MAU)</label>
-          <input id="mMau" type="text" value="${esc(lead.mau||'')}" placeholder="0">
+          <label>Monto Asegurado Unidades — MAU (UF)</label>
+          <input id="mMau" type="text" value="${esc(lead.mau||'')}" placeholder="—">
         </div>
       </div>
       <div style="display:flex;gap:24px;flex-wrap:wrap;padding:4px 0;">
@@ -1729,12 +1729,12 @@ function openModal(id, defaultCol, activeTab) {
       </div>
       <div class="form-2col">
         <div class="form-row">
-          <label id="mPrimaNetaLabel">Prima neta (<span id="mMonedaLabel">CLP</span>)</label>
+          <label id="mPrimaNetaLabel">Prima neta (<span id="mMonedaLabel">${lead.monedaPrima||'UF'}</span>)</label>
           <div style="display:flex;gap:6px;">
             <input id="mPrimaNeta" type="text" value="${esc(lead.primaNeta||'')}" placeholder="0" style="flex:1;">
             <select id="mMonedaPrima" style="width:70px;border:1.5px solid #e5e5e5;border-radius:7px;padding:6px 8px;font-size:12px;font-family:inherit;outline:none;color:#111;background:#fff;flex-shrink:0;">
-              <option value="CLP"${(lead.monedaPrima||'CLP')==='CLP'?' selected':''}>CLP</option>
-              <option value="UF"${(lead.monedaPrima||'CLP')==='UF'?' selected':''}>UF</option>
+              <option value="UF"${(lead.monedaPrima||'UF')==='UF'?' selected':''}>UF</option>
+              <option value="CLP"${(lead.monedaPrima||'UF')==='CLP'?' selected':''}>CLP</option>
             </select>
           </div>
         </div>
@@ -1791,7 +1791,7 @@ function openModal(id, defaultCol, activeTab) {
           <div style="display:flex;gap:6px;align-items:center;">
             <input id="mTelefono" type="tel" value="${esc(lead.telefono||'')}" placeholder="—" style="flex:1;">
             <div class="wa-dropdown-wrap" id="mWaWrap" style="${(lead.telefono||'').trim().replace(/\D/g,'')?'':'display:none;'}">
-              <button type="button" id="mWaBtn" style="background:#dcfce7;color:#15803d;border:none;border-radius:7px;padding:6px 10px;font-size:12px;cursor:pointer;white-space:nowrap;font-family:inherit;">💬 WA</button>
+              <button type="button" id="mWaBtn" style="background:#dcfce7;border:none;border-radius:7px;padding:6px 8px;cursor:pointer;display:flex;align-items:center;justify-content:center;" title="Enviar WhatsApp"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" fill="#25D366"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></button>
               <div class="wa-dropdown" id="mWaDropdown"></div>
             </div>
           </div>
@@ -1852,12 +1852,12 @@ function openModal(id, defaultCol, activeTab) {
           <input id="mCompania" type="text" value="${esc(lead.compania)}" placeholder="Mapfre, HDI, Zurich...">
         </div>
         <div class="form-row">
-          <label id="mPrimaNetaLabel">Prima neta (<span id="mMonedaLabel">CLP</span>)</label>
+          <label id="mPrimaNetaLabel">Prima neta (<span id="mMonedaLabel">${lead.monedaPrima||'UF'}</span>)</label>
           <div style="display:flex;gap:6px;">
             <input id="mPrimaNeta" type="text" value="${esc(lead.primaNeta)}" placeholder="0" style="flex:1;">
             <select id="mMonedaPrima" style="width:70px;border:1.5px solid #e5e5e5;border-radius:7px;padding:6px 8px;font-size:12px;font-family:inherit;outline:none;color:#111;background:#fff;flex-shrink:0;">
-              <option value="CLP"${(lead.monedaPrima||'CLP')==='CLP'?' selected':''}>CLP</option>
-              <option value="UF"${(lead.monedaPrima||'CLP')==='UF'?' selected':''}>UF</option>
+              <option value="UF"${(lead.monedaPrima||'UF')==='UF'?' selected':''}>UF</option>
+              <option value="CLP"${(lead.monedaPrima||'UF')==='CLP'?' selected':''}>CLP</option>
             </select>
           </div>
         </div>
@@ -2100,7 +2100,7 @@ function openModal(id, defaultCol, activeTab) {
           // Sync to root fields
           const cmpEl = bg.querySelector('#mCompania'); if (cmpEl) cmpEl.value = sel.compania||'';
           const primaEl = bg.querySelector('#mPrimaNeta'); if (primaEl) primaEl.value = sel.prima||'';
-          const monedaEl = bg.querySelector('#mMonedaPrima'); if (monedaEl) { monedaEl.value = sel.moneda||'CLP'; updateMonedaLabel(); }
+          const monedaEl = bg.querySelector('#mMonedaPrima'); if (monedaEl) { monedaEl.value = sel.moneda||'UF'; updateMonedaLabel(); }
           renderCotizaciones();
           calcComision();
         });
@@ -2165,7 +2165,7 @@ function openModal(id, defaultCol, activeTab) {
 
   // ── Moneda prima toggle ───────────────────────────────────
   function updateMonedaLabel() {
-    const moneda = (bg.querySelector('#mMonedaPrima') || {}).value || 'CLP';
+    const moneda = (bg.querySelector('#mMonedaPrima') || {}).value || 'UF';
     const lbl = bg.querySelector('#mMonedaLabel');
     if (lbl) lbl.textContent = moneda;
   }
@@ -3120,8 +3120,8 @@ const TABLE_COLS_COM = [
   { key:'unidades',          label:'Unidades',         sort:false },
   { key:'polizaVigente',     label:'Póliza vigente',   sort:false },
   { key:'cartaAsignacion',   label:'Carta Asignación', sort:false },
-  { key:'maec',              label:'MAEC ($)',         sort:true  },
-  { key:'mau',               label:'MAU ($)',          sort:true  },
+  { key:'maec',              label:'MAEC (UF)',         sort:true  },
+  { key:'mau',               label:'MAU (UF)',          sort:true  },
   { key:'fuente',            label:'Fuente',           sort:true  },
   { key:'tipoSeguro',        label:'Tipo seguro',      sort:true  },
   { key:'compania',          label:'Aseguradora',      sort:true  },
