@@ -584,8 +584,9 @@ const FIREBASE_CONFIG = {
 // ════════════════════════════════════════════════════════════
 
 const COLUMNS = [
-  { id:'nuevo',       label:'Nuevo Lead',        emoji:'📥' },
-  { id:'cotizando',   label:'Cotizando',          emoji:'🔍' },
+  { id:'nuevo',          label:'Nuevo Lead',        emoji:'📥' },
+  { id:'levantamiento',  label:'Levantamiento',     emoji:'📐' },
+  { id:'cotizando',      label:'Cotizando',          emoji:'🔍' },
   { id:'propuesta',   label:'Propuesta enviada',  emoji:'📋' },
   { id:'seguimiento', label:'Seguimiento',        emoji:'🔔' },
   { id:'emitida',     label:'Emitida',            emoji:'✅' },
@@ -3138,7 +3139,7 @@ const TABLE_COLS_COM = [
 ];
 function getTableCols() { return VERTICAL === 'comunidades' ? TABLE_COLS_COM : TABLE_COLS_FLOTAS; }
 
-const STAGE_LABELS = { nuevo:'Nuevo Lead', cotizando:'Cotizando', propuesta:'Propuesta enviada', seguimiento:'Seguimiento', emitida:'Emitida', perdido:'Perdido' };
+const STAGE_LABELS = { nuevo:'Nuevo Lead', levantamiento:'Levantamiento', cotizando:'Cotizando', propuesta:'Propuesta enviada', seguimiento:'Seguimiento', emitida:'Emitida', perdido:'Perdido' };
 let sortCol = 'fecha';
 let sortDir = -1;
 
@@ -3669,7 +3670,7 @@ function renderDashboard() {
   },{ cutout:'58%', plugins:{ legend:{ position:'right', labels:{ font:{size:10} } } } });
 
   // Embudo (horizontal bar)
-  const stgOrder = ['nuevo','cotizando','propuesta','seguimiento','emitida','perdido'];
+  const stgOrder = ['nuevo','levantamiento','cotizando','propuesta','seguimiento','emitida','perdido'];
   mkChart('chartEmbudo','bar',{
     labels: stgOrder.map(s => STAGE_LABELS[s]),
     datasets:[{ data:stgOrder.map(s=>all.filter(l=>l.columna===s).length), backgroundColor:['#9ca3af','#3b82f6','#7c3aed','#f59e0b','#22c55e','#ef4444'], borderRadius:4 }]
