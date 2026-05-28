@@ -598,13 +598,25 @@ function initStorage() {
               const raw = snap.val() || {};
               // _seeded is metadata — filter it out of STATE to avoid polluting lead lists
               const { _seeded, ...leads } = raw;
-              STATE = leads;
+              // Schema guard: only accept valid lead objects (reject strings, nulls, corrupt entries)
+              STATE = Object.fromEntries(
+                Object.entries(leads).filter(([, l]) => l && typeof l === 'object' && l.id)
+              );
               // Seed example data into Firebase only on first-ever login (never re-seed)
               if (!appReady && !_seeded) {
                 const examples = VERTICAL === 'comunidades' ? EXAMPLE_LEADS_COM : EXAMPLE_LEADS;
                 const seed = { _seeded: true };
                 examples.forEach(l => { seed[l.id] = l; });
-                DB_REF.update(seed); // update (not set) — never wipes existing data
+                DB_REF.update(seed).catch(err => {
+                  // Seeding failed (e.g. offline on first login) — show app anyway with empty state
+                  console.error('[CRM] Seed failed:', err);
+                  debouncedRender();
+                  if (!appReady) {
+                    appReady = true;
+                    document.getElementById('loadingOverlay').style.display = 'none';
+                    startPresenceFlow();
+                  }
+                });
                 return;
               }
               debouncedRender(); // debounced to prevent flicker on rapid remote changes
@@ -1102,7 +1114,7 @@ function today() {
 }
 
 function formatRut(raw) {
-  const clean = raw.replace(/[^0-9kK]/g, '').toUpperCase();
+  const clean = String(raw||'').slice(0, 20).replace(/[^0-9kK]/g, '').toUpperCase();
   if (clean.length < 2) return clean;
   const dv  = clean.slice(-1);
   const num = clean.slice(0, -1);
@@ -1136,7 +1148,10 @@ let filterHasta = '';
 
 function leadsVisible() {
   return Object.values(STATE).filter(l => {
-    if (!l || !l.id) return false;
+    if (!l || typeof l !== 'object' || !l.id) return false;
+    // Only show leads that belong to the current vertical (schema guard)
+    if (VERTICAL === 'flotas' && !l.asegurado && !l.marca) return false;
+    if (VERTICAL === 'comunidades' && !l.edificio) return false;
     if (filterFuente && l.fuente !== filterFuente) return false;
     if (filterCompania && l.compania !== filterCompania) return false;
     if (filterDesde && (!l.fecha || l.fecha < filterDesde)) return false;
@@ -1286,7 +1301,11 @@ function refreshCard(el, l) {
 }
 
 function coldDays(l) {
-  return Math.floor((Date.now() - (l.updatedAt || l.createdAt || Date.now())) / 86400000);
+  const ts = (l && typeof l.updatedAt === 'number') ? l.updatedAt
+           : (l && typeof l.createdAt === 'number') ? l.createdAt
+           : 0;
+  if (!ts) return 0;
+  return Math.max(0, Math.floor((Date.now() - ts) / 86400000));
 }
 const COLD_THRESHOLD = 7;
 
@@ -2029,11 +2048,16 @@ function openModal(id, defaultCol, activeTab) {
       const doc = (lead.documentos||[]).find(d => String(d.id) === String(btn.dataset.docDownload));
       if (!doc) return;
       if (doc.url) {
-        // Firebase Storage URL — open in new tab (avoids CORS issues with download attr)
+        // Validate URL is from Firebase Storage before opening (prevent open redirect)
+        if (!/^https:\/\/firebasestorage\.googleapis\.com\//.test(doc.url)) {
+          showToast('⚠️ URL de documento inválida', 'error'); return;
+        }
         window.open(doc.url, '_blank');
       } else if (doc.data) {
-        // Legacy base64
-        Object.assign(document.createElement('a'), { href:doc.data, download:doc.nombre }).click();
+        // Legacy base64 — only allow safe MIME types
+        if (doc.data && /^data:(image\/|application\/pdf|text\/plain)/.test(doc.data)) {
+          Object.assign(document.createElement('a'), { href:doc.data, download:doc.nombre }).click();
+        }
       }
     };
   });
@@ -2159,9 +2183,13 @@ document.getElementById('importFileInput').addEventListener('change', e => {
       const wb = XLSX.read(ev.target.result, {type:'array', cellDates:true});
       const ws = wb.Sheets[wb.SheetNames[0]];
       const data = XLSX.utils.sheet_to_json(ws, {defval:''});
+      const MAX_IMPORT = 1000;
+      if (data.length > MAX_IMPORT) {
+        alert(`⚠️ El archivo tiene ${data.length} filas. Solo se importarán las primeras ${MAX_IMPORT}.`);
+      }
       let imported = 0, skipped = 0;
       const importedLeads = [];
-      data.forEach(row => {
+      data.slice(0, MAX_IMPORT).forEach(row => {
         const toDate = v => { try { const d = new Date(v); return isNaN(d)?'':`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; } catch { return ''; }};
         const toNum  = v => String(v||'').replace(/[^\d]/g,'');
         const esCierre = /si/i.test(String(row['Cierre (SI/NO)']||row['Cierre']||''));
@@ -2318,7 +2346,7 @@ function renderPresence(data) {
     av.className = 'avatar';
     av.style.background = safeColor(u.color);
     if (u.photo && /^https?:\/\//.test(u.photo)) { // only allow http(s) photo URLs
-      av.style.backgroundImage = `url(${u.photo})`;
+      av.style.backgroundImage = `url("${u.photo.replace(/"/g,'%22').replace(/\)/g,'%29')}")`;
       av.style.backgroundSize = 'cover';
       av.style.backgroundPosition = 'center';
     } else {
@@ -2348,7 +2376,7 @@ function updateCardViewers(data) {
     av.className = 'card-viewer-av';
     av.style.background = u.color || '#6366f1';
     av.textContent = (u.name || '?')[0].toUpperCase();
-    av.dataset.name = (u.name || '?') + ' está viendo';
+    av.dataset.name = esc(u.name || '?') + ' está viendo';
     viewers.appendChild(av);
   });
 }
@@ -3195,7 +3223,9 @@ function switchVertical(v) {
     DB_REF.on('value', snap => {
       const raw = snap.val() || {};
       const { _seeded, ...leads } = raw;
-      STATE = leads;
+      STATE = Object.fromEntries(
+        Object.entries(leads).filter(([, l]) => l && typeof l === 'object' && l.id)
+      );
       if (!_seeded) {
         const examples = v === 'comunidades' ? EXAMPLE_LEADS_COM : EXAMPLE_LEADS;
         const seed = { _seeded: true };
