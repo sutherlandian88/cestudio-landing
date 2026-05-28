@@ -1643,7 +1643,13 @@ function openModal(id, defaultCol, activeTab) {
         </div>
         <div class="form-row">
           <label>Correo electrónico</label>
-          <input id="mCorreo" type="email" value="${esc(lead.correo||'')}" placeholder="admin@edificio.cl">
+          <div style="display:flex;gap:6px;align-items:center;">
+            <input id="mCorreo" type="email" value="${esc(lead.correo||'')}" placeholder="admin@edificio.cl" style="flex:1;">
+            <div class="wa-dropdown-wrap" id="mMailWrap" style="${(lead.correo||'').trim()?'':'display:none;'}">
+              <button type="button" id="mMailBtn" style="background:#e0e7ff;color:#4338ca;border:none;border-radius:7px;padding:6px 10px;font-size:12px;cursor:pointer;white-space:nowrap;font-family:inherit;">📧 Mail</button>
+              <div class="wa-dropdown" id="mMailDropdown"></div>
+            </div>
+          </div>
         </div>
       </div>
       <div class="form-2col">
@@ -2251,6 +2257,76 @@ function openModal(id, defaultCol, activeTab) {
     }
   }
   buildWaTemplates();
+
+  // ── Email templates (Comunidades only) ───────────────────
+  function buildEmailTemplates() {
+    const mailBtn = bg.querySelector('#mMailBtn');
+    const mailDropdown = bg.querySelector('#mMailDropdown');
+    const mailWrap = bg.querySelector('#mMailWrap');
+    const correoInput = bg.querySelector('#mCorreo');
+    if (!mailBtn || !mailDropdown || !correoInput) return;
+
+    function updateMailVisibility() {
+      mailWrap.style.display = (correoInput.value||'').trim() ? '' : 'none';
+    }
+    updateMailVisibility();
+    correoInput.addEventListener('input', updateMailVisibility);
+
+    mailBtn.addEventListener('click', e => {
+      e.stopPropagation();
+      mailDropdown.classList.toggle('open');
+      if (mailDropdown.classList.contains('open')) buildMailDropdown();
+    });
+    document.addEventListener('click', function closeMail(e) {
+      if (!mailWrap.contains(e.target)) { mailDropdown.classList.remove('open'); document.removeEventListener('click', closeMail); }
+    });
+
+    function buildMailDropdown() {
+      const correo = correoInput.value.trim();
+      const nombre = (bg.querySelector('#mAdministrador')||{}).value || (bg.querySelector('#mEdificio')||{}).value || '';
+      const edificio = (bg.querySelector('#mEdificio')||{}).value || '';
+      const compania = (bg.querySelector('#mCompania')||{}).value || '';
+      const prima = (bg.querySelector('#mPrimaNeta')||{}).value || '';
+      const tipo = (bg.querySelector('#mTipoSeguro')||{}).value || '';
+      const numPoliza = (bg.querySelector('#mNumPoliza')||{}).value || '';
+      const fechaVenc = (bg.querySelector('#mFechaVenc')||{}).value || '';
+      const moneda = (bg.querySelector('#mMonedaPrima')||{}).value || 'CLP';
+      const primaFmt = prima ? (moneda === 'UF' ? `UF ${prima}` : `$${prima}`) : '[prima]';
+
+      const templates = [
+        { icon: '📋', label: 'Enviar propuesta',
+          subject: `Propuesta de Seguro${tipo ? ' ' + tipo : ''} — ${edificio || '[edificio]'}`,
+          body: `Estimado/a ${nombre || '[nombre]'},\n\nAdjuntamos nuestra propuesta de seguro${tipo ? ' ' + tipo : ''} con ${compania || '[compañía]'} por ${primaFmt} anuales.\n\nQuedo disponible para cualquier consulta.\n\nSaludos cordiales,` },
+        { icon: '🔔', label: 'Seguimiento',
+          subject: `Seguimiento Cotización — ${edificio || '[edificio]'}`,
+          body: `Estimado/a ${nombre || '[nombre]'},\n\nMe comunico para hacer seguimiento a la propuesta de seguro que le enviamos.\n\n¿Pudo revisar los antecedentes? Quedo disponible para resolver cualquier duda.\n\nSaludos cordiales,` },
+        { icon: '✅', label: 'Confirmación emisión',
+          subject: `Póliza N°${numPoliza || '[N° póliza]'} emitida — ${edificio || '[edificio]'}`,
+          body: `Estimado/a ${nombre || '[nombre]'},\n\nConfirmamos la emisión exitosa de su póliza:\n\n• N° póliza: ${numPoliza || '[N° póliza]'}\n• Aseguradora: ${compania || '[compañía]'}\n• Prima: ${primaFmt}\n• Vencimiento: ${fechaVenc || '[fecha vencimiento]'}\n\nAdjuntamos la documentación correspondiente.\n\nSaludos cordiales,` },
+        { icon: '🔄', label: 'Renovación',
+          subject: `Renovación de Póliza — Vence ${fechaVenc || '[fecha]'}`,
+          body: `Estimado/a ${nombre || '[nombre]'},\n\nLe informamos que su póliza${numPoliza ? ' N°' + numPoliza : ''} vence el ${fechaVenc || '[fecha vencimiento]'}.\n\nNos comunicamos para coordinar la renovación y asegurar la continuidad de su cobertura.\n\n¿Le parece si agendamos una reunión para revisar opciones?\n\nSaludos cordiales,` },
+      ];
+
+      mailDropdown.innerHTML = templates.map(t => `
+        <button type="button" class="wa-tpl-btn" data-mail-subject="${esc(t.subject)}" data-mail-body="${esc(t.body)}" data-mail-to="${esc(correo)}">
+          ${t.icon} ${t.label}
+          <span>${esc(t.subject)}</span>
+        </button>`).join('');
+
+      mailDropdown.querySelectorAll('.wa-tpl-btn').forEach(tplBtn => {
+        tplBtn.addEventListener('click', e => {
+          e.stopPropagation();
+          const to = tplBtn.dataset.mailTo;
+          const subject = tplBtn.dataset.mailSubject;
+          const body = tplBtn.dataset.mailBody;
+          window.open(`mailto:${encodeURIComponent(to)}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`, '_blank');
+          mailDropdown.classList.remove('open');
+        });
+      });
+    }
+  }
+  buildEmailTemplates();
 
   // RUT auto-format (Comunidades)
   const rutInput = bg.querySelector('#mRutCom');
