@@ -608,6 +608,12 @@ function initStorage() {
           CURRENT_USER = null;
           document.getElementById('headerUser').style.display = 'none';
           if (DB_REF) { DB_REF.off(); DB_REF = null; }
+          // Clean up presence (prevent ghost cursors and interval leak)
+          if (_presenceInterval)   { clearInterval(_presenceInterval); _presenceInterval = null; }
+          if (_presenceMouseMove)  { document.removeEventListener('mousemove',  _presenceMouseMove);  _presenceMouseMove = null; }
+          if (_presenceMouseLeave) { document.removeEventListener('mouseleave', _presenceMouseLeave); _presenceMouseLeave = null; }
+          if (myPresenceRef)  { myPresenceRef.remove().catch(()=>{}); myPresenceRef = null; }
+          if (PRESENCE_REF)   { PRESENCE_REF.off(); PRESENCE_REF = null; }
           // Show login screen
           document.getElementById('loadingOverlay').style.display = 'flex';
           document.getElementById('loadingSpinner').style.display = 'none';
@@ -965,12 +971,12 @@ function saveState() {
 
 function fbWrite(id, data) {
   if (USE_FIREBASE && DB_REF) {
-    const prev = STATE[id]; // snapshot for rollback
+    const prev = STATE[id] ? JSON.parse(JSON.stringify(STATE[id])) : undefined; // deep copy for rollback
     setSyncing();
     DB_REF.child(id).set(data)
       .then(setSyncOnline)
       .catch(err => {
-        STATE[id] = prev; // rollback optimistic update on failure
+        if (prev !== undefined) STATE[id] = prev; else delete STATE[id]; // rollback
         setSyncOffline(err);
         renderAll();
       });
@@ -983,12 +989,12 @@ function fbWrite(id, data) {
 
 function fbRemove(id) {
   if (USE_FIREBASE && DB_REF) {
-    const prev = STATE[id]; // snapshot for rollback
+    const prev = STATE[id] ? JSON.parse(JSON.stringify(STATE[id])) : undefined; // deep copy for rollback
     setSyncing();
     DB_REF.child(id).remove()
       .then(setSyncOnline)
       .catch(err => {
-        STATE[id] = prev; // rollback
+        if (prev !== undefined) STATE[id] = prev; // rollback
         setSyncOffline(err);
         renderAll();
       });
@@ -1203,6 +1209,7 @@ function attachCardHandlers(card, l) {
 }
 
 function buildCard(l) {
+  if (!l || !l.id) return null;
   const card = document.createElement('div');
   card.className = 'card' + (coldDays(l) >= COLD_THRESHOLD && !['emitida','perdido'].includes(l.columna) ? ' fria' : '');
   card.dataset.id = l.id;
@@ -1338,8 +1345,13 @@ function initSortable() {
       dragClass: 'sortable-drag',
       onEnd(evt) {
         const id = evt.item.dataset.id;
+        // Lead may have been deleted remotely during drag — reconcile UI and bail
+        if (!STATE[id]) { renderAll(); return; }
         const toColId = evt.to.id.replace('list-','');
-        const toItems = [...evt.to.querySelectorAll('.card')].map(el => el.dataset.id);
+        // Only include items that still exist in STATE (concurrent deletes)
+        const toItems = [...evt.to.querySelectorAll('.card')]
+          .map(el => el.dataset.id)
+          .filter(cid => STATE[cid]);
 
         // Update columna for the moved card
         if (STATE[id]) {
@@ -1706,6 +1718,7 @@ function openModal(id, defaultCol, activeTab) {
   // Insert live-viewers banner at top of modal box (only for existing leads)
   if (isEdit) {
     const box = bg.querySelector('.modal-box');
+    if (!box) { bg.remove(); return; } // guard against malformed modal HTML
     const banner = document.createElement('div');
     banner.className = 'modal-viewing-banner';
     banner.dataset.leadId = id;
@@ -1717,7 +1730,8 @@ function openModal(id, defaultCol, activeTab) {
   }
 
   document.body.appendChild(bg);
-  (bg.querySelector('#mAsegurado') || bg.querySelector('#mEdificio') || bg.querySelector('input')).focus();
+  const firstInput = bg.querySelector('#mAsegurado') || bg.querySelector('#mEdificio') || bg.querySelector('input');
+  if (firstInput) firstInput.focus();
 
   // RUT auto-format (Comunidades)
   const rutInput = bg.querySelector('#mRutCom');
@@ -1972,7 +1986,8 @@ function openModal(id, defaultCol, activeTab) {
       if (USE_STORAGE && STORAGE && doc.storagePath) {
         STORAGE.ref(doc.storagePath).delete().catch(() => {});
       }
-      const l = STATE[lead.id] || lead;
+      const l = STATE[lead.id];
+      if (!l) { showToast('Lead actualizado por otro usuario — recarga', 'error'); bg.remove(); return; }
       l.documentos = (l.documentos||[]).filter(d => String(d.id) !== String(btn.dataset.docDelete));
       l.historial  = [...(l.historial||[]).slice(-49), { ts:Date.now(), usuario:getMyName()||'Sistema', desc:`Documento eliminado: ${doc.nombre}` }];
       saveLead(l); if (myPresenceRef) myPresenceRef.update({ activeLead: null }); bg.remove(); openModal(lead.id, null, 'documentos');
@@ -2084,7 +2099,7 @@ document.getElementById('importFileInput').addEventListener('change', e => {
       const wb = XLSX.read(ev.target.result, {type:'array', cellDates:true});
       const ws = wb.Sheets[wb.SheetNames[0]];
       const data = XLSX.utils.sheet_to_json(ws, {defval:''});
-      let imported = 0;
+      let imported = 0, skipped = 0;
       const importedLeads = [];
       data.forEach(row => {
         const toDate = v => { try { const d = new Date(v); return isNaN(d)?'':`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; } catch { return ''; }};
@@ -2116,7 +2131,7 @@ document.getElementById('importFileInput').addEventListener('change', e => {
             cierre:            esCierre,
             columna:           esCierre ? 'emitida' : 'nuevo',
           });
-          if (lead.edificio) { STATE[lead.id] = lead; importedLeads.push(lead); imported++; }
+          if (lead.edificio) { STATE[lead.id] = lead; importedLeads.push(lead); imported++; } else { skipped++; }
         } else {
           lead = defaultLead({
             fecha:             toDate(row['Fecha']) || today(),
@@ -2140,7 +2155,7 @@ document.getElementById('importFileInput').addEventListener('change', e => {
             compania:          String(row['Compañía']||row['Compania']||''),
             columna:           esCierre ? 'emitida' : 'nuevo',
           });
-          if (lead.asegurado) { STATE[lead.id] = lead; importedLeads.push(lead); imported++; }
+          if (lead.asegurado) { STATE[lead.id] = lead; importedLeads.push(lead); imported++; } else { skipped++; }
         }
       });
       if (USE_FIREBASE && DB_REF) {
@@ -2153,7 +2168,7 @@ document.getElementById('importFileInput').addEventListener('change', e => {
         saveState();
       }
       renderAll();
-      alert(`✓ ${imported} leads importados correctamente`);
+      alert(`✓ ${imported} leads importados${skipped ? ` (${skipped} filas sin nombre, omitidas)` : ''}`);
     } catch(err) { alert('Error al leer el archivo: ' + err.message); }
     e.target.value = '';
   };
@@ -2164,6 +2179,7 @@ document.getElementById('importFileInput').addEventListener('change', e => {
 function fmtTs(ts) {
   if (!ts) return '';
   const d = new Date(ts);
+  if (isNaN(d.getTime())) return '';
   const meses = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
   return `${d.getDate()} ${meses[d.getMonth()]} ${String(d.getFullYear()).slice(2)}, ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
 }
@@ -3095,6 +3111,10 @@ function switchVertical(v) {
   const thead = document.querySelector('#leadsTable thead');
   if (thead) thead.innerHTML = '';
   sortCol = 'fecha'; sortDir = -1;
+
+  // Destroy Sortable instances BEFORE clearing DOM (prevents orphaned event listeners)
+  _sortableInstances.forEach(s => { try { s.destroy(); } catch {} });
+  _sortableInstances = [];
 
   // Reset Kanban board so it rebuilds columns
   document.getElementById('kanbanBoard').innerHTML = '';
