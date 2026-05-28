@@ -24,12 +24,16 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .sync-dot{width:7px;height:7px;border-radius:50%;background:#555;flex-shrink:0;transition:background 0.4s;}
 .sync-dot.online{background:#22c55e;}
 .sync-dot.syncing{background:#f59e0b;}
-.presence-wrap{display:flex;align-items:center;gap:5px;}
-.presence-label{font-size:11px;color:#555;margin-right:2px;}
-.avatar{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#fff;border:2px solid #111;flex-shrink:0;cursor:default;position:relative;transition:transform 0.15s;}
-.avatar:hover{transform:scale(1.15);z-index:1;}
-.avatar::after{content:attr(data-name);position:absolute;bottom:calc(100% + 6px);left:50%;transform:translateX(-50%);background:#222;color:#fff;font-size:10px;padding:3px 8px;border-radius:5px;white-space:nowrap;pointer-events:none;opacity:0;transition:opacity 0.15s;}
-.avatar:hover::after{opacity:1;}
+.presence-wrap{display:flex;align-items:center;gap:-4px;padding:2px 0;}
+.avatar{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff;border:2.5px solid #1a1a2e;flex-shrink:0;cursor:default;position:relative;transition:transform 0.2s,box-shadow 0.2s;margin-left:-6px;background-size:cover;background-position:center;}
+.avatar:first-child{margin-left:0;}
+.avatar:hover{transform:scale(1.18) translateY(-2px);z-index:10;box-shadow:0 4px 14px rgba(0,0,0,0.35);}
+.avatar.is-self{border-color:#fff;box-shadow:0 0 0 2px var(--self-color,#6366f1);}
+.avatar-tooltip{position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);background:#1e1e2e;color:#fff;border-radius:8px;padding:6px 10px;white-space:nowrap;pointer-events:none;opacity:0;transition:opacity 0.18s;z-index:100;min-width:110px;text-align:center;box-shadow:0 4px 16px rgba(0,0,0,0.4);}
+.avatar-tooltip strong{display:block;font-size:11px;font-weight:700;margin-bottom:2px;}
+.avatar-tooltip span{display:block;font-size:10px;color:#aaa;}
+.avatar-tooltip::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:5px solid transparent;border-top-color:#1e1e2e;}
+.avatar:hover .avatar-tooltip{opacity:1;}
 
 /* ── Progress bar ── */
 .progress-global{height:3px;background:#333;flex-shrink:0;}
@@ -169,7 +173,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .name-modal button:hover{background:#333;}
 
 /* ── Remote cursors ── */
-.remote-cursor{position:fixed;pointer-events:none;z-index:9999;transition:left 0.09s linear,top 0.09s linear;display:none;}
+.remote-cursor{position:fixed;pointer-events:none;z-index:9999;transition:left 0.12s cubic-bezier(0.25,0,0.5,1),top 0.12s cubic-bezier(0.25,0,0.5,1);display:none;}
 .cursor-label{position:absolute;top:18px;left:10px;font-size:10px;font-weight:700;color:#fff;padding:2px 7px;border-radius:5px;white-space:nowrap;font-family:-apple-system,sans-serif;}
 
 /* ── Card live viewers ── */
@@ -1805,8 +1809,15 @@ function openModal(id, defaultCol, activeTab) {
     box.insertBefore(banner, box.firstChild);
     updateModalViewersBanner(PRESENCE_DATA);
     // Announce I'm viewing this lead
-    if (myPresenceRef) myPresenceRef.update({ activeLead: id });
+    if (myPresenceRef) {
+      const leadName = VERTICAL === 'comunidades'
+        ? (STATE[id] && STATE[id].edificio || 'lead')
+        : (STATE[id] && STATE[id].asegurado || 'lead');
+      myPresenceRef.update({ activeLead: id, activity: `📋 ${leadName}` });
+    }
   }
+
+  if (!isEdit && myPresenceRef) myPresenceRef.update({ activity: '✏️ nuevo lead' });
 
   document.body.appendChild(bg);
   const firstInput = bg.querySelector('#mAsegurado') || bg.querySelector('#mEdificio') || bg.querySelector('input');
@@ -1832,7 +1843,7 @@ function openModal(id, defaultCol, activeTab) {
   });
   const tryClose = () => {
     if (_dirty && !confirm('¿Descartar cambios sin guardar?')) return;
-    if (myPresenceRef) myPresenceRef.update({ activeLead: null });
+    if (myPresenceRef) myPresenceRef.update({ activeLead: null, activity: 'navegando' });
     bg.remove();
   };
   bg.querySelector('#mCancelar').addEventListener('click', tryClose);
@@ -1842,7 +1853,7 @@ function openModal(id, defaultCol, activeTab) {
     bg.querySelector('#mEliminar').addEventListener('click', () => {
       const name = VERTICAL === 'comunidades' ? (lead.edificio||'lead') : (lead.asegurado||'lead');
       if (!confirm(`¿Eliminar lead de "${name}"?`)) return;
-      if (myPresenceRef) myPresenceRef.update({ activeLead: null });
+      if (myPresenceRef) myPresenceRef.update({ activeLead: null, activity: 'navegando' });
       bg.remove();
       fbRemove(id);
     });
@@ -1926,7 +1937,7 @@ function openModal(id, defaultCol, activeTab) {
     if (isEdit && serverLead && lead.updatedAt && serverLead.updatedAt > lead.updatedAt) {
       if (!confirm('⚠️ Este lead fue modificado por otro usuario mientras lo tenías abierto.\n¿Sobreescribir sus cambios con los tuyos?')) return;
     }
-    if (myPresenceRef) myPresenceRef.update({ activeLead: null });
+    if (myPresenceRef) myPresenceRef.update({ activeLead: null, activity: 'navegando' });
     bg.remove();
     STATE[updated.id] = updated;
     fbWrite(updated.id, updated);
@@ -1952,7 +1963,7 @@ function openModal(id, defaultCol, activeTab) {
       l.notas = [...(l.notas||[]), nota];
       l.historial = [...(l.historial||[]).slice(-49), { ts: Date.now(), usuario: nota.usuario, desc: 'Nota agregada' }];
       saveLead(l);
-      if (myPresenceRef) myPresenceRef.update({ activeLead: null });
+      if (myPresenceRef) myPresenceRef.update({ activeLead: null, activity: 'navegando' });
       bg.remove();
       openModal(lead.id, null, 'notas');
     });
@@ -1994,7 +2005,7 @@ function openModal(id, defaultCol, activeTab) {
       l.documentos = [...(l.documentos||[]), ...uploadedDocs];
       l.historial  = [...(l.historial||[]).slice(-49), { ts:Date.now(), usuario:uploadedDocs[0].usuario, desc:`Documento${uploadedDocs.length>1?'s':''} adjuntado${uploadedDocs.length>1?'s':''}: ${uploadedDocs.map(d=>d.nombre).join(', ')}` }];
       saveLead(l);
-      if (myPresenceRef) myPresenceRef.update({ activeLead: null });
+      if (myPresenceRef) myPresenceRef.update({ activeLead: null, activity: 'navegando' });
       bg.remove();
       openModal(lead.id, null, 'documentos');
     }
@@ -2074,7 +2085,7 @@ function openModal(id, defaultCol, activeTab) {
       if (!l) { showToast('Lead actualizado por otro usuario — recarga', 'error'); bg.remove(); return; }
       l.documentos = (l.documentos||[]).filter(d => String(d.id) !== String(btn.dataset.docDelete));
       l.historial  = [...(l.historial||[]).slice(-49), { ts:Date.now(), usuario:getMyName()||'Sistema', desc:`Documento eliminado: ${doc.nombre}` }];
-      saveLead(l); if (myPresenceRef) myPresenceRef.update({ activeLead: null }); bg.remove(); openModal(lead.id, null, 'documentos');
+      saveLead(l); if (myPresenceRef) myPresenceRef.update({ activeLead: null, activity: 'navegando' }); bg.remove(); openModal(lead.id, null, 'documentos');
     };
   });
   // Rename doc — inline edit on doc-name
@@ -2311,7 +2322,7 @@ function initPresence(name, photo) {
   const db = firebase.database();
   PRESENCE_REF = db.ref('crm_cotizaciones/presence');
   myPresenceRef = PRESENCE_REF.child(SESSION_ID);
-  myPresenceRef.set({ name, color: getMyColor(), photo: photo||null, ts: Date.now() });
+  myPresenceRef.set({ name, color: getMyColor(), photo: photo||null, ts: Date.now(), vertical: VERTICAL, activity: 'navegando' });
   myPresenceRef.onDisconnect().remove();
   _presenceInterval = setInterval(() => myPresenceRef && myPresenceRef.update({ ts: Date.now() }), 30000);
 
@@ -2334,27 +2345,40 @@ function renderPresence(data) {
   PRESENCE_DATA = data;
   const wrap = document.getElementById('presenceWrap');
   wrap.innerHTML = '';
-  const users = Object.entries(data);
-  if (users.length > 1) {
-    const lbl = document.createElement('span');
-    lbl.className = 'presence-label';
-    lbl.textContent = 'Online:';
-    wrap.appendChild(lbl);
-  }
-  users.forEach(([sid, u]) => {
+
+  // Self first, then others sorted by join time
+  const entries = Object.entries(data);
+  const sorted = [
+    ...entries.filter(([sid]) => sid === SESSION_ID),
+    ...entries.filter(([sid]) => sid !== SESSION_ID).sort(([,a],[,b]) => (a.ts||0) - (b.ts||0)),
+  ];
+
+  sorted.forEach(([sid, u]) => {
+    const isSelf = sid === SESSION_ID;
+    const color = safeColor(u.color);
+
     const av = document.createElement('div');
-    av.className = 'avatar';
-    av.style.background = safeColor(u.color);
-    if (u.photo && /^https?:\/\//.test(u.photo)) { // only allow http(s) photo URLs
+    av.className = 'avatar' + (isSelf ? ' is-self' : '');
+    if (isSelf) av.style.setProperty('--self-color', color);
+    av.style.background = color;
+    if (u.photo && /^https?:\/\//.test(u.photo)) {
       av.style.backgroundImage = `url("${u.photo.replace(/"/g,'%22').replace(/\)/g,'%29')}")`;
-      av.style.backgroundSize = 'cover';
-      av.style.backgroundPosition = 'center';
     } else {
       av.textContent = (u.name || '?')[0].toUpperCase();
     }
-    av.dataset.name = esc(u.name || '?') + (sid===SESSION_ID ? ' (tú)' : '');
+
+    const tip = document.createElement('div');
+    tip.className = 'avatar-tooltip';
+    const nameEl = document.createElement('strong');
+    nameEl.textContent = (u.name || '?') + (isSelf ? ' (tú)' : '');
+    const actEl = document.createElement('span');
+    actEl.textContent = u.activity || (isSelf ? 'conectado' : 'navegando');
+    tip.appendChild(nameEl);
+    tip.appendChild(actEl);
+    av.appendChild(tip);
     wrap.appendChild(av);
   });
+
   updateRemoteCursors(data);
   updateCardViewers(data);
   updateModalViewersBanner(data);
@@ -3185,6 +3209,7 @@ function switchVertical(v) {
   _switchingVertical = true;
   VERTICAL = v;
   localStorage.setItem('crm_vertical', v);
+  if (myPresenceRef) myPresenceRef.update({ vertical: v, activeLead: null, activity: 'navegando' });
 
   // Update active button
   document.querySelectorAll('.vert-btn').forEach(btn => {
