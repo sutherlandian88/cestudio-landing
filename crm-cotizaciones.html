@@ -529,6 +529,8 @@ function initStorage() {
       AUTH = firebase.auth();
       USE_FIREBASE = true;
       if (FIREBASE_CONFIG.storageBucket) { STORAGE = firebase.storage(); USE_STORAGE = true; }
+      // Enable local disk cache for offline resilience (must be called before any .ref())
+      try { firebase.database().setPersistenceEnabled(true); } catch(e) {}
       document.getElementById('loadingMsg').textContent = 'Verificando acceso...';
 
       // ── Real-time connection monitor ──────────────────
@@ -564,7 +566,6 @@ function initStorage() {
           // Connect to DB
           if (!DB_REF) {
             DB_REF = firebase.database().ref(VERTICAL_CONFIG[VERTICAL].firebasePath);
-            DB_REF.keepSynced(true); // cache data locally for offline resilience
             DB_REF.on('value', snap => {
               const raw = snap.val() || {};
               // _seeded is metadata — filter it out of STATE to avoid polluting lead lists
@@ -3086,7 +3087,6 @@ function switchVertical(v) {
   if (USE_FIREBASE && DB_REF) {
     DB_REF.off();
     DB_REF = firebase.database().ref(cfg.firebasePath);
-    DB_REF.keepSynced(true);
     STATE = {};
     DB_REF.on('value', snap => {
       const raw = snap.val() || {};
