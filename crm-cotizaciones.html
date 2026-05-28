@@ -542,8 +542,19 @@ function initStorage() {
 
       // ── Real-time connection monitor ──────────────────
       firebase.database().ref('.info/connected').on('value', snap => {
-        if (snap.val() === true) setSyncOnline();
-        else if (appReady) setSyncOffline(); // only show offline after app is loaded
+        const online = snap.val() === true;
+        if (online) {
+          _fbOnline = true;
+          setSyncOnline();
+          _flushPending(); // retry any writes that failed while offline
+          if (appReady) debouncedRender(); // reconcile UI after reconnect
+        } else {
+          _fbOnline = false;
+          if (appReady) {
+            setSyncOffline();
+            showToast('📡 Sin conexión — los cambios se guardarán al reconectar', 'warn', 3000);
+          }
+        }
       });
 
       // ── Google login button ───────────────────────────
@@ -596,12 +607,17 @@ function initStorage() {
                 DB_REF.update(seed); // update (not set) — never wipes existing data
                 return;
               }
-              renderAll();
+              debouncedRender(); // debounced to prevent flicker on rapid remote changes
               if (!appReady) {
                 appReady = true;
                 document.getElementById('loadingOverlay').style.display = 'none';
                 startPresenceFlow();
               }
+            }, err => {
+              // Firebase permission or network error on the listener itself
+              console.error('[CRM] DB listener error:', err);
+              if (appReady) showToast('⚠️ Error de conexión con Firebase — recargando...', 'error', 3000);
+              setTimeout(() => location.reload(), 3500);
             });
           }
         } else {
@@ -971,14 +987,20 @@ function saveState() {
 
 function fbWrite(id, data) {
   if (USE_FIREBASE && DB_REF) {
-    const prev = STATE[id] ? JSON.parse(JSON.stringify(STATE[id])) : undefined; // deep copy for rollback
+    const prev = STATE[id] ? JSON.parse(JSON.stringify(STATE[id])) : undefined;
     setSyncing();
     DB_REF.child(id).set(data)
       .then(setSyncOnline)
       .catch(err => {
-        if (prev !== undefined) STATE[id] = prev; else delete STATE[id]; // rollback
-        setSyncOffline(err);
-        renderAll();
+        if (!_fbOnline) {
+          // Offline — queue for retry; keep optimistic UI
+          _pendingWrites.push({ id, data, remove: false });
+          showToast('📡 Sin conexión — se guardará al reconectar', 'warn', 3000);
+        } else {
+          if (prev !== undefined) STATE[id] = prev; else delete STATE[id];
+          setSyncOffline(err);
+          renderAll();
+        }
       });
   } else {
     STATE[id] = data;
@@ -989,14 +1011,19 @@ function fbWrite(id, data) {
 
 function fbRemove(id) {
   if (USE_FIREBASE && DB_REF) {
-    const prev = STATE[id] ? JSON.parse(JSON.stringify(STATE[id])) : undefined; // deep copy for rollback
+    const prev = STATE[id] ? JSON.parse(JSON.stringify(STATE[id])) : undefined;
     setSyncing();
     DB_REF.child(id).remove()
       .then(setSyncOnline)
       .catch(err => {
-        if (prev !== undefined) STATE[id] = prev; // rollback
-        setSyncOffline(err);
-        renderAll();
+        if (!_fbOnline) {
+          _pendingWrites.push({ id, data: null, remove: true });
+          showToast('📡 Sin conexión — eliminación pendiente al reconectar', 'warn', 3000);
+        } else {
+          if (prev !== undefined) STATE[id] = prev;
+          setSyncOffline(err);
+          renderAll();
+        }
       });
   } else {
     delete STATE[id];
@@ -1006,13 +1033,46 @@ function fbRemove(id) {
 }
 
 const syncDot = document.getElementById('syncDot');
-function setSyncing()   { syncDot.className = 'sync-dot syncing'; }
-function setSyncOnline() { syncDot.className = 'sync-dot online'; syncDot.title = 'Sincronizado con Firebase'; }
+function setSyncing()    { syncDot.className = 'sync-dot syncing'; syncDot.title = 'Guardando...'; }
+function setSyncOnline() { syncDot.className = 'sync-dot online';  syncDot.title = 'Sincronizado con Firebase'; }
 function setSyncOffline(err) {
   syncDot.className = 'sync-dot';
   syncDot.title = 'Sin conexión con Firebase';
-  if (appReady) showToast('⚠️ Error al guardar — verifica tu conexión a internet', 'error', 4000);
-  if (err) console.error('[CRM Firebase write error]', err);
+  if (appReady) showToast('⚠️ Error al guardar — verifica tu conexión', 'error', 4000);
+  if (err) console.error('[CRM Firebase error]', err);
+}
+
+// ── Pending-write retry queue ─────────────────────────────
+// Stores writes that failed while offline; flushed on reconnect
+const _pendingWrites = []; // [{id, data, remove}]
+let   _fbOnline = false;
+
+function _flushPending() {
+  if (!_fbOnline || !DB_REF || !_pendingWrites.length) return;
+  const batch = _pendingWrites.splice(0); // take all at once
+  const updates = {};
+  batch.forEach(({ id, data, remove }) => {
+    updates[id] = remove ? null : data;
+  });
+  DB_REF.update(updates)
+    .then(() => { setSyncOnline(); if (batch.length) showToast(`✓ ${batch.length} cambio(s) pendiente(s) guardado(s)`); })
+    .catch(err => {
+      _pendingWrites.unshift(...batch); // re-queue if still failing
+      setSyncOffline(err);
+    });
+}
+
+// ── Debounced renderAll (prevents flicker on rapid Firebase events) ──
+let _renderTimer = null;
+const _renderAll_raw = () => {
+  renderBoard();
+  renderStats();
+  if (activeTab === 'tabla')     renderTable();
+  if (activeTab === 'dashboard') renderDashboard();
+};
+function debouncedRender() {
+  if (_renderTimer) clearTimeout(_renderTimer);
+  _renderTimer = setTimeout(_renderAll_raw, 80);
 }
 
 // ── Lead model ────────────────────────────────────────────
@@ -2465,16 +2525,21 @@ function saveLead(l, histDesc) {
       ts: Date.now(), usuario: getMyName() || 'Sistema', desc: histDesc
     }];
   }
-  STATE[l.id] = l;
+  // Capture rollback snapshot BEFORE overwriting STATE
+  const prev = STATE[l.id] ? JSON.parse(JSON.stringify(STATE[l.id])) : undefined;
+  STATE[l.id] = l; // optimistic update
   if (USE_FIREBASE && DB_REF) {
-    const prev = STATE[l.id];
     setSyncing();
     DB_REF.child(l.id).set(l)
       .then(setSyncOnline)
-      .catch(err => { STATE[l.id] = prev; setSyncOffline(err); renderAll(); });
+      .catch(err => {
+        if (prev !== undefined) STATE[l.id] = prev; else delete STATE[l.id];
+        setSyncOffline(err);
+        renderAll();
+      });
   } else {
     saveState();
-    renderAll(); // full re-render so Kanban stays in sync with table edits
+    renderAll();
   }
 }
 
@@ -3085,9 +3150,11 @@ function openQuickAdd() {
 }
 
 // ── Vertical switcher ─────────────────────────────────────
+let _switchingVertical = false;
 function switchVertical(v) {
   if (v === VERTICAL) return;
-  if (!appReady) return; // don't switch while initial auth/data load is in progress
+  if (!appReady || _switchingVertical) return; // no-op during load or mid-switch
+  _switchingVertical = true;
   VERTICAL = v;
   localStorage.setItem('crm_vertical', v);
 
@@ -3129,15 +3196,19 @@ function switchVertical(v) {
       const raw = snap.val() || {};
       const { _seeded, ...leads } = raw;
       STATE = leads;
-      // Seed examples into Firebase only if this vertical has never been initialized
       if (!_seeded) {
         const examples = v === 'comunidades' ? EXAMPLE_LEADS_COM : EXAMPLE_LEADS;
         const seed = { _seeded: true };
         examples.forEach(l => { seed[l.id] = l; });
-        DB_REF.update(seed); // update (not set) — never wipes existing data
+        DB_REF.update(seed);
         return;
       }
-      renderAll();
+      _switchingVertical = false; // unlock after first successful data load
+      debouncedRender();
+    }, err => {
+      _switchingVertical = false;
+      console.error('[CRM] switchVertical listener error:', err);
+      showToast('⚠️ Error al cambiar vertical — reintenta', 'error', 3000);
     });
   } else {
     try { STATE = JSON.parse(localStorage.getItem(cfg.storageKey) || '{}'); } catch { STATE = {}; }
