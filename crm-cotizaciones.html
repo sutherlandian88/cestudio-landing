@@ -2290,6 +2290,7 @@ let myPresenceRef = null;
 let PRESENCE_REF = null;
 let PRESENCE_DATA = {};
 const remoteCursors = {};
+let _presenceAvatarKey = '';
 
 function getMyColor() {
   let c = localStorage.getItem('crm_color');
@@ -2318,6 +2319,7 @@ function initPresence(name, photo) {
   if (_presenceMouseMove)  { document.removeEventListener('mousemove',   _presenceMouseMove);  _presenceMouseMove = null; }
   if (_presenceMouseLeave) { document.removeEventListener('mouseleave',  _presenceMouseLeave); _presenceMouseLeave = null; }
   if (PRESENCE_REF) { PRESENCE_REF.off(); }
+  _presenceAvatarKey = ''; // force avatar rebuild on next snapshot
 
   const db = firebase.database();
   PRESENCE_REF = db.ref('crm_cotizaciones/presence');
@@ -2343,45 +2345,64 @@ function initPresence(name, photo) {
 
 function renderPresence(data) {
   PRESENCE_DATA = data;
-  const wrap = document.getElementById('presenceWrap');
-  wrap.innerHTML = '';
 
-  // Self first, then others sorted by join time
-  const entries = Object.entries(data);
-  const sorted = [
-    ...entries.filter(([sid]) => sid === SESSION_ID),
-    ...entries.filter(([sid]) => sid !== SESSION_ID).sort(([,a],[,b]) => (a.ts||0) - (b.ts||0)),
-  ];
+  // Build a key from stable fields only (exclude cursor — it changes every ~100ms).
+  // This prevents the avatar DOM from being destroyed/recreated on every mouse move,
+  // which would interrupt the CSS :hover tooltip.
+  const stableKey = JSON.stringify(
+    Object.fromEntries(
+      Object.entries(data).map(([sid, u]) => [sid, {
+        name: u.name, color: u.color, photo: u.photo,
+        activity: u.activity, activeLead: u.activeLead,
+      }])
+    )
+  );
 
-  sorted.forEach(([sid, u]) => {
-    const isSelf = sid === SESSION_ID;
-    const color = safeColor(u.color);
+  if (stableKey !== _presenceAvatarKey) {
+    _presenceAvatarKey = stableKey;
 
-    const av = document.createElement('div');
-    av.className = 'avatar' + (isSelf ? ' is-self' : '');
-    if (isSelf) av.style.setProperty('--self-color', color);
-    av.style.background = color;
-    if (u.photo && /^https?:\/\//.test(u.photo)) {
-      av.style.backgroundImage = `url("${u.photo.replace(/"/g,'%22').replace(/\)/g,'%29')}")`;
-    } else {
-      av.textContent = (u.name || '?')[0].toUpperCase();
-    }
+    const wrap = document.getElementById('presenceWrap');
+    wrap.innerHTML = '';
 
-    const tip = document.createElement('div');
-    tip.className = 'avatar-tooltip';
-    const nameEl = document.createElement('strong');
-    nameEl.textContent = (u.name || '?') + (isSelf ? ' (tú)' : '');
-    const actEl = document.createElement('span');
-    actEl.textContent = u.activity || (isSelf ? 'conectado' : 'navegando');
-    tip.appendChild(nameEl);
-    tip.appendChild(actEl);
-    av.appendChild(tip);
-    wrap.appendChild(av);
-  });
+    // Self first, then others sorted by join time
+    const entries = Object.entries(data);
+    const sorted = [
+      ...entries.filter(([sid]) => sid === SESSION_ID),
+      ...entries.filter(([sid]) => sid !== SESSION_ID).sort(([,a],[,b]) => (a.ts||0) - (b.ts||0)),
+    ];
 
+    sorted.forEach(([sid, u]) => {
+      const isSelf = sid === SESSION_ID;
+      const color = safeColor(u.color);
+
+      const av = document.createElement('div');
+      av.className = 'avatar' + (isSelf ? ' is-self' : '');
+      if (isSelf) av.style.setProperty('--self-color', color);
+      av.style.background = color;
+      if (u.photo && /^https?:\/\//.test(u.photo)) {
+        av.style.backgroundImage = `url("${u.photo.replace(/"/g,'%22').replace(/\)/g,'%29')}")`;
+      } else {
+        av.textContent = (u.name || '?')[0].toUpperCase();
+      }
+
+      const tip = document.createElement('div');
+      tip.className = 'avatar-tooltip';
+      const nameEl = document.createElement('strong');
+      nameEl.textContent = (u.name || '?') + (isSelf ? ' (tú)' : '');
+      const actEl = document.createElement('span');
+      actEl.textContent = u.activity || (isSelf ? 'conectado' : 'navegando');
+      tip.appendChild(nameEl);
+      tip.appendChild(actEl);
+      av.appendChild(tip);
+      wrap.appendChild(av);
+    });
+
+    updateCardViewers(data);
+    updateModalViewersBanner(data);
+  }
+
+  // Cursors always update (independent of avatar rebuild)
   updateRemoteCursors(data);
-  updateCardViewers(data);
-  updateModalViewersBanner(data);
 }
 
 function updateCardViewers(data) {
@@ -2398,7 +2419,7 @@ function updateCardViewers(data) {
     }
     const av = document.createElement('div');
     av.className = 'card-viewer-av';
-    av.style.background = u.color || '#6366f1';
+    av.style.background = safeColor(u.color);
     av.textContent = (u.name || '?')[0].toUpperCase();
     av.dataset.name = esc(u.name || '?') + ' está viendo';
     viewers.appendChild(av);
