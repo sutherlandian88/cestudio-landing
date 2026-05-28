@@ -355,6 +355,83 @@ td[contenteditable]:focus{outline:none;background:#fffbeb;box-shadow:inset 0 0 0
 .vert-btn:hover{color:#ccc;}
 .vert-btn.active{background:#fff;color:#111;}
 
+/* ── Cotizaciones tab ── */
+.cot-item{background:#f9f9f9;border-radius:8px;padding:10px 12px;margin-bottom:8px;border:1px solid #efefef;position:relative;}
+.cot-item.selected{border-color:#22c55e;background:#f0fdf4;}
+.cot-item-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;}
+.cot-compania{font-size:12px;font-weight:700;color:#111;}
+.cot-badge{font-size:9px;font-weight:700;padding:2px 7px;border-radius:10px;background:#dcfce7;color:#15803d;}
+.cot-details{font-size:11px;color:#888;line-height:1.5;}
+.cot-actions{display:flex;gap:6px;margin-top:8px;}
+.btn-cot-select{background:#111;color:#fff;border:none;border-radius:6px;padding:5px 12px;font-size:11px;font-weight:600;cursor:pointer;font-family:inherit;transition:background 0.15s;}
+.btn-cot-select:hover{background:#333;}
+.btn-cot-select.selected{background:#dcfce7;color:#15803d;border:1px solid #bbf7d0;}
+.btn-cot-del{background:#fee2e2;color:#991b1b;border:none;border-radius:6px;padding:5px 10px;font-size:11px;cursor:pointer;font-family:inherit;transition:background 0.15s;}
+.btn-cot-del:hover{background:#fecaca;}
+.cot-add-form{background:#f0f9ff;border:1.5px solid #bae6fd;border-radius:8px;padding:12px;margin-top:10px;}
+.cot-add-form .form-row{margin-bottom:8px;}
+.cot-add-form .form-row:last-child{margin-bottom:0;}
+
+/* ── Tipo seguro badge en card ── */
+.card-tipo-seguro{font-size:9px;color:#6366f1;background:#ede9fe;padding:1px 6px;border-radius:6px;display:inline-block;margin-top:3px;}
+
+/* ── Comision ── */
+.comision-calc{font-size:11px;color:#15803d;font-weight:600;padding:6px 8px;background:#f0fdf4;border-radius:6px;display:inline-block;margin-top:4px;}
+
+/* ── WA dropdown ── */
+.wa-dropdown-wrap{position:relative;display:inline-block;}
+.wa-dropdown{position:absolute;top:calc(100% + 6px);left:0;background:#fff;border:1px solid #e5e5e5;border-radius:10px;box-shadow:0 8px 24px rgba(0,0,0,0.12);z-index:50;min-width:260px;padding:6px;display:none;}
+.wa-dropdown.open{display:block;}
+.wa-tpl-btn{display:block;width:100%;text-align:left;background:none;border:none;padding:8px 10px;font-size:12px;font-family:inherit;cursor:pointer;border-radius:7px;color:#111;line-height:1.4;}
+.wa-tpl-btn:hover{background:#f5f5f5;}
+.wa-tpl-btn span{display:block;font-size:10px;color:#aaa;margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+
+/* ── Vencimientos view ── */
+#viewVencimientos{flex:1;overflow:auto;padding:16px 24px;display:none;}
+#viewVencimientos.active{display:block;}
+.venc-filter-bar{display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap;}
+.btn-venc-filter{background:#f5f5f5;color:#555;border:1px solid #e5e5e5;border-radius:7px;padding:5px 12px;font-size:11px;font-weight:600;cursor:pointer;font-family:inherit;transition:all 0.15s;white-space:nowrap;}
+.btn-venc-filter:hover{background:#e5e5e5;color:#111;}
+.btn-venc-filter.active{background:#111;color:#fff;border-color:#111;}
+.venc-dias.rojo{color:#991b1b;font-weight:700;}
+.venc-dias.naranja{color:#92400e;font-weight:700;}
+.venc-dias.amarillo{color:#78350f;font-weight:600;}
+.venc-dias.verde{color:#15803d;font-weight:600;}
+
+/* ── Responsive móvil ── */
+@media(max-width:768px){
+  /* Header */
+  .header{padding:8px 14px;}
+  .user-display-name{display:none;}
+  /* Meta bar */
+  .meta{padding:6px 14px;gap:10px;}
+  .meta-divider:nth-child(n+6){display:none;}
+  .meta-item:nth-child(n+6){display:none;}
+  /* Filter bar */
+  .filter-bar{padding:6px 14px;flex-wrap:wrap;}
+  .filter-bar input{max-width:100%;min-width:140px;}
+  /* Tab nav */
+  .tab-nav{padding:0 8px;}
+  .tab-btn{padding:8px 10px;font-size:11px;flex:1;text-align:center;}
+  /* Kanban */
+  .kanban-wrap{padding:10px 14px;}
+  .kanban-board{gap:8px;}
+  .column{width:200px;}
+  .card{padding:7px 8px;}
+  /* Table */
+  #viewTabla{padding:10px 14px;overflow-x:auto;}
+  .leads-table-wrap{overflow-x:auto;}
+  /* Modal */
+  .modal-bg{padding:0;}
+  .modal-box{border-radius:0;max-height:100vh;height:100%;width:100%;max-width:100%;padding:16px 16px;}
+  .form-2col{grid-template-columns:1fr;}
+  .form-3col{grid-template-columns:1fr 1fr;}
+  /* Dashboard */
+  .dash-kpis{grid-template-columns:repeat(2,1fr);}
+  .dash-charts{grid-template-columns:1fr;}
+  /* Vencimientos */
+  #viewVencimientos{padding:10px 14px;}
+}
 @media(max-width:600px){.kanban-board{gap:8px;}.column{width:200px;}.meta{gap:12px;}}
 </style>
 </head>
@@ -437,6 +514,7 @@ td[contenteditable]:focus{outline:none;background:#fffbeb;box-shadow:inset 0 0 0
   <button class="tab-btn active" data-tab="kanban">Kanban</button>
   <button class="tab-btn" data-tab="tabla">Tabla</button>
   <button class="tab-btn" data-tab="dashboard">Dashboard</button>
+  <button class="tab-btn" data-tab="vencimientos">📅 Vencimientos</button>
 </div>
 
 <div class="kanban-wrap" id="viewKanban">
@@ -455,6 +533,8 @@ td[contenteditable]:focus{outline:none;background:#fffbeb;box-shadow:inset 0 0 0
     <div class="dash-kpi"><span class="kpi-n" id="dEmitidas">0</span><span class="kpi-l">Emitidas</span></div>
     <div class="dash-kpi"><span class="kpi-n" id="dPrimaTotal">—</span><span class="kpi-l">Prima total emitida</span></div>
     <div class="dash-kpi"><span class="kpi-n" id="dTasa">—</span><span class="kpi-l">Tasa de cierre</span></div>
+    <div class="dash-kpi"><span class="kpi-n" id="dPipeline">—</span><span class="kpi-l">💰 Pipeline activo</span></div>
+    <div class="dash-kpi"><span class="kpi-n" id="dComision">—</span><span class="kpi-l">🤝 Comisión proyectada</span></div>
   </div>
   <div class="dash-charts">
     <div class="dash-box"><h3>Leads por fuente</h3><canvas id="chartFuente"></canvas></div>
@@ -462,6 +542,23 @@ td[contenteditable]:focus{outline:none;background:#fffbeb;box-shadow:inset 0 0 0
     <div class="dash-box"><h3>Prima emitida por mes</h3><canvas id="chartPrima"></canvas></div>
     <div class="dash-box"><h3>Leads ingresados por mes</h3><canvas id="chartLeads"></canvas></div>
   </div>
+</div>
+
+<div id="viewVencimientos">
+  <div class="venc-filter-bar">
+    <button class="btn-venc-filter active" data-vf="todos">Todos</button>
+    <button class="btn-venc-filter" data-vf="vencidos">Vencidos</button>
+    <button class="btn-venc-filter" data-vf="30">30 días</button>
+    <button class="btn-venc-filter" data-vf="60">60 días</button>
+    <button class="btn-venc-filter" data-vf="90">90 días</button>
+  </div>
+  <div class="table-toolbar"><span id="vencCount"></span></div>
+  <table class="leads-table" id="vencTable">
+    <thead><tr>
+      <th>Lead</th><th>Vertical</th><th>Aseguradora</th><th>Prima</th><th>Tipo seguro</th><th>F. Vencimiento</th><th>Días restantes</th><th>Etapa</th>
+    </tr></thead>
+    <tbody id="vencTableBody"></tbody>
+  </table>
 </div>
 
 <script>
@@ -1083,8 +1180,9 @@ let _renderTimer = null;
 const _renderAll_raw = () => {
   renderBoard();
   renderStats();
-  if (activeTab === 'tabla')     renderTable();
-  if (activeTab === 'dashboard') renderDashboard();
+  if (activeTab === 'tabla')        renderTable();
+  if (activeTab === 'dashboard')    renderDashboard();
+  if (activeTab === 'vencimientos') renderVencimientos();
 };
 function debouncedRender() {
   if (_renderTimer) clearTimeout(_renderTimer);
@@ -1099,15 +1197,21 @@ function defaultLead(overrides) {
     id: newLeadId(), columna:'nuevo', orden:Date.now(), fecha:today(),
     fuente:'', edificio:'', tipoContacto:'Administrador', administrador:'', telefono:'', correo:'', rutComunidad:'', direccion:'', comuna:'', unidades:'',
     polizaVigente:false, cartaAsignacion:false, maec:'', mau:'',
-    compania:'', primaNeta:'', fechaCotizacion:today(), accionSeguimiento:'', cierre:false,
+    compania:'', primaNeta:'', monedaPrima:'CLP', fechaCotizacion:today(), accionSeguimiento:'', cierre:false,
     comentarios:'', fechaEmision:'', fechaSeguimiento:'',
+    numPoliza:'', fechaVencimiento:'', tipoSeguro:'', comisionPct:'',
+    cotizaciones:[],
     notas:[], historial:[], documentos:[], createdAt:Date.now(), updatedAt:Date.now()
   } : {
     id: newLeadId(), columna:'nuevo', orden:Date.now(), fecha:today(),
     fuente:'', asegurado:'', rut:'', telefono:'', marca:'', modelo:'', anio:'', patente:'',
+    vehiculos:[],
     polizaVigente:false, primaVigente:'', deducibleActual:'', fechaCotizacion:today(),
     accionSeguimiento:'', cierre:false, comentarios:'', fechaEmision:'', primaNeta:'',
-    compania:'', fechaSeguimiento:'', notas:[], historial:[], documentos:[],
+    monedaPrima:'CLP', compania:'', fechaSeguimiento:'',
+    numPoliza:'', fechaVencimiento:'', tipoSeguro:'', comisionPct:'',
+    cotizaciones:[],
+    notas:[], historial:[], documentos:[],
     createdAt:Date.now(), updatedAt:Date.now()
   };
   return Object.assign(base, overrides);
@@ -1126,11 +1230,15 @@ function formatRut(raw) {
   return formatted + '-' + dv;
 }
 
-function fmtPrima(v) {
+function fmtPrima(v, moneda) {
   if (!v && v !== 0) return null;
   const n = parseFloat(String(v).replace(/[^0-9.]/g,''));
   if (isNaN(n)) return null;
+  if (moneda === 'UF') return 'UF ' + n.toLocaleString('es-CL', {minimumFractionDigits:2,maximumFractionDigits:2});
   return '$' + Math.round(n).toLocaleString('es-CL');
+}
+function fmtPrimaLead(l) {
+  return fmtPrima(l.primaNeta, l.monedaPrima);
 }
 
 function fmtDate(d) {
@@ -1179,6 +1287,7 @@ function renderAll() {
   renderTable();
   renderDashboard();
   renderTodayPanel();
+  renderVencimientos();
 }
 
 function renderBoard() {
@@ -1314,10 +1423,11 @@ function coldDays(l) {
 const COLD_THRESHOLD = 7;
 
 function cardHTMLCom(l) {
-  const primaFmt = fmtPrima(l.primaNeta);
+  const primaFmt = fmtPrimaLead(l);
   const fuenteClass = FUENTE_CLASS[l.fuente] || 'fuente-otro';
   const fuenteBadge = l.fuente ? `<span class="fuente-badge ${fuenteClass}">${l.fuente}</span>` : '';
-  const companyLine = l.compania ? `<div class="card-compania">${l.compania}</div>` : '';
+  const companyLine = l.compania ? `<div class="card-compania">${esc(l.compania)}</div>` : '';
+  const tipoLine = l.tipoSeguro ? `<div class="card-tipo-seguro">${esc(l.tipoSeguro)}</div>` : '';
   const isCold = coldDays(l) >= COLD_THRESHOLD && !['emitida','perdido'].includes(l.columna);
   const coldTag = isCold ? `<span class="card-fria-tag">❄ Sin movimiento ${coldDays(l)}d</span>` : '';
   const tags = [];
@@ -1342,17 +1452,20 @@ function cardHTMLCom(l) {
       <span class="card-prima ${primaFmt?'':'empty'}">${primaFmt || 'Sin prima'}</span>
       <span style="display:flex;align-items:center;gap:5px;">${waBtn}${fuenteBadge}</span>
     </div>
-    ${companyLine}
+    ${companyLine}${tipoLine}
     ${tagsHTML}
     ${segHTML}`;
 }
 
 function cardHTML(l) {
   if (VERTICAL === 'comunidades') return cardHTMLCom(l);
+  const veh = l.vehiculos && l.vehiculos.length > 1 ? l.vehiculos : null;
   const vehicle = [l.marca, l.modelo, l.anio].filter(Boolean).join(' ');
-  const primaFmt = fmtPrima(l.primaNeta);
+  const vehicleLabel = veh ? `${veh.length} vehículos` : (vehicle || '—');
+  const primaFmt = fmtPrimaLead(l);
   const fuenteClass = FUENTE_CLASS[l.fuente] || 'fuente-otro';
-  const companyLine = l.compania ? `<div class="card-compania">${l.compania}</div>` : '';
+  const companyLine = l.compania ? `<div class="card-compania">${esc(l.compania)}</div>` : '';
+  const tipoLine = l.tipoSeguro ? `<div class="card-tipo-seguro">${esc(l.tipoSeguro)}</div>` : '';
   const fuenteBadge = l.fuente ? `<span class="fuente-badge ${fuenteClass}">${l.fuente}</span>` : '';
   const tags = [];
   if (l.patente) tags.push(l.patente.toUpperCase());
@@ -1376,12 +1489,12 @@ function cardHTML(l) {
     <div class="card-date">${fmtDate(l.fecha)}</div>
     ${coldTag}
     <div class="card-name">${esc(l.asegurado) || 'Sin nombre'}</div>
-    <div class="card-vehicle">${vehicle || '—'}</div>
+    <div class="card-vehicle">${esc(vehicleLabel)}</div>
     <div class="card-row">
       <span class="card-prima ${primaFmt?'':'empty'}">${primaFmt || 'Sin prima'}</span>
       <span style="display:flex;align-items:center;gap:5px;">${waBtn}${fuenteBadge}</span>
     </div>
-    ${companyLine}
+    ${companyLine}${tipoLine}
     ${tagsHTML}
     ${segHTML}`;
 }
@@ -1520,7 +1633,13 @@ function openModal(id, defaultCol, activeTab) {
       <div class="form-2col">
         <div class="form-row">
           <label>Teléfono / WhatsApp</label>
-          <input id="mTelefono" type="tel" value="${esc(lead.telefono||'')}" placeholder="+56 9 1234 5678">
+          <div style="display:flex;gap:6px;align-items:center;">
+            <input id="mTelefono" type="tel" value="${esc(lead.telefono||'')}" placeholder="+56 9 1234 5678" style="flex:1;">
+            <div class="wa-dropdown-wrap" id="mWaWrap" style="${(lead.telefono||'').trim().replace(/\D/g,'')?'':'display:none;'}">
+              <button type="button" id="mWaBtn" style="background:#dcfce7;color:#15803d;border:none;border-radius:7px;padding:6px 10px;font-size:12px;cursor:pointer;white-space:nowrap;font-family:inherit;">💬 WA</button>
+              <div class="wa-dropdown" id="mWaDropdown"></div>
+            </div>
+          </div>
         </div>
         <div class="form-row">
           <label>Correo electrónico</label>
@@ -1594,12 +1713,41 @@ function openModal(id, defaultCol, activeTab) {
       <div class="modal-section">Póliza</div>
       <div class="form-2col">
         <div class="form-row">
+          <label>Tipo de seguro</label>
+          <select id="mTipoSeguro">${['','Copropiedad','Incendio y Sismo','RC Copropiedad','Todo Riesgo Edificio','Combinado'].map(t=>`<option value="${t}"${(lead.tipoSeguro||'')===t?' selected':''}>${t||'— Sin tipo'}</option>`).join('')}</select>
+        </div>
+        <div class="form-row">
           <label>Aseguradora</label>
           <input id="mCompania" type="text" value="${esc(lead.compania||'')}" placeholder="Mapfre, HDI, Zurich...">
         </div>
+      </div>
+      <div class="form-2col">
         <div class="form-row">
-          <label>Prima neta</label>
-          <input id="mPrimaNeta" type="text" value="${esc(lead.primaNeta||'')}" placeholder="0">
+          <label id="mPrimaNetaLabel">Prima neta (<span id="mMonedaLabel">CLP</span>)</label>
+          <div style="display:flex;gap:6px;">
+            <input id="mPrimaNeta" type="text" value="${esc(lead.primaNeta||'')}" placeholder="0" style="flex:1;">
+            <select id="mMonedaPrima" style="width:70px;border:1.5px solid #e5e5e5;border-radius:7px;padding:6px 8px;font-size:12px;font-family:inherit;outline:none;color:#111;background:#fff;flex-shrink:0;">
+              <option value="CLP"${(lead.monedaPrima||'CLP')==='CLP'?' selected':''}>CLP</option>
+              <option value="UF"${(lead.monedaPrima||'CLP')==='UF'?' selected':''}>UF</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <label>% Comisión</label>
+          <div style="display:flex;gap:6px;align-items:center;">
+            <input id="mComisionPct" type="text" value="${esc(lead.comisionPct||'')}" placeholder="15" style="width:80px;">
+            <span id="mComisionCalc" class="comision-calc" style="display:none;"></span>
+          </div>
+        </div>
+      </div>
+      <div class="form-2col">
+        <div class="form-row">
+          <label>N° de póliza</label>
+          <input id="mNumPoliza" type="text" value="${esc(lead.numPoliza||'')}" placeholder="12345678-9">
+        </div>
+        <div class="form-row">
+          <label>Fecha vencimiento</label>
+          <input id="mFechaVenc" type="date" value="${lead.fechaVencimiento||''}">
         </div>
       </div>
       <div class="form-2col">
@@ -1634,7 +1782,13 @@ function openModal(id, defaultCol, activeTab) {
         </div>
         <div class="form-row">
           <label>Teléfono / WhatsApp</label>
-          <input id="mTelefono" type="tel" value="${esc(lead.telefono||'')}" placeholder="+56 9 1234 5678">
+          <div style="display:flex;gap:6px;align-items:center;">
+            <input id="mTelefono" type="tel" value="${esc(lead.telefono||'')}" placeholder="+56 9 1234 5678" style="flex:1;">
+            <div class="wa-dropdown-wrap" id="mWaWrap" style="${(lead.telefono||'').trim().replace(/\D/g,'')?'':'display:none;'}">
+              <button type="button" id="mWaBtn" style="background:#dcfce7;color:#15803d;border:none;border-radius:7px;padding:6px 10px;font-size:12px;cursor:pointer;white-space:nowrap;font-family:inherit;">💬 WA</button>
+              <div class="wa-dropdown" id="mWaDropdown"></div>
+            </div>
+          </div>
         </div>
       </div>
       <div class="form-2col">
@@ -1657,25 +1811,9 @@ function openModal(id, defaultCol, activeTab) {
           <select id="mColumna">${colOptions}</select>
         </div>
       </div>
-      <div class="modal-section">Vehículo</div>
-      <div class="form-3col">
-        <div class="form-row">
-          <label>Marca</label>
-          <input id="mMarca" type="text" value="${esc(lead.marca)}" placeholder="Toyota">
-        </div>
-        <div class="form-row">
-          <label>Modelo</label>
-          <input id="mModelo" type="text" value="${esc(lead.modelo)}" placeholder="Corolla">
-        </div>
-        <div class="form-row">
-          <label>Año</label>
-          <input id="mAnio" type="text" value="${esc(lead.anio)}" placeholder="2022">
-        </div>
-      </div>
-      <div class="form-row">
-        <label>Patente</label>
-        <input id="mPatente" type="text" value="${esc(lead.patente)}" placeholder="ABCD12" style="text-transform:uppercase;">
-      </div>
+      <div class="modal-section">Vehículos</div>
+      <div id="mVehiculosList"></div>
+      <button type="button" id="mAddVehiculo" style="background:none;border:1.5px dashed #e5e5e5;border-radius:7px;padding:6px 12px;font-size:12px;color:#aaa;cursor:pointer;font-family:inherit;width:100%;margin-bottom:8px;transition:all 0.15s;" onmouseover="this.style.borderColor='#bbb';this.style.color='#666';" onmouseout="this.style.borderColor='#e5e5e5';this.style.color='#aaa';">＋ Agregar vehículo</button>
       <div class="modal-section">Póliza vigente</div>
       <div class="form-row checkbox-row">
         <input type="checkbox" id="mPolizaVigente" ${lead.polizaVigente?'checked':''}>
@@ -1698,18 +1836,47 @@ function openModal(id, defaultCol, activeTab) {
           <input id="mFechaCot" type="date" value="${lead.fechaCotizacion}">
         </div>
         <div class="form-row">
-          <label>Aseguradora</label>
-          <input id="mCompania" type="text" value="${esc(lead.compania)}" placeholder="Mapfre, HDI, Zurich...">
+          <label>Tipo de seguro</label>
+          <select id="mTipoSeguro">${['','Todo Riesgo','Terceros','SOAP + Terceros','Pérdida Total','Flota'].map(t=>`<option value="${t}"${(lead.tipoSeguro||'')===t?' selected':''}>${t||'— Sin tipo'}</option>`).join('')}</select>
         </div>
       </div>
       <div class="form-2col">
         <div class="form-row">
-          <label>Prima neta</label>
-          <input id="mPrimaNeta" type="text" value="${esc(lead.primaNeta)}" placeholder="0">
+          <label>Aseguradora</label>
+          <input id="mCompania" type="text" value="${esc(lead.compania)}" placeholder="Mapfre, HDI, Zurich...">
         </div>
+        <div class="form-row">
+          <label id="mPrimaNetaLabel">Prima neta (<span id="mMonedaLabel">CLP</span>)</label>
+          <div style="display:flex;gap:6px;">
+            <input id="mPrimaNeta" type="text" value="${esc(lead.primaNeta)}" placeholder="0" style="flex:1;">
+            <select id="mMonedaPrima" style="width:70px;border:1.5px solid #e5e5e5;border-radius:7px;padding:6px 8px;font-size:12px;font-family:inherit;outline:none;color:#111;background:#fff;flex-shrink:0;">
+              <option value="CLP"${(lead.monedaPrima||'CLP')==='CLP'?' selected':''}>CLP</option>
+              <option value="UF"${(lead.monedaPrima||'CLP')==='UF'?' selected':''}>UF</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="form-2col">
+        <div class="form-row">
+          <label>% Comisión</label>
+          <div style="display:flex;gap:6px;align-items:center;">
+            <input id="mComisionPct" type="text" value="${esc(lead.comisionPct||'')}" placeholder="15" style="width:80px;">
+            <span id="mComisionCalc" class="comision-calc" style="display:none;"></span>
+          </div>
+        </div>
+        <div class="form-row">
+          <label>N° de póliza</label>
+          <input id="mNumPoliza" type="text" value="${esc(lead.numPoliza||'')}" placeholder="12345678-9">
+        </div>
+      </div>
+      <div class="form-2col">
         <div class="form-row">
           <label>Fecha emisión</label>
           <input id="mFechaEmision" type="date" value="${lead.fechaEmision || ''}">
+        </div>
+        <div class="form-row">
+          <label>Fecha vencimiento</label>
+          <input id="mFechaVenc" type="date" value="${lead.fechaVencimiento || ''}">
         </div>
       </div>
       <div class="form-2col">
@@ -1737,6 +1904,7 @@ function openModal(id, defaultCol, activeTab) {
       ${isEdit ? `
       <div class="modal-tabs">
         <button class="modal-tab-btn active" data-mtab="datos">Datos</button>
+        <button class="modal-tab-btn" data-mtab="cotizaciones">Cotizaciones${(lead.cotizaciones||[]).length ? ` (${(lead.cotizaciones||[]).length})` : ''}</button>
         <button class="modal-tab-btn" data-mtab="notas">Notas${notasCount ? ` (${notasCount})` : ''}</button>
         <button class="modal-tab-btn" data-mtab="historial">Historial${histCount ? ` (${histCount})` : ''}</button>
         <button class="modal-tab-btn" data-mtab="documentos">Documentos${docsCount ? ` (${docsCount})` : ''}</button>
@@ -1744,6 +1912,12 @@ function openModal(id, defaultCol, activeTab) {
       <div class="modal-tab-panel active" id="mtab-datos">
       ${datosTabHTML}
       </div><!-- /mtab-datos -->
+
+      <div class="modal-tab-panel" id="mtab-cotizaciones">
+        <div id="mCotizacionesList"></div>
+        <div id="mCotAddFormWrap"></div>
+        <button type="button" id="mAddCotBtn" style="margin-top:10px;background:none;border:1.5px dashed #e5e5e5;border-radius:7px;padding:7px 12px;font-size:12px;color:#aaa;cursor:pointer;font-family:inherit;width:100%;transition:all 0.15s;" onmouseover="this.style.borderColor='#bbb';this.style.color='#666';" onmouseout="this.style.borderColor='#e5e5e5';this.style.color='#aaa';">＋ Agregar cotización</button>
+      </div><!-- /mtab-cotizaciones -->
 
       <div class="modal-tab-panel" id="mtab-notas">
         ${(lead.notas||[]).length === 0 ? '<div class="panel-empty">Sin notas aún — agrega la primera abajo</div>' :
@@ -1823,6 +1997,261 @@ function openModal(id, defaultCol, activeTab) {
   const firstInput = bg.querySelector('#mAsegurado') || bg.querySelector('#mEdificio') || bg.querySelector('input');
   if (firstInput) firstInput.focus();
 
+  // ── Vehiculos list (Flotas only) ─────────────────────────
+  let _modalVehiculos = (lead.vehiculos && lead.vehiculos.length)
+    ? JSON.parse(JSON.stringify(lead.vehiculos))
+    : (lead.marca || lead.modelo || lead.anio || lead.patente
+        ? [{ id: Date.now(), marca: lead.marca||'', modelo: lead.modelo||'', anio: lead.anio||'', patente: lead.patente||'' }]
+        : []);
+
+  function renderVehiculosList() {
+    const container = bg.querySelector('#mVehiculosList');
+    if (!container) return;
+    if (!_modalVehiculos.length) {
+      container.innerHTML = '<div style="font-size:11px;color:#ccc;text-align:center;padding:8px 0 4px;">Sin vehículos agregados</div>';
+      return;
+    }
+    container.innerHTML = _modalVehiculos.map((v, idx) => `
+      <div style="display:grid;grid-template-columns:1fr 1fr 80px 100px 28px;gap:6px;margin-bottom:8px;align-items:end;" data-veh-idx="${idx}">
+        <div class="form-row" style="margin-bottom:0;">
+          ${idx===0?'<label style="font-size:9px;font-weight:700;letter-spacing:0.5px;text-transform:uppercase;color:#aaa;display:block;margin-bottom:4px;">Marca</label>':''}
+          <input type="text" class="veh-marca" value="${esc(v.marca||'')}" placeholder="Toyota" style="width:100%;border:1.5px solid #e5e5e5;border-radius:8px;padding:7px 9px;font-size:13px;font-family:inherit;outline:none;color:#111;" data-idx="${idx}">
+        </div>
+        <div class="form-row" style="margin-bottom:0;">
+          ${idx===0?'<label style="font-size:9px;font-weight:700;letter-spacing:0.5px;text-transform:uppercase;color:#aaa;display:block;margin-bottom:4px;">Modelo</label>':''}
+          <input type="text" class="veh-modelo" value="${esc(v.modelo||'')}" placeholder="Corolla" style="width:100%;border:1.5px solid #e5e5e5;border-radius:8px;padding:7px 9px;font-size:13px;font-family:inherit;outline:none;color:#111;" data-idx="${idx}">
+        </div>
+        <div class="form-row" style="margin-bottom:0;">
+          ${idx===0?'<label style="font-size:9px;font-weight:700;letter-spacing:0.5px;text-transform:uppercase;color:#aaa;display:block;margin-bottom:4px;">Año</label>':''}
+          <input type="text" class="veh-anio" value="${esc(v.anio||'')}" placeholder="2022" style="width:100%;border:1.5px solid #e5e5e5;border-radius:8px;padding:7px 9px;font-size:13px;font-family:inherit;outline:none;color:#111;" data-idx="${idx}">
+        </div>
+        <div class="form-row" style="margin-bottom:0;">
+          ${idx===0?'<label style="font-size:9px;font-weight:700;letter-spacing:0.5px;text-transform:uppercase;color:#aaa;display:block;margin-bottom:4px;">Patente</label>':''}
+          <input type="text" class="veh-patente" value="${esc(v.patente||'')}" placeholder="ABCD12" style="width:100%;border:1.5px solid #e5e5e5;border-radius:8px;padding:7px 9px;font-size:13px;font-family:inherit;outline:none;color:#111;text-transform:uppercase;" data-idx="${idx}">
+        </div>
+        <button type="button" class="veh-remove" data-idx="${idx}" style="background:#fee2e2;color:#991b1b;border:none;border-radius:7px;height:32px;width:28px;font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;${idx===0?'margin-top:20px;':''}">✕</button>
+      </div>`).join('');
+
+    container.querySelectorAll('.veh-marca,.veh-modelo,.veh-anio,.veh-patente').forEach(inp => {
+      inp.addEventListener('input', () => {
+        const idx = +inp.dataset.idx;
+        const field = inp.classList.contains('veh-marca') ? 'marca'
+                    : inp.classList.contains('veh-modelo') ? 'modelo'
+                    : inp.classList.contains('veh-anio')   ? 'anio'
+                    : 'patente';
+        _modalVehiculos[idx][field] = inp.value.trim();
+        if (field === 'patente') inp.value = inp.value.toUpperCase();
+      });
+    });
+    container.querySelectorAll('.veh-remove').forEach(btn => {
+      btn.addEventListener('click', () => {
+        _modalVehiculos.splice(+btn.dataset.idx, 1);
+        renderVehiculosList();
+      });
+    });
+  }
+  renderVehiculosList();
+  const addVehBtn = bg.querySelector('#mAddVehiculo');
+  if (addVehBtn) {
+    addVehBtn.addEventListener('click', () => {
+      _modalVehiculos.push({ id: Date.now(), marca:'', modelo:'', anio:'', patente:'' });
+      renderVehiculosList();
+    });
+  }
+
+  // ── Cotizaciones tab ──────────────────────────────────────
+  let _modalCotizaciones = JSON.parse(JSON.stringify(lead.cotizaciones||[]));
+
+  function renderCotizaciones() {
+    const listEl = bg.querySelector('#mCotizacionesList');
+    if (!listEl) return;
+    if (!_modalCotizaciones.length) {
+      listEl.innerHTML = '<div class="panel-empty">Sin cotizaciones — agrega la primera abajo</div>';
+    } else {
+      listEl.innerHTML = _modalCotizaciones.map((c, idx) => `
+        <div class="cot-item${c.seleccionada?' selected':''}" data-cot-idx="${idx}">
+          <div class="cot-item-header">
+            <span class="cot-compania">${esc(c.compania||'Sin aseguradora')}</span>
+            ${c.seleccionada ? '<span class="cot-badge">✓ Seleccionada</span>' : ''}
+          </div>
+          <div class="cot-details">
+            ${c.prima ? (c.moneda==='UF'?'UF ':'$')+esc(c.prima) : 'Sin prima'}
+            ${c.moneda ? ' · '+esc(c.moneda) : ''}
+            ${c.tipoSeguro ? ' · '+esc(c.tipoSeguro) : ''}
+            ${c.fecha ? ' · '+c.fecha : ''}
+          </div>
+          <div class="cot-actions">
+            ${!c.seleccionada ? `<button type="button" class="btn-cot-select" data-cot-sel="${idx}">✓ Seleccionar</button>` : `<button type="button" class="btn-cot-select selected" data-cot-sel="${idx}" disabled>✓ Seleccionada</button>`}
+            <button type="button" class="btn-cot-del" data-cot-del="${idx}">Eliminar</button>
+          </div>
+        </div>`).join('');
+      listEl.querySelectorAll('[data-cot-sel]').forEach(btn => {
+        if (btn.disabled) return;
+        btn.addEventListener('click', () => {
+          const idx = +btn.dataset.cotSel;
+          _modalCotizaciones.forEach((c,i) => c.seleccionada = i === idx);
+          const sel = _modalCotizaciones[idx];
+          // Sync to root fields
+          const cmpEl = bg.querySelector('#mCompania'); if (cmpEl) cmpEl.value = sel.compania||'';
+          const primaEl = bg.querySelector('#mPrimaNeta'); if (primaEl) primaEl.value = sel.prima||'';
+          const monedaEl = bg.querySelector('#mMonedaPrima'); if (monedaEl) { monedaEl.value = sel.moneda||'CLP'; updateMonedaLabel(); }
+          renderCotizaciones();
+          calcComision();
+        });
+      });
+      listEl.querySelectorAll('[data-cot-del]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          _modalCotizaciones.splice(+btn.dataset.cotDel, 1);
+          renderCotizaciones();
+        });
+      });
+    }
+  }
+  renderCotizaciones();
+
+  const addCotBtn = bg.querySelector('#mAddCotBtn');
+  const cotFormWrap = bg.querySelector('#mCotAddFormWrap');
+  if (addCotBtn && cotFormWrap) {
+    addCotBtn.addEventListener('click', () => {
+      if (cotFormWrap.innerHTML) { cotFormWrap.innerHTML = ''; addCotBtn.textContent = '＋ Agregar cotización'; return; }
+      const tipoOpts = VERTICAL === 'comunidades'
+        ? ['','Copropiedad','Incendio y Sismo','RC Copropiedad','Todo Riesgo Edificio','Combinado']
+        : ['','Todo Riesgo','Terceros','SOAP + Terceros','Pérdida Total','Flota'];
+      cotFormWrap.innerHTML = `
+        <div class="cot-add-form">
+          <div class="form-2col">
+            <div class="form-row"><label>Aseguradora</label><input id="ncCompania" type="text" placeholder="Mapfre, HDI..."></div>
+            <div class="form-row"><label>Prima</label><input id="ncPrima" type="text" placeholder="0"></div>
+          </div>
+          <div class="form-2col">
+            <div class="form-row"><label>Moneda</label><select id="ncMoneda"><option value="CLP">CLP</option><option value="UF">UF</option></select></div>
+            <div class="form-row"><label>Tipo seguro</label><select id="ncTipo">${tipoOpts.map(t=>`<option value="${t}">${t||'— Sin tipo'}</option>`).join('')}</select></div>
+          </div>
+          <div class="form-row"><label>Fecha</label><input id="ncFecha" type="date" value="${today()}"></div>
+          <div style="display:flex;gap:8px;margin-top:8px;">
+            <button type="button" id="ncGuardar" style="flex:1;background:#111;color:#fff;border:none;border-radius:8px;padding:8px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;">Agregar</button>
+            <button type="button" id="ncCancelar" style="background:#f5f5f5;color:#888;border:none;border-radius:8px;padding:8px 12px;font-size:12px;cursor:pointer;font-family:inherit;">Cancelar</button>
+          </div>
+        </div>`;
+      addCotBtn.textContent = '✕ Cerrar';
+      cotFormWrap.querySelector('#ncGuardar').addEventListener('click', () => {
+        const compania = cotFormWrap.querySelector('#ncCompania').value.trim();
+        if (!compania) { cotFormWrap.querySelector('#ncCompania').focus(); return; }
+        _modalCotizaciones.push({
+          id: Date.now(),
+          compania,
+          prima:     cotFormWrap.querySelector('#ncPrima').value.trim(),
+          moneda:    cotFormWrap.querySelector('#ncMoneda').value,
+          tipoSeguro:cotFormWrap.querySelector('#ncTipo').value,
+          fecha:     cotFormWrap.querySelector('#ncFecha').value,
+          seleccionada: false,
+        });
+        cotFormWrap.innerHTML = '';
+        addCotBtn.textContent = '＋ Agregar cotización';
+        renderCotizaciones();
+      });
+      cotFormWrap.querySelector('#ncCancelar').addEventListener('click', () => {
+        cotFormWrap.innerHTML = '';
+        addCotBtn.textContent = '＋ Agregar cotización';
+      });
+    });
+  }
+
+  // ── Moneda prima toggle ───────────────────────────────────
+  function updateMonedaLabel() {
+    const moneda = (bg.querySelector('#mMonedaPrima') || {}).value || 'CLP';
+    const lbl = bg.querySelector('#mMonedaLabel');
+    if (lbl) lbl.textContent = moneda;
+  }
+  const monedaEl = bg.querySelector('#mMonedaPrima');
+  if (monedaEl) { updateMonedaLabel(); monedaEl.addEventListener('change', updateMonedaLabel); }
+
+  // ── Comision auto-calc ────────────────────────────────────
+  function calcComision() {
+    const prima = parseFloat((bg.querySelector('#mPrimaNeta')||{}).value||'0');
+    const pct   = parseFloat((bg.querySelector('#mComisionPct')||{}).value||'0');
+    const calcEl = bg.querySelector('#mComisionCalc');
+    if (!calcEl) return;
+    if (pct > 0 && prima > 0) {
+      calcEl.style.display = 'inline-block';
+      const monto = Math.round(prima * pct / 100);
+      calcEl.textContent = '= ' + fmtPrima(monto);
+    } else {
+      calcEl.style.display = 'none';
+    }
+  }
+  calcComision();
+  const primaInput = bg.querySelector('#mPrimaNeta');
+  const comPctInput = bg.querySelector('#mComisionPct');
+  if (primaInput) primaInput.addEventListener('input', calcComision);
+  if (comPctInput) comPctInput.addEventListener('input', calcComision);
+
+  // ── WhatsApp templates ────────────────────────────────────
+  function buildWaTemplates() {
+    const waBtn = bg.querySelector('#mWaBtn');
+    const waDropdown = bg.querySelector('#mWaDropdown');
+    const waWrap = bg.querySelector('#mWaWrap');
+    const telInput = bg.querySelector('#mTelefono');
+    if (!waBtn || !waDropdown || !telInput) return;
+    // Show/hide based on phone
+    function updateWaVisibility() {
+      const hasPhone = (telInput.value||'').replace(/\D/g,'').length > 0;
+      waWrap.style.display = hasPhone ? '' : 'none';
+    }
+    updateWaVisibility();
+    telInput.addEventListener('input', updateWaVisibility);
+
+    waBtn.addEventListener('click', e => {
+      e.stopPropagation();
+      waDropdown.classList.toggle('open');
+      if (waDropdown.classList.contains('open')) {
+        buildWaDropdown();
+      }
+    });
+    document.addEventListener('click', function closeWa(e) {
+      if (!waWrap.contains(e.target)) { waDropdown.classList.remove('open'); document.removeEventListener('click', closeWa); }
+    });
+
+    function buildWaDropdown() {
+      const phone = telInput.value.replace(/\D/g,'');
+      const num = phone.startsWith('56') ? phone : '56' + phone;
+      const nombre = VERTICAL === 'comunidades'
+        ? (bg.querySelector('#mAdministrador') || {}).value || (bg.querySelector('#mEdificio') || {}).value || ''
+        : (bg.querySelector('#mAsegurado') || {}).value || '';
+      const compania = (bg.querySelector('#mCompania') || {}).value || '';
+      const prima = (bg.querySelector('#mPrimaNeta') || {}).value || '';
+      const tipo = (bg.querySelector('#mTipoSeguro') || {}).value || '';
+      const numPoliza = (bg.querySelector('#mNumPoliza') || {}).value || '';
+      const fechaVenc = (bg.querySelector('#mFechaVenc') || {}).value || '';
+
+      const templates = [
+        { icon: '📋', label: 'Enviar propuesta',
+          text: `Hola ${nombre || '[nombre]'}, te enviamos nuestra propuesta de seguro ${tipo || '[tipo]'} con ${compania || '[compania]'} por $${prima || '[prima]'}. Quedo disponible para cualquier consulta.` },
+        { icon: '🔔', label: 'Seguimiento',
+          text: `Hola ${nombre || '[nombre]'}, te escribimos para hacer seguimiento a tu cotización de seguro. ¿Pudiste revisar la propuesta que te enviamos?` },
+        { icon: '✅', label: 'Confirmación emisión',
+          text: `Hola ${nombre || '[nombre]'}, tu póliza N°${numPoliza || '[numPoliza]'} ha sido emitida exitosamente con ${compania || '[compania]'}. Vence el ${fechaVenc || '[fechaVencimiento]'}.` },
+        { icon: '🔄', label: 'Renovación',
+          text: `Hola ${nombre || '[nombre]'}, tu póliza vence el ${fechaVenc || '[fechaVencimiento]'}. Te contactamos para gestionar la renovación.` },
+      ];
+      waDropdown.innerHTML = templates.map(t => `
+        <button type="button" class="wa-tpl-btn" data-wa-text="${esc(t.text)}" data-wa-num="${num}">
+          ${t.icon} ${t.label}
+          <span>${esc(t.text.slice(0,60))}${t.text.length>60?'...':''}</span>
+        </button>`).join('');
+      waDropdown.querySelectorAll('.wa-tpl-btn').forEach(tplBtn => {
+        tplBtn.addEventListener('click', e => {
+          e.stopPropagation();
+          const text = tplBtn.dataset.waText;
+          const n = tplBtn.dataset.waNum;
+          window.open(`https://wa.me/${n}?text=${encodeURIComponent(text)}`, '_blank');
+          waDropdown.classList.remove('open');
+        });
+      });
+    }
+  }
+  buildWaTemplates();
+
   // RUT auto-format (Comunidades)
   const rutInput = bg.querySelector('#mRutCom');
   if (rutInput) {
@@ -1882,18 +2311,26 @@ function openModal(id, defaultCol, activeTab) {
         fecha:             bg.querySelector('#mFecha').value,
         columna:           bg.querySelector('#mColumna').value,
         fechaCotizacion:   bg.querySelector('#mFechaCot').value,
+        tipoSeguro:        bg.querySelector('#mTipoSeguro').value,
         compania:          bg.querySelector('#mCompania').value.trim(),
         primaNeta:         bg.querySelector('#mPrimaNeta').value.trim(),
+        monedaPrima:       bg.querySelector('#mMonedaPrima').value,
+        numPoliza:         bg.querySelector('#mNumPoliza').value.trim(),
+        fechaVencimiento:  bg.querySelector('#mFechaVenc').value,
+        comisionPct:       bg.querySelector('#mComisionPct').value.trim(),
         fechaEmision:      bg.querySelector('#mFechaEmision').value,
         accionSeguimiento: bg.querySelector('#mAccion').value.trim(),
         fechaSeguimiento:  bg.querySelector('#mFechaSeg').value,
         cierre:            bg.querySelector('#mCierre').checked,
         comentarios:       bg.querySelector('#mComentarios').value.trim(),
+        cotizaciones:      _modalCotizaciones,
         updatedAt:         Date.now(),
       });
     } else {
       const asegurado = bg.querySelector('#mAsegurado').value.trim();
       if (!asegurado) { bg.querySelector('#mAsegurado').focus(); return; }
+      // Collect vehiculos from local array
+      const firstVeh = _modalVehiculos[0] || {};
       updated = Object.assign({}, lead, {
         asegurado,
         telefono:          bg.querySelector('#mTelefono').value.trim(),
@@ -1901,21 +2338,29 @@ function openModal(id, defaultCol, activeTab) {
         fuente:            bg.querySelector('#mFuente').value,
         fecha:             bg.querySelector('#mFecha').value,
         columna:           bg.querySelector('#mColumna').value,
-        marca:             bg.querySelector('#mMarca').value.trim(),
-        modelo:            bg.querySelector('#mModelo').value.trim(),
-        anio:              bg.querySelector('#mAnio').value.trim(),
-        patente:           bg.querySelector('#mPatente').value.trim().toUpperCase(),
+        vehiculos:         _modalVehiculos,
+        // Sync primary vehicle from first vehiculos entry for backward compat
+        marca:             firstVeh.marca !== undefined ? firstVeh.marca : (lead.marca||''),
+        modelo:            firstVeh.modelo !== undefined ? firstVeh.modelo : (lead.modelo||''),
+        anio:              firstVeh.anio !== undefined ? firstVeh.anio : (lead.anio||''),
+        patente:           firstVeh.patente !== undefined ? (firstVeh.patente||'').toUpperCase() : (lead.patente||''),
         polizaVigente:     bg.querySelector('#mPolizaVigente').checked,
         primaVigente:      bg.querySelector('#mPrimaVigente').value.trim(),
         deducibleActual:   bg.querySelector('#mDeducible').value.trim(),
         fechaCotizacion:   bg.querySelector('#mFechaCot').value,
+        tipoSeguro:        bg.querySelector('#mTipoSeguro').value,
         compania:          bg.querySelector('#mCompania').value.trim(),
         primaNeta:         bg.querySelector('#mPrimaNeta').value.trim(),
+        monedaPrima:       bg.querySelector('#mMonedaPrima').value,
+        numPoliza:         bg.querySelector('#mNumPoliza').value.trim(),
+        fechaVencimiento:  bg.querySelector('#mFechaVenc').value,
+        comisionPct:       bg.querySelector('#mComisionPct').value.trim(),
         fechaEmision:      bg.querySelector('#mFechaEmision').value,
         accionSeguimiento: bg.querySelector('#mAccion').value.trim(),
         fechaSeguimiento:  bg.querySelector('#mFechaSeg').value,
         cierre:            bg.querySelector('#mCierre').checked,
         comentarios:       bg.querySelector('#mComentarios').value.trim(),
+        cotizaciones:      _modalCotizaciones,
         updatedAt:         Date.now(),
       });
     }
@@ -1923,8 +2368,8 @@ function openModal(id, defaultCol, activeTab) {
     // Detect changes for history
     const changes = [];
     const TRACK = VERTICAL === 'comunidades'
-      ? { edificio:'Edificio', columna:'Etapa', primaNeta:'Prima neta', compania:'Aseguradora', fuente:'Fuente', cierre:'Cierre' }
-      : { asegurado:'Asegurado', columna:'Etapa', primaNeta:'Prima neta', compania:'Aseguradora', fuente:'Fuente', cierre:'Cierre' };
+      ? { edificio:'Edificio', columna:'Etapa', primaNeta:'Prima neta', compania:'Aseguradora', fuente:'Fuente', cierre:'Cierre', numPoliza:'N° Póliza', tipoSeguro:'Tipo seguro' }
+      : { asegurado:'Asegurado', columna:'Etapa', primaNeta:'Prima neta', compania:'Aseguradora', fuente:'Fuente', cierre:'Cierre', numPoliza:'N° Póliza', tipoSeguro:'Tipo seguro' };
     Object.entries(TRACK).forEach(([k, label]) => {
       if (String(lead[k]||'') !== String(updated[k]||'')) changes.push(`${label} → ${updated[k]||'—'}`);
     });
@@ -2521,54 +2966,64 @@ document.querySelectorAll('.tab-btn').forEach(btn => {
     document.getElementById('viewKanban').classList.toggle('hidden', activeTab !== 'kanban');
     document.getElementById('viewTabla').classList.toggle('active', activeTab === 'tabla');
     document.getElementById('viewDashboard').classList.toggle('active', activeTab === 'dashboard');
-    if (activeTab === 'tabla') renderTable();
-    if (activeTab === 'dashboard') renderDashboard();
+    document.getElementById('viewVencimientos').classList.toggle('active', activeTab === 'vencimientos');
+    if (activeTab === 'tabla')        renderTable();
+    if (activeTab === 'dashboard')    renderDashboard();
+    if (activeTab === 'vencimientos') renderVencimientos();
   });
 });
 
 // ── Table view ────────────────────────────────────────────
 const TABLE_COLS_FLOTAS = [
-  { key:'fecha',             label:'Fecha',       sort:true  },
-  { key:'asegurado',         label:'Asegurado',   sort:true  },
-  { key:'telefono',          label:'Teléfono',    sort:false },
-  { key:'rut',               label:'RUT',         sort:false },
-  { key:'fuente',            label:'Fuente',      sort:true  },
-  { key:'_vehicle',          label:'Vehículo',    sort:true  },
-  { key:'patente',           label:'Patente',     sort:false },
-  { key:'polizaVigente',     label:'Póliza vig.', sort:false },
-  { key:'primaVigente',      label:'Prima vig.',  sort:false },
-  { key:'deducibleActual',   label:'Deducible',   sort:false },
-  { key:'fechaCotizacion',   label:'F. Cotiz.',   sort:false },
-  { key:'compania',          label:'Aseguradora', sort:true  },
-  { key:'primaNeta',         label:'Prima neta',  sort:true  },
-  { key:'accionSeguimiento', label:'Acción',      sort:false },
-  { key:'cierre',            label:'Cierre',      sort:false },
-  { key:'fechaEmision',      label:'F. Emisión',  sort:false },
-  { key:'comentarios',       label:'Comentarios', sort:false },
-  { key:'columna',           label:'Etapa',       sort:true  },
+  { key:'fecha',             label:'Fecha',          sort:true  },
+  { key:'asegurado',         label:'Asegurado',      sort:true  },
+  { key:'telefono',          label:'Teléfono',       sort:false },
+  { key:'rut',               label:'RUT',            sort:false },
+  { key:'fuente',            label:'Fuente',         sort:true  },
+  { key:'_vehicle',          label:'Vehículo',       sort:true  },
+  { key:'patente',           label:'Patente',        sort:false },
+  { key:'polizaVigente',     label:'Póliza vig.',    sort:false },
+  { key:'primaVigente',      label:'Prima vig.',     sort:false },
+  { key:'deducibleActual',   label:'Deducible',      sort:false },
+  { key:'fechaCotizacion',   label:'F. Cotiz.',      sort:false },
+  { key:'tipoSeguro',        label:'Tipo seguro',    sort:true  },
+  { key:'compania',          label:'Aseguradora',    sort:true  },
+  { key:'primaNeta',         label:'Prima neta',     sort:true  },
+  { key:'numPoliza',         label:'N° Póliza',      sort:false },
+  { key:'fechaVencimiento',  label:'F. Vencimiento', sort:true  },
+  { key:'comisionPct',       label:'% Comisión',     sort:false },
+  { key:'accionSeguimiento', label:'Acción',         sort:false },
+  { key:'cierre',            label:'Cierre',         sort:false },
+  { key:'fechaEmision',      label:'F. Emisión',     sort:false },
+  { key:'comentarios',       label:'Comentarios',    sort:false },
+  { key:'columna',           label:'Etapa',          sort:true  },
 ];
 const TABLE_COLS_COM = [
-  { key:'fecha',             label:'Fecha',         sort:true  },
-  { key:'edificio',          label:'Edificio',      sort:true  },
-  { key:'telefono',          label:'Teléfono',      sort:false },
-  { key:'tipoContacto',      label:'Tipo contacto', sort:true  },
-  { key:'administrador',     label:'Administrador', sort:true  },
-  { key:'direccion',         label:'Dirección',     sort:false },
-  { key:'comuna',            label:'Comuna',        sort:true  },
-  { key:'unidades',          label:'Unidades',      sort:false },
+  { key:'fecha',             label:'Fecha',            sort:true  },
+  { key:'edificio',          label:'Edificio',         sort:true  },
+  { key:'telefono',          label:'Teléfono',         sort:false },
+  { key:'tipoContacto',      label:'Tipo contacto',    sort:true  },
+  { key:'administrador',     label:'Administrador',    sort:true  },
+  { key:'direccion',         label:'Dirección',        sort:false },
+  { key:'comuna',            label:'Comuna',           sort:true  },
+  { key:'unidades',          label:'Unidades',         sort:false },
   { key:'polizaVigente',     label:'Póliza vigente',   sort:false },
   { key:'cartaAsignacion',   label:'Carta Asignación', sort:false },
-  { key:'maec',              label:'MAEC ($)',       sort:true  },
-  { key:'mau',               label:'MAU ($)',        sort:true  },
-  { key:'fuente',            label:'Fuente',        sort:true  },
-  { key:'compania',          label:'Aseguradora',   sort:true  },
-  { key:'primaNeta',         label:'Prima neta',    sort:true  },
-  { key:'accionSeguimiento', label:'Acción',        sort:false },
-  { key:'fechaSeguimiento',  label:'F. Seguimiento',sort:false },
-  { key:'cierre',            label:'Cierre',        sort:false },
-  { key:'fechaEmision',      label:'F. Emisión',    sort:false },
-  { key:'comentarios',       label:'Comentarios',   sort:false },
-  { key:'columna',           label:'Etapa',         sort:true  },
+  { key:'maec',              label:'MAEC ($)',         sort:true  },
+  { key:'mau',               label:'MAU ($)',          sort:true  },
+  { key:'fuente',            label:'Fuente',           sort:true  },
+  { key:'tipoSeguro',        label:'Tipo seguro',      sort:true  },
+  { key:'compania',          label:'Aseguradora',      sort:true  },
+  { key:'primaNeta',         label:'Prima neta',       sort:true  },
+  { key:'numPoliza',         label:'N° Póliza',        sort:false },
+  { key:'fechaVencimiento',  label:'F. Vencimiento',   sort:true  },
+  { key:'comisionPct',       label:'% Comisión',       sort:false },
+  { key:'accionSeguimiento', label:'Acción',           sort:false },
+  { key:'fechaSeguimiento',  label:'F. Seguimiento',   sort:false },
+  { key:'cierre',            label:'Cierre',           sort:false },
+  { key:'fechaEmision',      label:'F. Emisión',       sort:false },
+  { key:'comentarios',       label:'Comentarios',      sort:false },
+  { key:'columna',           label:'Etapa',            sort:true  },
 ];
 function getTableCols() { return VERTICAL === 'comunidades' ? TABLE_COLS_COM : TABLE_COLS_FLOTAS; }
 
@@ -2730,8 +3185,12 @@ function buildEditableRowCom(lead) {
   tr.appendChild(numTd('maec'));
   tr.appendChild(numTd('mau'));
   tr.appendChild(fuenteTd());
+  tr.appendChild(textTd('tipoSeguro','t-muted','font-size:11px'));
   tr.appendChild(textTd('compania',''));
   tr.appendChild(numTd('primaNeta'));
+  tr.appendChild(textTd('numPoliza','t-muted','font-size:11px'));
+  tr.appendChild(dateTd('fechaVencimiento'));
+  tr.appendChild(textTd('comisionPct','t-muted','font-size:11px;text-align:center'));
   tr.appendChild(textTd('accionSeguimiento','','max-width:140px'));
   tr.appendChild(dateTd('fechaSeguimiento'));
   tr.appendChild(boolTd('cierre'));
@@ -2934,8 +3393,12 @@ function buildEditableRow(lead) {
   tr.appendChild(numTd('primaVigente', false));
   tr.appendChild(numTd('deducibleActual', false));
   tr.appendChild(dateTd('fechaCotizacion'));
+  tr.appendChild(textTd('tipoSeguro', 't-muted', 'font-size:11px'));
   tr.appendChild(textTd('compania', ''));
   tr.appendChild(numTd('primaNeta', true));
+  tr.appendChild(textTd('numPoliza', 't-muted', 'font-size:11px'));
+  tr.appendChild(dateTd('fechaVencimiento'));
+  tr.appendChild(textTd('comisionPct', 't-muted', 'font-size:11px;text-align:center'));
   tr.appendChild(textTd('accionSeguimiento', '', 'max-width:140px'));
   tr.appendChild(boolTd('cierre'));
   tr.appendChild(dateTd('fechaEmision'));
@@ -3067,10 +3530,17 @@ function renderDashboard() {
   const cerr = emit.length + perd.length;
   const primaTotal = emit.reduce((s,l) => s+(parseFloat(l.primaNeta)||0), 0);
 
+  const pipeline = all.filter(l => ['cotizando','propuesta','seguimiento'].includes(l.columna))
+    .reduce((s,l) => s+(parseFloat(l.primaNeta)||0), 0);
+  const comision = emit.filter(l => l.comisionPct)
+    .reduce((s,l) => s+((parseFloat(l.primaNeta)||0)*(parseFloat(l.comisionPct)||0)/100), 0);
+
   document.getElementById('dTotal').textContent     = all.length;
   document.getElementById('dEmitidas').textContent  = emit.length;
   document.getElementById('dPrimaTotal').textContent= fmtPrima(primaTotal) || '$0';
   document.getElementById('dTasa').textContent      = cerr ? Math.round(emit.length/cerr*100)+'%' : '—';
+  document.getElementById('dPipeline').textContent  = fmtPrima(pipeline) || '$0';
+  document.getElementById('dComision').textContent  = fmtPrima(comision) || '$0';
 
   const mkChart = (id, type, data, opts={}) => {
     if (_charts[id]) _charts[id].destroy();
@@ -3113,6 +3583,96 @@ function renderDashboard() {
     datasets:[{ data:lm.map(m=>leadsByM[m]), borderColor:'#6366f1', backgroundColor:'rgba(99,102,241,0.08)', fill:true, tension:0.35, pointRadius:4 }]
   },{ plugins:{ legend:{display:false} }, scales:{ y:{ ticks:{font:{size:10}} }, x:{ ticks:{font:{size:10}} } } });
 }
+
+// ── Vencimientos view ─────────────────────────────────────
+let _vencFilter = 'todos';
+function renderVencimientos() {
+  if (activeTab !== 'vencimientos') return;
+  const tbody = document.getElementById('vencTableBody');
+  const countEl = document.getElementById('vencCount');
+  if (!tbody) return;
+
+  // Gather ALL leads from both verticals for vencimientos — use STATE (current vertical)
+  // plus we load the other vertical's data from localStorage/Firebase if available
+  const allLeads = Object.values(STATE).filter(l => l && l.id && l.fechaVencimiento);
+  const today_ = new Date(); today_.setHours(0,0,0,0);
+
+  let filtered = allLeads;
+  if (_vencFilter === 'vencidos') {
+    filtered = allLeads.filter(l => {
+      const d = new Date(l.fechaVencimiento + 'T00:00:00');
+      return d < today_;
+    });
+  } else if (_vencFilter === '30') {
+    filtered = allLeads.filter(l => {
+      const d = new Date(l.fechaVencimiento + 'T00:00:00');
+      const diff = Math.round((d - today_) / 86400000);
+      return diff >= 0 && diff <= 30;
+    });
+  } else if (_vencFilter === '60') {
+    filtered = allLeads.filter(l => {
+      const d = new Date(l.fechaVencimiento + 'T00:00:00');
+      const diff = Math.round((d - today_) / 86400000);
+      return diff >= 0 && diff <= 60;
+    });
+  } else if (_vencFilter === '90') {
+    filtered = allLeads.filter(l => {
+      const d = new Date(l.fechaVencimiento + 'T00:00:00');
+      const diff = Math.round((d - today_) / 86400000);
+      return diff >= 0 && diff <= 90;
+    });
+  }
+
+  // Sort by fechaVencimiento ascending
+  filtered.sort((a,b) => (a.fechaVencimiento||'') < (b.fechaVencimiento||'') ? -1 : 1);
+
+  if (countEl) countEl.textContent = `${filtered.length} lead${filtered.length !== 1 ? 's' : ''} con vencimiento`;
+
+  tbody.innerHTML = '';
+  if (!filtered.length) {
+    tbody.innerHTML = `<tr><td colspan="8" class="table-empty">Sin leads con fecha de vencimiento en este rango</td></tr>`;
+    return;
+  }
+
+  filtered.forEach(l => {
+    const vencDate = new Date(l.fechaVencimiento + 'T00:00:00');
+    const diffDias = Math.round((vencDate - today_) / 86400000);
+    let diasCls = 'verde', diasLabel;
+    if (diffDias < 0)        { diasCls = 'rojo';    diasLabel = `Vencido hace ${Math.abs(diffDias)}d`; }
+    else if (diffDias <= 30) { diasCls = 'naranja';  diasLabel = `${diffDias}d`; }
+    else if (diffDias <= 60) { diasCls = 'amarillo'; diasLabel = `${diffDias}d`; }
+    else                     { diasCls = 'verde';    diasLabel = `${diffDias}d`; }
+
+    const isFlota = !l.edificio;
+    const leadName = isFlota ? (l.asegurado || 'Sin nombre') : (l.edificio || 'Sin nombre');
+    const vertical = isFlota ? '🚗 Flotas' : '🏢 Comunidades';
+    const stageCls = 'stage-' + (l.columna || 'nuevo');
+
+    const tr = document.createElement('tr');
+    tr.style.cursor = 'pointer';
+    tr.addEventListener('click', () => openModal(l.id));
+    tr.innerHTML = `
+      <td class="t-asegurado">${esc(leadName)}</td>
+      <td style="font-size:11px;color:#888;">${vertical}</td>
+      <td>${esc(l.compania||'—')}</td>
+      <td class="t-prima">${fmtPrimaLead(l) || '—'}</td>
+      <td style="font-size:11px;color:#888;">${esc(l.tipoSeguro||'—')}</td>
+      <td style="font-size:11px;">${l.fechaVencimiento}</td>
+      <td class="venc-dias ${diasCls}">${diasLabel}</td>
+      <td><span class="t-stage ${stageCls}">${STAGE_LABELS[l.columna]||l.columna}</span></td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+// Vencimientos filter buttons
+document.querySelectorAll('.btn-venc-filter').forEach(btn => {
+  btn.addEventListener('click', () => {
+    _vencFilter = btn.dataset.vf;
+    document.querySelectorAll('.btn-venc-filter').forEach(b => b.classList.toggle('active', b === btn));
+    renderVencimientos();
+  });
+});
 
 // ── Toast ─────────────────────────────────────────────────
 function showToast(msg, type = 'success', duration = 2500) {
