@@ -2849,6 +2849,19 @@ function initPresence(name, photo) {
   myPresenceRef.onDisconnect().remove();
   _presenceInterval = setInterval(() => myPresenceRef && myPresenceRef.update({ ts: Date.now() }), 30000);
 
+  // On first connect, sweep stale ghost entries from Firebase so they don't
+  // accumulate for other users who connect later.
+  PRESENCE_REF.once('value', snap => {
+    const all = snap.val() || {};
+    const staleMs = 90_000;
+    const nowTs = Date.now();
+    Object.entries(all).forEach(([sid, u]) => {
+      if (sid !== SESSION_ID && u.ts && (nowTs - u.ts) >= staleMs) {
+        PRESENCE_REF.child(sid).remove().catch(() => {});
+      }
+    });
+  });
+
   PRESENCE_REF.on('value', snap => renderPresence(snap.val() || {}));
 
   _presenceMouseMove = e => {
@@ -2864,7 +2877,17 @@ function initPresence(name, photo) {
   document.addEventListener('mouseleave', _presenceMouseLeave);
 }
 
-function renderPresence(data) {
+function renderPresence(rawData) {
+  // Drop ghost sessions: any entry with ts older than 90s (3× the 30s heartbeat).
+  // onDisconnect().remove() doesn't always fire (browser crash, network drop),
+  // so we filter client-side to avoid showing stale "?" avatars.
+  const STALE_MS = 90_000;
+  const now = Date.now();
+  const data = Object.fromEntries(
+    Object.entries(rawData).filter(([sid, u]) =>
+      sid === SESSION_ID || !u.ts || (now - u.ts) < STALE_MS
+    )
+  );
   PRESENCE_DATA = data;
 
   // Build a key from stable fields only (exclude cursor — it changes every ~100ms).
