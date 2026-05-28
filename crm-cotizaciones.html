@@ -1720,7 +1720,7 @@ function openModal(id, defaultCol, activeTab) {
       <div class="form-2col">
         <div class="form-row">
           <label>Tipo de seguro</label>
-          <select id="mTipoSeguro">${['','Copropiedad','Incendio y Sismo','RC Copropiedad','Todo Riesgo Edificio','Combinado'].map(t=>`<option value="${t}"${(lead.tipoSeguro||'')===t?' selected':''}>${t||'— Sin tipo'}</option>`).join('')}</select>
+          <select id="mTipoSeguro">${['','Copropiedad','Incendio','Incendio y Sismo','RC Copropiedad','Todo Riesgo Edificio','Combinado'].map(t=>`<option value="${t}"${(lead.tipoSeguro||'')===t?' selected':''}>${t||'— Sin tipo'}</option>`).join('')}</select>
         </div>
         <div class="form-row">
           <label>Aseguradora</label>
@@ -2121,7 +2121,7 @@ function openModal(id, defaultCol, activeTab) {
     addCotBtn.addEventListener('click', () => {
       if (cotFormWrap.innerHTML) { cotFormWrap.innerHTML = ''; addCotBtn.textContent = '＋ Agregar cotización'; return; }
       const tipoOpts = VERTICAL === 'comunidades'
-        ? ['','Copropiedad','Incendio y Sismo','RC Copropiedad','Todo Riesgo Edificio','Combinado']
+        ? ['','Copropiedad','Incendio','Incendio y Sismo','RC Copropiedad','Todo Riesgo Edificio','Combinado']
         : ['','Todo Riesgo','Terceros','SOAP + Terceros','Pérdida Total','Flota'];
       cotFormWrap.innerHTML = `
         <div class="cot-add-form">
