@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>C | Estudio — Partner Estratégico para Corredoras</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --cream: #F7F4EF;
+    --dark: #1C1C1A;
+    --warm: #2C2A25;
+    --accent: #B8935A;
+    --accent-light: #D4B48A;
+    --muted: #7A7570;
+    --line: rgba(28,28,26,0.12);
+  }
+
+  body {
+    background: var(--cream);
+    color: var(--dark);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    width: 210mm;
+    min-height: 297mm;
+    margin: 0 auto;
+    padding: 0;
+    font-size: 13px;
+    line-height: 1.6;
+  }
+
+  /* HEADER */
+  .header {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: start;
+    padding: 36px 44px 28px;
+    border-bottom: 1px solid var(--line);
+    gap: 20px;
+  }
+
+  .header-left .tagline {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 13px;
+    color: var(--muted);
+    letter-spacing: 0.02em;
+    margin-bottom: 6px;
+  }
+
+  .header-left h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 300;
+    font-size: 28px;
+    line-height: 1.15;
+    color: var(--dark);
+    letter-spacing: -0.01em;
+  }
+
+  .header-left h1 em {
+    font-style: italic;
+    color: var(--accent);
+  }
+
+  .logo-area {
+    text-align: right;
+  }
+
+  .logo-img {
+    height: 128px;
+    width: auto;
+    display: block;
+    margin-left: auto;
+  }
+
+  /* INTRO */
+  .intro {
+    padding: 28px 44px 24px;
+    display: grid;
+    grid-template-columns: 1fr 1px 1fr;
+    gap: 28px;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .intro-divider {
+    background: var(--line);
+  }
+
+  .intro-block p {
+    font-size: 13px;
+    color: var(--warm);
+    line-height: 1.7;
+  }
+
+  .intro-block p strong {
+    font-weight: 500;
+    color: var(--dark);
+  }
+
+  .intro-block .label {
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 8px;
+    font-weight: 500;
+  }
+
+  /* PROPUESTA */
+  .propuesta {
+    padding: 24px 44px;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .section-label {
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 500;
+    margin-bottom: 16px;
+  }
+
+  .propuesta-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+
+  .prop-card {
+    padding: 18px 16px;
+    border: 1px solid var(--line);
+    background: white;
+    position: relative;
+  }
+
+  .prop-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: var(--accent);
+  }
+
+  .prop-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 32px;
+    font-weight: 300;
+    color: var(--accent-light);
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+
+  .prop-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--dark);
+    line-height: 1.2;
+    margin-bottom: 6px;
+  }
+
+  .prop-sub {
+    font-size: 11px;
+    color: var(--muted);
+    font-style: italic;
+    margin-bottom: 10px;
+    line-height: 1.4;
+  }
+
+  .prop-body {
+    font-size: 11.5px;
+    color: var(--warm);
+    line-height: 1.6;
+  }
+
+  .prop-price {
+    margin-top: 12px;
+    padding-top: 10px;
+    border-top: 1px solid var(--line);
+    font-size: 11px;
+    color: var(--dark);
+    font-weight: 500;
+  }
+
+  .prop-price span {
+    color: var(--accent);
+    font-weight: 500;
+  }
+
+  .prop-note {
+    font-size: 7.5px;
+    color: var(--muted);
+    font-style: italic;
+    margin-top: 3px;
+    line-height: 1.4;
+  }
+
+  /* BENEFICIOS CORREDORA */
+  .beneficios {
+    padding: 24px 44px;
+    border-bottom: 1px solid var(--line);
+    background: var(--dark);
+    color: var(--cream);
+  }
+
+  .beneficios .section-label {
+    color: var(--accent-light);
+  }
+
+  .beneficios-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    margin-top: 4px;
+  }
+
+  .ben-item {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .ben-icon {
+    font-size: 18px;
+    margin-bottom: 2px;
+  }
+
+  .ben-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 15px;
+    font-weight: 600;
+    color: white;
+    line-height: 1.2;
+  }
+
+  .ben-desc {
+    font-size: 11px;
+    color: rgba(247,244,239,0.65);
+    line-height: 1.5;
+  }
+
+  /* CURCUMA */
+  .curcuma {
+    padding: 24px 44px;
+    border-bottom: 1px solid var(--line);
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 32px;
+    align-items: center;
+    background: #FFFDF8;
+  }
+
+  .curcuma-brand {
+    text-align: center;
+  }
+
+  .curcuma-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 36px;
+    font-weight: 300;
+    color: var(--accent);
+    letter-spacing: 0.05em;
+    line-height: 1;
+  }
+
+  .curcuma-tagline {
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    margin-top: 6px;
+    text-transform: uppercase;
+    font-style: italic;
+  }
+
+  .curcuma-pill {
+    display: inline-block;
+    background: var(--accent);
+    color: white;
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 3px 10px;
+    margin-top: 10px;
+  }
+
+  .curcuma-content .label {
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 500;
+    margin-bottom: 8px;
+  }
+
+  .curcuma-content h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18px;
+    font-weight: 400;
+    color: var(--dark);
+    margin-bottom: 8px;
+    line-height: 1.3;
+  }
+
+  .curcuma-content p {
+    font-size: 12px;
+    color: var(--warm);
+    line-height: 1.7;
+  }
+
+  /* COMO FUNCIONA */
+  .flujo {
+    padding: 22px 44px;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .flujo-steps {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 0;
+    margin-top: 14px;
+    position: relative;
+  }
+
+  .flujo-steps::before {
+    content: '';
+    position: absolute;
+    top: 18px;
+    left: 10%;
+    right: 10%;
+    height: 1px;
+    background: var(--accent-light);
+  }
+
+  .flujo-step {
+    text-align: center;
+    position: relative;
+    padding: 0 6px;
+  }
+
+  .flujo-dot {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: white;
+    border: 1.5px solid var(--accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 10px;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--accent);
+    position: relative;
+    z-index: 1;
+  }
+
+  .flujo-label {
+    font-size: 10.5px;
+    color: var(--dark);
+    font-weight: 500;
+    line-height: 1.3;
+    margin-bottom: 4px;
+  }
+
+  .flujo-desc {
+    font-size: 10px;
+    color: var(--muted);
+    line-height: 1.4;
+  }
+
+  /* FOOTER */
+  .footer {
+    padding: 20px 44px;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .footer-left p {
+    font-size: 11.5px;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  .footer-left strong {
+    color: var(--dark);
+    font-weight: 500;
+  }
+
+  .footer-contact {
+    text-align: right;
+  }
+
+  .contact-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 16px;
+    font-weight: 400;
+    color: var(--dark);
+  }
+
+  .contact-items {
+    margin-top: 6px;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    align-items: flex-end;
+  }
+
+  .contact-item {
+    font-size: 11px;
+    color: var(--muted);
+  }
+
+  .contact-item a {
+    color: var(--accent);
+    text-decoration: none;
+    font-weight: 500;
+  }
+
+  .cta-btn {
+    display: inline-block;
+    background: var(--accent);
+    color: white;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 8px 18px;
+    margin-top: 10px;
+    text-decoration: none;
+    font-weight: 500;
+  }
+
+  @media print {
+    body { width: 210mm; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="header">
+  <div class="header-left">
+    <p class="tagline">Alianza C | Estudio &nbsp;·&nbsp; "Diseño que se siente, gestión que se nota"</p>
+    <h1><em>Aceleramos la venta</em><br>de propiedades.</h1>
+  </div>
+  <div class="logo-area" style="display:none;">
+    <img src="https://sutherlandian88.github.io/cestudio-landing/imgs/cestudio-img-1.png" alt="C | Estudio Arquitectura" class="logo-img">
+  </div>
+</header>
+
+<!-- INTRO -->
+<section class="intro">
+  <div class="intro-block">
+    <p class="label">El problema</p>
+    <p>Las propiedades no se venden rápido porque el comprador <strong>no logra proyectarse.</strong> Se asusta por el estado del inmueble y no sabe cuánto costaría transformarlo.</p>
+  </div>
+  <div class="intro-divider"></div>
+  <div class="intro-block">
+    <p class="label">Nuestra solución</p>
+    <p>Entramos en tu proceso de venta como <strong>partner estratégico.</strong> Ayudamos al comprador a ver lo que la propiedad puede llegar a ser.</p>
+  </div>
+</section>
+
+<!-- IMAGEN ANTES / DESPUÉS -->
+<section style="padding: 0 44px 24px;">
+  <img src="https://sutherlandian88.github.io/cestudio-landing/imgs/cestudio-img-2.jpeg" alt="Antes y después C | Estudio" style="width:100%; display:block; border:none;">
+</section>
+
+<!-- TEXTO BAJO IMAGEN -->
+<section style="padding: 0 44px 24px;">
+  <p style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 15px; color: #7A7570; text-align: center; line-height: 1.7;">Trabajamos con propiedades que necesitan transformación para maximizar su valor y acelerar su venta, visualizando lo que podría llegar a ser, bajo nuestra visión profesional.</p>
+</section>
+
+<!-- SERVICIOS -->
+<section class="propuesta">
+  <p class="section-label">Servicios para corredoras</p>
+  <div class="propuesta-grid">
+
+    <div class="prop-card">
+      <div class="prop-num">01</div>
+      <div class="prop-title">Visita de Potencial</div>
+      <div class="prop-sub">Ojo experto en terreno</div>
+
+      <div class="prop-price">Desde <span>$65.000 CLP</span></div>
+      <div class="prop-note">* Valor reembolsable si se ejecuta la remodelación.</div>
+    </div>
+
+    <div class="prop-card">
+      <div class="prop-num">02</div>
+      <div class="prop-title">Diagnóstico de Potencial</div>
+      <div class="prop-sub">Visita + informe en 48 hrs</div>
+
+      <div class="prop-price">Desde <span>$180.000 CLP</span></div>
+      <div class="prop-note">* Valor reembolsable si se ejecuta la remodelación.</div>
+    </div>
+
+
+
+    <div class="prop-card">
+      <div class="prop-num">03</div>
+      <div class="prop-title">Remodelación Integral</div>
+      <div class="prop-sub">Diseño, dirección y gestión</div>
+
+      <div class="prop-price">Desde <span>700 UF</span></div>
+    </div>
+
+  </div>
+</section>
+
+<!-- BENEFICIOS CORREDORA -->
+<section class="beneficios">
+  <p class="section-label">Lo que gana la corredora</p>
+  <div class="beneficios-grid">
+    <div class="ben-item">
+      <div class="ben-title">Vende más rápido</div>
+      <div class="ben-desc">El comprador decide con claridad.</div>
+    </div>
+    <div class="ben-item">
+      <div class="ben-title">Destraba propiedades difíciles</div>
+      <div class="ben-desc">El potencial oculto se vuelve visible.</div>
+    </div>
+    <div class="ben-item">
+      <div class="ben-title">Justifica el precio</div>
+      <div class="ben-desc">Respaldo profesional con argumentos concretos.</div>
+    </div>
+    <div class="ben-item">
+      <div class="ben-title">Experiencia premium</div>
+      <div class="ben-desc">Un servicio que nadie más ofrece.</div>
+    </div>
+  </div>
+</section>
+
+<!-- CURCUMA -->
+<section class="curcuma">
+  <div class="curcuma-brand">
+    <div class="curcuma-name">Cúrcuma</div>
+    <div class="curcuma-tagline">portal visualizador</div>
+    <div class="curcuma-pill">Nuevo</div>
+  </div>
+  <div class="curcuma-content">
+    <p class="label">Plus para corredoras aliadas</p>
+    <h3>No vendemos casas.<br>Mostramos su potencial.</h3>
+    <p>Portal visualizador que muestra la transformación posible de una propiedad antes de comprarla. Acelera el cierre de propiedades que hoy están trabadas.</p>
+  </div>
+</section>
+
+<!-- COMO FUNCIONA -->
+<section class="flujo">
+  <p class="section-label">Cómo trabajamos juntos</p>
+  <div class="flujo-steps">
+    <div class="flujo-step">
+      <div class="flujo-dot">1</div>
+      <div class="flujo-label">Nos contactas</div>
+      <div class="flujo-desc">Propiedad o comprador que necesita claridad</div>
+    </div>
+    <div class="flujo-step">
+      <div class="flujo-dot">2</div>
+      <div class="flujo-label">Nos presentas</div>
+      <div class="flujo-desc">Nosotros tomamos el contacto directo</div>
+    </div>
+    <div class="flujo-step">
+      <div class="flujo-dot">3</div>
+      <div class="flujo-label">Evaluamos</div>
+      <div class="flujo-desc">Visita o diagnóstico según necesidad</div>
+    </div>
+    <div class="flujo-step">
+      <div class="flujo-dot">4</div>
+      <div class="flujo-label">El comprador decide</div>
+      <div class="flujo-desc">Con certeza y confianza</div>
+    </div>
+    <div class="flujo-step">
+      <div class="flujo-dot">5</div>
+      <div class="flujo-label">Tú cierras</div>
+      <div class="flujo-desc">Más rápido, a mejor precio</div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-left">
+    <p><strong>Sin contratos. Sin mensualidades.</strong><br>
+    Caso a caso. Respondemos en menos de 24 hrs.</p>
+  </div>
+  <div class="footer-contact">
+    <div class="contact-name">Camila Barros L.</div>
+    <div class="contact-items">
+      <div class="contact-item"><a href="mailto:cami@cestudio.cl">cami@cestudio.cl</a></div>
+      <div class="contact-item"><a href="tel:+56998182936">+56 9 9818 2936</a></div>
+      <div class="contact-item">@_c_estudio</div>
+    </div>
+    <a href="tel:+56998182936" class="cta-btn">Agenda tu reunión</a>
+  </div>
+</footer>
+
+</body>
+</html>
