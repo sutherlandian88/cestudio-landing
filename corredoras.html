@@ -6,6 +6,7 @@
 <title>C | Estudio — Partner Estratégico para Corredoras</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
+  @page { size: A4; margin: 0; }
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
   :root {
@@ -36,9 +37,9 @@
     display: grid;
     grid-template-columns: 1fr auto;
     align-items: start;
-    padding: 36px 44px 28px;
+    padding: 22px 44px 16px;
     border-bottom: 1px solid var(--line);
-    gap: 20px;
+    gap: 12px;
   }
 
   .header-left .tagline {
@@ -53,7 +54,7 @@
   .header-left h1 {
     font-family: 'Cormorant Garamond', serif;
     font-weight: 300;
-    font-size: 28px;
+    font-size: 34px;
     line-height: 1.15;
     color: var(--dark);
     letter-spacing: -0.01em;
@@ -77,10 +78,10 @@
 
   /* INTRO */
   .intro {
-    padding: 28px 44px 24px;
+    padding: 16px 44px 14px;
     display: grid;
     grid-template-columns: 1fr 1px 1fr;
-    gap: 28px;
+    gap: 16px;
     border-bottom: 1px solid var(--line);
   }
 
@@ -100,17 +101,17 @@
   }
 
   .intro-block .label {
-    font-size: 9px;
+    font-size: 11px;
     letter-spacing: 0.2em;
     text-transform: uppercase;
     color: var(--accent);
     margin-bottom: 8px;
-    font-weight: 500;
+    font-weight: 700;
   }
 
   /* PROPUESTA */
   .propuesta {
-    padding: 24px 44px;
+    padding: 14px 44px;
     border-bottom: 1px solid var(--line);
   }
 
@@ -142,15 +143,6 @@
     top: 0; left: 0; right: 0;
     height: 2px;
     background: var(--accent);
-  }
-
-  .prop-num {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 32px;
-    font-weight: 300;
-    color: var(--accent-light);
-    line-height: 1;
-    margin-bottom: 8px;
   }
 
   .prop-title {
@@ -200,7 +192,7 @@
 
   /* BENEFICIOS CORREDORA */
   .beneficios {
-    padding: 24px 44px;
+    padding: 14px 44px;
     border-bottom: 1px solid var(--line);
     background: var(--dark);
     color: var(--cream);
@@ -213,7 +205,7 @@
   .beneficios-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 20px;
+    gap: 12px;
     margin-top: 4px;
   }
 
@@ -244,11 +236,12 @@
 
   /* CURCUMA */
   .curcuma {
-    padding: 24px 44px;
+    page-break-before: always;
+    padding: 60px 44px 14px;
     border-bottom: 1px solid var(--line);
     display: grid;
     grid-template-columns: 1fr 2fr;
-    gap: 32px;
+    gap: 18px;
     align-items: center;
     background: #FFFDF8;
   }
@@ -312,7 +305,7 @@
 
   /* COMO FUNCIONA */
   .flujo {
-    padding: 22px 44px;
+    padding: 12px 44px;
     border-bottom: 1px solid var(--line);
   }
 
@@ -374,11 +367,11 @@
 
   /* FOOTER */
   .footer {
-    padding: 20px 44px;
+    padding: 11px 44px;
     display: grid;
     grid-template-columns: 1fr auto;
     align-items: center;
-    gap: 20px;
+    gap: 12px;
   }
 
   .footer-left p {
@@ -467,12 +460,12 @@
 </section>
 
 <!-- IMAGEN ANTES / DESPUÉS -->
-<section style="padding: 0 44px 24px;">
+<section style="padding: 0 44px 14px;">
   <img src="https://sutherlandian88.github.io/cestudio-landing/imgs/cestudio-img-2.jpeg" alt="Antes y después C | Estudio" style="width:100%; display:block; border:none;">
 </section>
 
 <!-- TEXTO BAJO IMAGEN -->
-<section style="padding: 0 44px 24px;">
+<section style="padding: 0 44px 14px;">
   <p style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 15px; color: #7A7570; text-align: center; line-height: 1.7;">Trabajamos con propiedades que necesitan transformación para maximizar su valor y acelerar su venta, visualizando lo que podría llegar a ser, bajo nuestra visión profesional.</p>
 </section>
 
@@ -482,31 +475,28 @@
   <div class="propuesta-grid">
 
     <div class="prop-card">
-      <div class="prop-num">01</div>
       <div class="prop-title">Visita de Potencial</div>
       <div class="prop-sub">Ojo experto en terreno</div>
 
-      <div class="prop-price">Desde <span>$65.000 CLP</span></div>
+      <div class="prop-price"><span>Por definir</span></div>
       <div class="prop-note">* Valor reembolsable si se ejecuta la remodelación.</div>
     </div>
 
     <div class="prop-card">
-      <div class="prop-num">02</div>
       <div class="prop-title">Diagnóstico de Potencial</div>
       <div class="prop-sub">Visita + informe en 48 hrs</div>
 
-      <div class="prop-price">Desde <span>$180.000 CLP</span></div>
+      <div class="prop-price"><span>Por definir</span></div>
       <div class="prop-note">* Valor reembolsable si se ejecuta la remodelación.</div>
     </div>
 
 
 
     <div class="prop-card">
-      <div class="prop-num">03</div>
       <div class="prop-title">Remodelación Integral</div>
       <div class="prop-sub">Diseño, dirección y gestión</div>
 
-      <div class="prop-price">Desde <span>700 UF</span></div>
+      <div class="prop-price">Desde <span>800 UF</span></div>
     </div>
 
   </div>
@@ -592,9 +582,9 @@
     <div class="contact-items">
       <div class="contact-item"><a href="mailto:cami@cestudio.cl">cami@cestudio.cl</a></div>
       <div class="contact-item"><a href="tel:+56998182936">+56 9 9818 2936</a></div>
-      <div class="contact-item">@_c_estudio</div>
+      <div class="contact-item"><a href="https://www.instagram.com/_c_estudio/" target="_blank">@_c_estudio</a></div>
     </div>
-    <a href="tel:+56998182936" class="cta-btn">Agenda tu reunión</a>
+    <a href="https://wa.me/56998182936?text=Hola%20Camila%2C%20me%20interesa%20agendar%20una%20reuni%C3%B3n." target="_blank" class="cta-btn">Agenda tu reunión</a>
   </div>
 </footer>
 
