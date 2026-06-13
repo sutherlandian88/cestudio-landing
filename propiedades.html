@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Propiedades con Potencial — Cúrcuma × C Estudio</title>
+<meta name="description" content="Propiedades seleccionadas con potencial de remodelación en Santiago. Cúrcuma encuentra la propiedad, C Estudio la transforma."/>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%233a3632'/><text y='.9em' font-size='72' font-family='serif' fill='%23f0ece5' x='14'>C</text></svg>"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Jost:wght@300;400&display=swap" rel="stylesheet"/>
+<style>
+*, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+html { scroll-behavior:smooth; }
+body { font-family:'Jost',sans-serif; font-weight:300; background:#f5f3ef; color:#3a3632; min-height:100vh; }
+
+/* ── NAV ── */
+nav { display:flex; justify-content:space-between; align-items:center; padding:20px 40px; background:#f5f3ef; border-bottom:0.5px solid #d8d4cc; position:sticky; top:0; z-index:100; }
+.nav-logo { font-family:'Cormorant Garamond',serif; font-size:18px; font-weight:300; letter-spacing:3px; color:#3a3632; text-decoration:none; }
+.nav-links { display:flex; gap:32px; list-style:none; }
+.nav-links a { font-size:10px; letter-spacing:2.5px; text-transform:uppercase; color:#3a3632; text-decoration:none; transition:opacity 0.2s; }
+.nav-links a:hover { opacity:0.5; }
+.nav-curcuma { color:#b08a5a !important; }
+.nav-curcuma.active { border-bottom:1px solid #b08a5a; padding-bottom:1px; }
+
+/* ── HERO ── */
+.prop-hero { padding:72px 40px 56px; background:#3a3632; color:#f0ece5; display:flex; justify-content:space-between; align-items:flex-end; flex-wrap:wrap; gap:24px; }
+.prop-hero-brand { }
+.prop-hero-eyebrow { font-size:9px; letter-spacing:3px; text-transform:uppercase; color:#b08a5a; margin-bottom:14px; display:block; }
+.prop-hero-title { font-family:'Cormorant Garamond',serif; font-size:52px; font-weight:300; line-height:1.05; }
+.prop-hero-title em { font-style:italic; color:#b08a5a; }
+.prop-hero-desc { max-width:420px; font-size:13px; line-height:1.9; color:#b0aaa4; }
+
+/* ── BEFORE/AFTER HERO ── */
+.ba-hero { position:relative; width:100%; height:500px; overflow:hidden; cursor:ew-resize; user-select:none; background:#1a1815; }
+.ba-hero img { width:100%; height:100%; object-fit:cover; display:block; pointer-events:none; }
+.ba-before, .ba-after { position:absolute; inset:0; width:100%; height:100%; }
+.ba-after { clip-path:inset(0 50% 0 0); }
+.ba-divider { position:absolute; top:0; bottom:0; left:50%; width:1.5px; background:rgba(255,255,255,0.85); z-index:5; pointer-events:none; }
+.ba-handle { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:40px; height:40px; background:#fff; border-radius:50%; display:flex; align-items:center; justify-content:center; z-index:6; pointer-events:none; box-shadow:0 2px 16px rgba(0,0,0,0.25); }
+.ba-tag { position:absolute; bottom:20px; padding:4px 12px; font-size:9px; letter-spacing:2px; text-transform:uppercase; font-weight:500; z-index:4; pointer-events:none; }
+.ba-tag.b { left:20px; background:rgba(58,54,50,0.8); color:#f0ece5; }
+.ba-tag.a { right:20px; background:rgba(90,130,90,0.88); color:#fff; }
+.ba-caption { position:absolute; top:20px; left:50%; transform:translateX(-50%); background:rgba(245,243,239,0.93); padding:6px 18px; font-family:'Cormorant Garamond',serif; font-size:14px; color:#3a3632; letter-spacing:3px; z-index:7; pointer-events:none; white-space:nowrap; }
+
+/* ── FILTROS ── */
+.prop-filters { display:flex; gap:0; padding:32px 40px 0; border-bottom:0.5px solid #d8d4cc; flex-wrap:wrap; }
+.prop-filter-btn { font-size:9px; letter-spacing:2.5px; text-transform:uppercase; padding:10px 20px 14px; border:none; background:none; color:#9a948e; cursor:pointer; border-bottom:2px solid transparent; transition:all 0.2s; margin-bottom:-0.5px; }
+.prop-filter-btn:hover { color:#3a3632; }
+.prop-filter-btn.active { color:#3a3632; border-bottom-color:#3a3632; }
+
+/* ── CARDS GRID ── */
+.prop-cards-section { padding:40px 40px 72px; }
+.prop-section-title { font-size:9px; letter-spacing:3px; text-transform:uppercase; color:#b0aaa4; margin-bottom:28px; }
+.prop-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:24px; }
+
+/* ── CARD ── */
+.prop-card { background:#fff; border:0.5px solid #ece9e3; overflow:hidden; transition:transform 0.3s, box-shadow 0.3s; }
+.prop-card:hover { transform:translateY(-4px); box-shadow:0 20px 56px rgba(26,24,21,0.1); }
+.prop-card[data-hidden="true"] { display:none; }
+
+.card-img { position:relative; aspect-ratio:4/3; overflow:hidden; cursor:ew-resize; user-select:none; }
+.card-img img { width:100%; height:100%; object-fit:cover; display:block; position:absolute; inset:0; pointer-events:none; }
+.card-after-wrap { position:absolute; inset:0; overflow:hidden; clip-path:inset(0 55% 0 0); }
+.card-after-wrap img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
+.card-div { position:absolute; top:0; bottom:0; left:45%; width:1px; background:rgba(255,255,255,0.8); z-index:5; pointer-events:none; }
+.card-handle { position:absolute; top:50%; left:45%; transform:translate(-50%,-50%); width:24px; height:24px; background:#fff; border-radius:50%; display:flex; align-items:center; justify-content:center; z-index:6; pointer-events:none; box-shadow:0 1px 8px rgba(0,0,0,0.22); }
+.ctag { position:absolute; bottom:10px; padding:2px 8px; font-size:8px; letter-spacing:1px; text-transform:uppercase; z-index:4; pointer-events:none; }
+.ctag.b { left:10px; background:rgba(58,54,50,0.78); color:#f0ece5; }
+.ctag.a { right:10px; background:rgba(90,130,90,0.88); color:#fff; }
+.card-badge { position:absolute; top:12px; left:12px; font-size:8px; letter-spacing:1.5px; text-transform:uppercase; padding:3px 8px; z-index:4; }
+.badge-dest { background:#3a3632; color:#c8a87a; }
+.badge-new { background:#c8a87a; color:#fff; }
+
+.card-body { padding:20px 22px 24px; }
+.card-comuna { font-size:9px; letter-spacing:2.5px; text-transform:uppercase; color:#b08a5a; margin-bottom:8px; }
+.card-title { font-family:'Cormorant Garamond',serif; font-size:22px; font-weight:300; color:#3a3632; margin-bottom:12px; line-height:1.15; }
+.card-specs { display:flex; gap:10px; font-size:11px; color:#9a948e; margin-bottom:16px; padding-bottom:14px; border-bottom:0.5px solid #ece9e3; }
+.card-pricing { display:flex; justify-content:space-between; align-items:flex-end; }
+.card-price-label { font-size:9px; letter-spacing:1.5px; text-transform:uppercase; color:#b0aaa4; margin-bottom:4px; }
+.card-price { font-family:'Cormorant Garamond',serif; font-size:24px; color:#3a3632; font-weight:300; }
+.card-projected { font-size:10px; color:#5a8a6a; margin-top:5px; }
+.card-cta { font-size:9px; letter-spacing:1.5px; text-transform:uppercase; color:#b08a5a; margin-top:14px; display:flex; align-items:center; gap:8px; }
+.card-cta::before { content:''; width:16px; height:0.5px; background:#b08a5a; }
+
+/* ── BANNER ── */
+.prop-banner { background:#3a3632; padding:64px 40px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:24px; }
+.prop-banner-text h2 { font-family:'Cormorant Garamond',serif; font-size:36px; font-weight:300; color:#f0ece5; margin-bottom:8px; }
+.prop-banner-text p { font-size:12px; color:#b0aaa4; line-height:1.8; }
+.prop-banner-cta { display:flex; flex-direction:column; gap:12px; align-items:flex-end; }
+.btn-primary { display:inline-block; background:#b08a5a; color:#fff; font-size:9px; letter-spacing:2.5px; text-transform:uppercase; padding:14px 28px; text-decoration:none; transition:opacity 0.2s; }
+.btn-primary:hover { opacity:0.85; }
+.btn-ghost { display:inline-block; border:0.5px solid rgba(240,236,229,0.4); color:#f0ece5; font-size:9px; letter-spacing:2.5px; text-transform:uppercase; padding:14px 28px; text-decoration:none; transition:opacity 0.2s; }
+.btn-ghost:hover { opacity:0.65; }
+
+/* ── FOOTER ── */
+footer { display:flex; justify-content:center; padding:20px 40px; border-top:0.5px solid #d8d4cc; background:#f5f3ef; font-size:10px; color:#b0aaa4; letter-spacing:1px; }
+
+/* ── WHATSAPP ── */
+.whatsapp-float { position:fixed; bottom:28px; right:28px; z-index:1000; width:56px; height:56px; background:#25d366; border-radius:50%; display:flex; align-items:center; justify-content:center; box-shadow:0 4px 16px rgba(0,0,0,0.22); transition:transform 0.2s,box-shadow 0.2s; text-decoration:none; }
+.whatsapp-float:hover { transform:scale(1.08); box-shadow:0 6px 20px rgba(0,0,0,0.28); }
+.whatsapp-float svg { width:32px; height:32px; fill:#fff; }
+
+/* ── RESPONSIVE ── */
+@media (max-width:1024px) {
+  .prop-grid { grid-template-columns:repeat(2,1fr); }
+}
+@media (max-width:768px) {
+  nav { padding:16px 20px; }
+  .nav-links { gap:16px; }
+  .prop-hero { padding:48px 20px 40px; }
+  .prop-hero-title { font-size:36px; }
+  .ba-hero { height:280px; }
+  .prop-filters { padding:24px 20px 0; }
+  .prop-cards-section { padding:32px 20px 56px; }
+  .prop-grid { grid-template-columns:1fr; }
+  .prop-banner { padding:48px 20px; flex-direction:column; }
+  .prop-banner-cta { align-items:flex-start; }
+  footer { padding:16px 20px; }
+  .whatsapp-float { bottom:20px; right:16px; width:50px; height:50px; }
+  .whatsapp-float svg { width:28px; height:28px; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="/" class="nav-logo">C | ESTUDIO</a>
+  <ul class="nav-links">
+    <li><a href="/propiedades" class="nav-curcuma active">Cúrcuma</a></li>
+    <li><a href="/#quienes-somos">Quiénes somos</a></li>
+    <li><a href="/#servicios">Servicios</a></li>
+    <li><a href="/#contacto">Contacto</a></li>
+  </ul>
+</nav>
+
+<!-- Hero -->
+<div class="prop-hero">
+  <div class="prop-hero-brand">
+    <span class="prop-hero-eyebrow">Cúrcuma × C Estudio</span>
+    <h1 class="prop-hero-title">Propiedades con<br/><em>potencial de diseño</em></h1>
+  </div>
+  <p class="prop-hero-desc">Seleccionamos propiedades en comunas premium de Santiago con potencial de transformación. Cúrcuma encuentra la oportunidad, C Estudio la ejecuta.</p>
+</div>
+
+<!-- Before/After Hero -->
+<div class="ba-hero" id="baHero">
+  <div class="ba-before">
+    <img src="https://raw.githubusercontent.com/sutherlandian88/curcuma/main/imgs/sz-01A-cocina-antes.jpg" alt="Cocina antes de remodelar" draggable="false"/>
+  </div>
+  <div class="ba-after" id="baAfter">
+    <img src="https://raw.githubusercontent.com/sutherlandian88/curcuma/main/imgs/sz-01B-cocina-despues.jpg" alt="Cocina después de remodelar" draggable="false"/>
+  </div>
+  <div class="ba-divider" id="baDivider"></div>
+  <div class="ba-handle" id="baHandle">
+    <svg width="18" height="18" fill="none" stroke="#3a3632" stroke-width="2" viewBox="0 0 24 24"><path d="M8 4l-4 8 4 8M16 4l4 8-4 8"/></svg>
+  </div>
+  <span class="ba-tag b">Estado actual</span>
+  <span class="ba-tag a">Con C Estudio</span>
+  <span class="ba-caption">Casa Los Sauzales · Lo Barnechea</span>
+</div>
+
+<!-- Filters -->
+<div class="prop-filters">
+  <button class="prop-filter-btn active" data-filter="all">Todas</button>
+  <button class="prop-filter-btn" data-filter="lo-barnechea">Lo Barnechea</button>
+  <button class="prop-filter-btn" data-filter="vitacura">Vitacura</button>
+  <button class="prop-filter-btn" data-filter="las-condes">Las Condes</button>
+  <button class="prop-filter-btn" data-filter="la-reina">La Reina</button>
+</div>
+
+<!-- Cards -->
+<div class="prop-cards-section">
+  <p class="prop-section-title">6 propiedades disponibles</p>
+  <div class="prop-grid" id="propGrid">
+
+    <!-- Card 1 -->
+    <div class="prop-card" data-comuna="lo-barnechea">
+      <div class="card-img">
+        <img src="https://raw.githubusercontent.com/sutherlandian88/curcuma/main/imgs/sz-05A-living-antes.jpg" alt="Living antes"/>
+        <div class="card-after-wrap">
+          <img src="https://raw.githubusercontent.com/sutherlandian88/curcuma/main/imgs/sz-05B-living-despues.jpg" alt="Living después"/>
+        </div>
+        <div class="card-div"></div>
+        <div class="card-handle"><svg width="11" height="11" fill="none" stroke="#3a3632" stroke-width="2" viewBox="0 0 24 24"><path d="M8 4l-4 8 4 8M16 4l4 8-4 8"/></svg></div>
+        <span class="ctag b">Hoy</span>
+        <span class="ctag a">Potencial</span>
+        <span class="card-badge badge-dest">Destacada</span>
+      </div>
+      <div class="card-body">
+        <p class="card-comuna">Lo Barnechea</p>
+        <h2 class="card-title">Casa Los Sauzales</h2>
+        <div class="card-specs"><span>5 dorm.</span><span>·</span><span>4 baños</span><span>·</span><span>280 m²</span><span>·</span><span>Jardín</span></div>
+        <div class="card-pricing">
+          <div>
+            <p class="card-price-label">Precio actual</p>
+            <p class="card-price">22.500 UF</p>
+            <p class="card-projected">↑ 26.000 UF post-remodelación</p>
+          </div>
+        </div>
+        <p class="card-cta">C | Estudio lo remodelaría</p>
+      </div>
+    </div>
+
+    <!-- Card 2 -->
+    <div class="prop-card" data-comuna="vitacura">
+      <div class="card-img">
+        <img src="https://raw.githubusercontent.com/sutherlandian88/curcuma/main/imgs/qt-01A-fachada-antes.jpg" alt="Fachada antes"/>
+        <div class="card-after-wrap">
+          <img src="https://raw.githubusercontent.com/sutherlandian88/curcuma/main/imgs/qt-01B-fachada-despues.jpg" alt="Fachada después"/>
+        </div>
+        <div class="card-div"></div>
+        <div class="card-handle"><svg width="11" height="11" fill="none" stroke="#3a3632" stroke-width="2" viewBox="0 0 24 24"><path d="M8 4l-4 8 4 8M16 4l4 8-4 8"/></svg></div>
+        <span class="ctag b">Hoy</span>
+        <span class="ctag a">Potencial</span>
+        <span class="card-badge badge-new">Nueva</span>
+      </div>
+      <div class="card-body">
+        <p class="card-comuna">Vitacura</p>
+        <h2 class="card-title">Casa Quilín</h2>
+        <div class="card-specs"><span>4 dorm.</span><span>·</span><span>3 baños</span><span>·</span><span>210 m²</span></div>
+        <div class="card-pricing">
+          <div>
+            <p class="card-price-label">Precio actual</p>
+            <p class="card-price">18.900 UF</p>
+            <p class="card-projected">↑ 23.500 UF post-remodelación</p>
+          </div>
+        </div>
+        <p class="card-cta">C | Estudio lo remodelaría</p>
+      </div>
+    </div>
+
+    <!-- Card 3 -->
+    <div class="prop-card" data-comuna="las-condes">
+      <div class="card-img">
+        <img src="https://raw.githubusercontent.com/sutherlandian88/curcuma/main/imgs/rb-02A-cocina-antes.jpg" alt="Cocina antes"/>
+        <div class="card-after-wrap">
+          <img src="https://raw.githubusercontent.com/sutherlandian88/curcuma/main/imgs/rb-02B-cocina-despues.jpg" alt="Cocina después"/>
+        </div>
+        <div class="card-div"></div>
+        <div class="card-handle"><svg width="11" height="11" fill="none" stroke="#3a3632" stroke-width="2" viewBox="0 0 24 24"><path d="M8 4l-4 8 4 8M16 4l4 8-4 8"/></svg></div>
+        <span class="ctag b">Hoy</span>
+        <span class="ctag a">Potencial</span>
+      </div>
+      <div class="card-body">
+        <p class="card-comuna">Las Condes</p>
+        <h2 class="card-title">Casa Río Bueno</h2>
+        <div class="card-specs"><span>4 dorm.</span><span>·</span><span>3 baños</span><span>·</span><span>195 m²</span></div>
+        <div class="card-pricing">
+          <div>
+            <p class="card-price-label">Precio actual</p>
+            <p class="card-price">16.200 UF</p>
+            <p class="card-projected">↑ 20.000 UF post-remodelación</p>
+          </div>
+        </div>
+        <p class="card-cta">C | Estudio lo remodelaría</p>
+      </div>
+    </div>
+
+    <!-- Card 4 -->
+    <div class="prop-card" data-comuna="lo-barnechea">
+      <div class="card-img">
+        <img src="https://raw.githubusercontent.com/sutherlandian88/curcuma/main/imgs/sz-03A-bano-antes.jpg" alt="Baño antes"/>
+        <div class="card-after-wrap">
+          <img src="https://raw.githubusercontent.com/sutherlandian88/curcuma/main/imgs/sz-03B-bano-despues.jpg" alt="Baño después"/>
+        </div>
+        <div class="card-div"></div>
+        <div class="card-handle"><svg width="11" height="11" fill="none" stroke="#3a3632" stroke-width="2" viewBox="0 0 24 24"><path d="M8 4l-4 8 4 8M16 4l4 8-4 8"/></svg></div>
+        <span class="ctag b">Hoy</span>
+        <span class="ctag a">Potencial</span>
+      </div>
+      <div class="card-body">
+        <p class="card-comuna">Lo Barnechea</p>
+        <h2 class="card-title">Casa El Manzano</h2>
+        <div class="card-specs"><span>3 dorm.</span><span>·</span><span>2 baños</span><span>·</span><span>160 m²</span></div>
+        <div class="card-pricing">
+          <div>
+            <p class="card-price-label">Precio actual</p>
+            <p class="card-price">12.400 UF</p>
+            <p class="card-projected">↑ 15.800 UF post-remodelación</p>
+          </div>
+        </div>
+        <p class="card-cta">C | Estudio lo remodelaría</p>
+      </div>
+    </div>
+
+    <!-- Card 5 -->
+    <div class="prop-card" data-comuna="la-reina">
+      <div class="card-img">
+        <img src="https://raw.githubusercontent.com/sutherlandian88/curcuma/main/imgs/as-01A-living-antes.jpg" alt="Living antes"/>
+        <div class="card-after-wrap">
+          <img src="https://raw.githubusercontent.com/sutherlandian88/curcuma/main/imgs/as-01B-living-despues.jpg" alt="Living después"/>
+        </div>
+        <div class="card-div"></div>
+        <div class="card-handle"><svg width="11" height="11" fill="none" stroke="#3a3632" stroke-width="2" viewBox="0 0 24 24"><path d="M8 4l-4 8 4 8M16 4l4 8-4 8"/></svg></div>
+        <span class="ctag b">Hoy</span>
+        <span class="ctag a">Potencial</span>
+        <span class="card-badge badge-new">Nueva</span>
+      </div>
+      <div class="card-body">
+        <p class="card-comuna">La Reina</p>
+        <h2 class="card-title">Casa Andes Sur</h2>
+        <div class="card-specs"><span>4 dorm.</span><span>·</span><span>3 baños</span><span>·</span><span>220 m²</span></div>
+        <div class="card-pricing">
+          <div>
+            <p class="card-price-label">Precio actual</p>
+            <p class="card-price">14.800 UF</p>
+            <p class="card-projected">↑ 18.500 UF post-remodelación</p>
+          </div>
+        </div>
+        <p class="card-cta">C | Estudio lo remodelaría</p>
+      </div>
+    </div>
+
+    <!-- Card 6 -->
+    <div class="prop-card" data-comuna="las-condes">
+      <div class="card-img">
+        <img src="https://raw.githubusercontent.com/sutherlandian88/curcuma/main/imgs/rb-01A-living-antes.jpg" alt="Living antes"/>
+        <div class="card-after-wrap">
+          <img src="https://raw.githubusercontent.com/sutherlandian88/curcuma/main/imgs/rb-01B-living-despues.jpg" alt="Living después"/>
+        </div>
+        <div class="card-div"></div>
+        <div class="card-handle"><svg width="11" height="11" fill="none" stroke="#3a3632" stroke-width="2" viewBox="0 0 24 24"><path d="M8 4l-4 8 4 8M16 4l4 8-4 8"/></svg></div>
+        <span class="ctag b">Hoy</span>
+        <span class="ctag a">Potencial</span>
+      </div>
+      <div class="card-body">
+        <p class="card-comuna">Las Condes</p>
+        <h2 class="card-title">Casa Río Bueno II</h2>
+        <div class="card-specs"><span>5 dorm.</span><span>·</span><span>4 baños</span><span>·</span><span>310 m²</span><span>·</span><span>Piscina</span></div>
+        <div class="card-pricing">
+          <div>
+            <p class="card-price-label">Precio actual</p>
+            <p class="card-price">28.500 UF</p>
+            <p class="card-projected">↑ 34.000 UF post-remodelación</p>
+          </div>
+        </div>
+        <p class="card-cta">C | Estudio lo remodelaría</p>
+      </div>
+    </div>
+
+  </div><!-- /grid -->
+</div>
+
+<!-- CTA Banner -->
+<div class="prop-banner">
+  <div class="prop-banner-text">
+    <h2>¿Te interesa alguna propiedad?</h2>
+    <p>Te mostramos cómo quedaría remodelada y gestionamos<br/>el proceso completo contigo.</p>
+  </div>
+  <div class="prop-banner-cta">
+    <a href="https://wa.me/56998182936" class="btn-primary">Hablemos por WhatsApp →</a>
+    <a href="/#contacto" class="btn-ghost">Formulario de contacto</a>
+  </div>
+</div>
+
+<footer>
+  <span>© 2025 C Estudio · Camila Barros Lama, Arquitecta</span>
+</footer>
+
+<a href="https://wa.me/56998182936" class="whatsapp-float" target="_blank" rel="noopener" aria-label="Contactar por WhatsApp">
+  <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><path d="M16 3C9.373 3 4 8.373 4 15c0 2.385.832 4.584 2.218 6.332L4.1 28.1l6.91-2.09A11.93 11.93 0 0016 27c6.627 0 12-5.373 12-12S22.627 3 16 3zm0 2c5.523 0 10 4.477 10 10s-4.477 10-10 10a9.93 9.93 0 01-4.9-1.28l-.35-.2-4.1 1.24 1.26-4-.23-.37A9.93 9.93 0 016 15c0-5.523 4.477-10 10-10zm-3.5 5c-.25 0-.65.1-.95.45-.3.35-1.15 1.12-1.15 2.73s1.18 3.17 1.34 3.39c.17.22 2.3 3.72 5.67 5.07.79.34 1.41.54 1.89.7.79.25 1.51.21 2.08.13.64-.1 1.96-.8 2.23-1.57.28-.77.28-1.43.2-1.57-.08-.14-.3-.22-.63-.38s-1.96-.97-2.27-1.08c-.3-.1-.52-.15-.74.15s-.85 1.08-1.04 1.3-.38.23-.7.08a8.81 8.81 0 01-2.58-1.59 9.7 9.7 0 01-1.79-2.22c-.18-.32 0-.5.14-.66.14-.15.3-.38.46-.57.15-.19.2-.32.3-.54.1-.22.05-.41-.03-.57-.07-.16-.74-1.77-1.02-2.43-.27-.64-.54-.55-.74-.56l-.63-.01z"/></svg>
+</a>
+
+<script>
+// ── Before/After Hero ──
+(function(){
+  var hero = document.getElementById('baHero');
+  if (!hero) return;
+  var after = document.getElementById('baAfter');
+  var div = document.getElementById('baDivider');
+  var handle = document.getElementById('baHandle');
+  var dragging = false;
+  function setPos(x) {
+    var r = hero.getBoundingClientRect();
+    var pct = Math.min(Math.max((x - r.left) / r.width, 0.02), 0.98);
+    after.style.clipPath = 'inset(0 ' + ((1-pct)*100).toFixed(1) + '% 0 0)';
+    div.style.left = (pct*100).toFixed(1) + '%';
+    handle.style.left = (pct*100).toFixed(1) + '%';
+  }
+  hero.addEventListener('mousedown', function(e){ dragging=true; setPos(e.clientX); e.preventDefault(); });
+  hero.addEventListener('touchstart', function(e){ dragging=true; setPos(e.touches[0].clientX); e.preventDefault(); }, {passive:false});
+  window.addEventListener('mousemove', function(e){ if(dragging) setPos(e.clientX); });
+  window.addEventListener('touchmove', function(e){ if(dragging) setPos(e.touches[0].clientX); e.preventDefault(); }, {passive:false});
+  window.addEventListener('mouseup', function(){ dragging=false; });
+  window.addEventListener('touchend', function(){ dragging=false; });
+})();
+
+// ── Card Sliders ──
+document.querySelectorAll('.card-img').forEach(function(card) {
+  var wrap = card.querySelector('.card-after-wrap');
+  var div = card.querySelector('.card-div');
+  var handle = card.querySelector('.card-handle');
+  var dragging = false;
+  function setPos(x) {
+    var r = card.getBoundingClientRect();
+    var pct = Math.min(Math.max((x - r.left) / r.width, 0.02), 0.98);
+    wrap.style.clipPath = 'inset(0 ' + ((1-pct)*100).toFixed(1) + '% 0 0)';
+    div.style.left = (pct*100).toFixed(1) + '%';
+    handle.style.left = (pct*100).toFixed(1) + '%';
+  }
+  card.addEventListener('mousedown', function(e){ dragging=true; setPos(e.clientX); e.preventDefault(); });
+  card.addEventListener('touchstart', function(e){ dragging=true; setPos(e.touches[0].clientX); e.preventDefault(); }, {passive:false});
+  window.addEventListener('mousemove', function(e){ if(dragging) setPos(e.clientX); });
+  window.addEventListener('touchmove', function(e){ if(dragging) setPos(e.touches[0].clientX); e.preventDefault(); }, {passive:false});
+  window.addEventListener('mouseup', function(){ dragging=false; });
+  window.addEventListener('touchend', function(){ dragging=false; });
+});
+
+// ── Filtros ──
+var filterBtns = document.querySelectorAll('.prop-filter-btn');
+var cards = document.querySelectorAll('.prop-card');
+var countEl = document.querySelector('.prop-section-title');
+filterBtns.forEach(function(btn) {
+  btn.addEventListener('click', function() {
+    filterBtns.forEach(function(b){ b.classList.remove('active'); });
+    btn.classList.add('active');
+    var filter = btn.getAttribute('data-filter');
+    var visible = 0;
+    cards.forEach(function(card) {
+      if (filter === 'all' || card.getAttribute('data-comuna') === filter) {
+        card.removeAttribute('data-hidden');
+        visible++;
+      } else {
+        card.setAttribute('data-hidden', 'true');
+      }
+    });
+    countEl.textContent = visible + (visible === 1 ? ' propiedad disponible' : ' propiedades disponibles');
+  });
+});
+</script>
+
+</body>
+</html>
