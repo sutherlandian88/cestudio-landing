@@ -61,9 +61,10 @@
   "sameAs": ["https://www.instagram.com/_c_estudio/"]
 }
 
-  // populate project strip from embedded carousel images
-  (function(){ var img = document.getElementById('home-project-img'); if(img && typeof _ald !== 'undefined' && _ald.length) img.src = _ald[0]; })();
 
+
+  // populate project strip
+  (function(){ var img = document.getElementById('home-project-img'); if(img && typeof _ald !== 'undefined' && _ald.length) img.src = _ald[0]; })();
 </script>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' fill='%23f5f3ef'/><text x='6' y='26' font-family='Georgia,serif' font-size='26' font-weight='400' fill='%232C2C2A'>C</text></svg>"/>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@200;300;400&display=swap" rel="stylesheet"/>
@@ -172,11 +173,7 @@ footer { background:#322f2c; border-top:0.5px solid rgba(255,255,255,0.07); padd
 
 
 @media (max-width:768px) {
-  .curcuma-section { padding:40px 20px; }
-  .curcuma-header { flex-direction:column; align-items:flex-start; }
-  .curcuma-desc { text-align:left; }
-  .curcuma-ba-hero { height:260px; }
-  .curcuma-cards { grid-template-columns:1fr; }
+
 }
 
 .whatsapp-float { position:fixed; bottom:28px; right:28px; z-index:1000; width:56px; height:56px; background:#25d366; border-radius:50%; display:flex; align-items:center; justify-content:center; box-shadow:0 4px 16px rgba(0,0,0,0.22); transition:transform 0.2s,box-shadow 0.2s; text-decoration:none; }
