@@ -75,7 +75,8 @@ body { font-family:'Jost',sans-serif; background:#f5f3ef; color:#3a3632; overflo
 nav { display:flex; justify-content:space-between; align-items:center; padding:18px 40px; background:#f5f3ef; border-bottom:0.5px solid #d8d4cc; position:sticky; top:0; z-index:10; }
 .nav-logo { font-family:'Cormorant Garamond',serif; font-size:17px; font-weight:400; letter-spacing:3px; }
 .nav-links { display:flex; gap:28px; list-style:none; }
-.nav-curcuma { color:#b08a5a !important; }
+.footer-curcuma { font-size:9px; letter-spacing:1.5px; color:#b08a5a; text-decoration:none; opacity:0.8; transition:opacity 0.2s; }
+.footer-curcuma:hover { opacity:1; }
 .nav-links a { font-size:10px; letter-spacing:2px; text-transform:uppercase; text-decoration:none; color:#6b6560; }
 .nav-links a.hl { color:#3a3632; border-bottom:1px solid #3a3632; padding-bottom:1px; }
 .hero { display:grid; grid-template-columns:1fr 1fr; min-height:500px; }
@@ -256,7 +257,6 @@ footer { background:#322f2c; border-top:0.5px solid rgba(255,255,255,0.07); padd
 <nav>
   <div class="nav-logo">C | ESTUDIO</div>
   <ul class="nav-links">
-    <li><a href="/propiedades" class="nav-curcuma">Cúrcuma</a></li>
     <li><a href="#quienes-somos">Quiénes somos</a></li>
     <li><a href="#servicios">Servicios</a></li>
     <li><a href="#contacto">Contacto</a></li>
@@ -317,21 +317,6 @@ footer { background:#322f2c; border-top:0.5px solid rgba(255,255,255,0.07); padd
   <div class="home-project-caption">
     <span class="home-project-label">Alderete Cook · Remodelación Integral</span>
     <a href="/propiedades" class="home-project-link">Ver propiedades con potencial →</a>
-  </div>
-</div>
-  <div class="home-ba-after" id="homeBaAfter">
-    <img src="https://raw.githubusercontent.com/sutherlandian88/curcuma/main/imgs/sz-01B-cocina-despues.jpg" alt="Después de remodelar"/>
-  </div>
-  <div class="home-ba-line" id="homeBaLine"></div>
-  <div class="home-ba-knob" id="homeBaKnob">
-    <svg fill="none" stroke="#3a3632" stroke-width="2" viewBox="0 0 24 24"><path d="M8 4l-4 8 4 8M16 4l4 8-4 8"/></svg>
-  </div>
-  <div class="home-ba-label">
-    <span>Antes</span>
-    <span class="dot"></span>
-    <span>Después</span>
-    <span class="dot"></span>
-    <a href="/propiedades">Ver propiedades con potencial →</a>
   </div>
 </div>
 
@@ -446,6 +431,7 @@ footer { background:#322f2c; border-top:0.5px solid rgba(255,255,255,0.07); padd
 </section>
 <footer>
   <span>© 2025 C Estudio · Camila Barros Lama, Arquitecta</span>
+  <a href="/propiedades" class="footer-curcuma">Propiedades con potencial → Cúrcuma</a>
 </footer>
 <script>
 
