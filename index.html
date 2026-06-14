@@ -275,11 +275,11 @@ footer { background:#322f2c; border-top:0.5px solid rgba(255,255,255,0.07); padd
   <div class="hero-ba" id="heroBA">
     <div class="hero-ba-before">
       <img src="https://raw.githubusercontent.com/sutherlandian88/curcuma/main/imgs/sz-01A-cocina-antes.jpg" alt="Antes de remodelar" draggable="false"/>
-      <span class="hero-ba-tag tag-b">Antes</span>
+      <span class="hero-ba-tag tag-b">Hoy</span>
     </div>
     <div class="hero-ba-after" id="heroBaAfter">
       <img id="hero-ba-after-img" src="" alt="Después de remodelar" draggable="false"/>
-      <span class="hero-ba-tag tag-a">Después</span>
+      <span class="hero-ba-tag tag-a">El potencial</span>
     </div>
     <div class="hero-ba-line" id="heroBaLine"></div>
     <div class="hero-ba-knob" id="heroBaKnob">
@@ -542,7 +542,7 @@ footer { background:#322f2c; border-top:0.5px solid rgba(255,255,255,0.07); padd
   (function(){
     // populate after image from carousel
     var afterImg = document.getElementById('hero-ba-after-img');
-    if(afterImg && typeof _ald !== 'undefined' && _ald.length) afterImg.src = _ald[0];
+    if(afterImg) afterImg.src = 'https://raw.githubusercontent.com/sutherlandian88/curcuma/main/imgs/sz-01B-cocina-despues.jpg';
 
     var strip = document.getElementById('heroBA');
     if(!strip) return;
