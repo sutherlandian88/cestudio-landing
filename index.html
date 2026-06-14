@@ -60,6 +60,30 @@
   },
   "sameAs": ["https://www.instagram.com/_c_estudio/"]
 }
+
+  // ── Home BA slider ──
+  (function(){
+    var strip = document.getElementById('homeBA');
+    if(!strip) return;
+    var after = document.getElementById('homeBaAfter');
+    var line = document.getElementById('homeBaLine');
+    var knob = document.getElementById('homeBaKnob');
+    var dragging = false;
+    function setPos(x){
+      var r = strip.getBoundingClientRect();
+      var pct = Math.min(Math.max((x - r.left)/r.width, 0.02), 0.98);
+      after.style.clipPath = 'inset(0 '+((1-pct)*100).toFixed(1)+'% 0 0)';
+      line.style.left = (pct*100).toFixed(1)+'%';
+      knob.style.left = (pct*100).toFixed(1)+'%';
+    }
+    strip.addEventListener('mousedown',function(e){dragging=true;setPos(e.clientX);e.preventDefault();});
+    strip.addEventListener('touchstart',function(e){dragging=true;setPos(e.touches[0].clientX);e.preventDefault();},{passive:false});
+    window.addEventListener('mousemove',function(e){if(dragging)setPos(e.clientX);});
+    window.addEventListener('touchmove',function(e){if(dragging)setPos(e.touches[0].clientX);e.preventDefault();},{passive:false});
+    window.addEventListener('mouseup',function(){dragging=false;});
+    window.addEventListener('touchend',function(){dragging=false;});
+  })();
+
 </script>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' fill='%23f5f3ef'/><text x='6' y='26' font-family='Georgia,serif' font-size='26' font-weight='400' fill='%232C2C2A'>C</text></svg>"/>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@200;300;400&display=swap" rel="stylesheet"/>
@@ -179,6 +203,22 @@ footer { background:#322f2c; border-top:0.5px solid rgba(255,255,255,0.07); padd
 .whatsapp-float svg { width:32px; height:32px; fill:#fff; }
 
 /* ── TABLET (≤1024px) ── */
+
+/* ── HOME ANTES/DESPUÉS STRIP ── */
+.home-ba-strip { position:relative; width:100%; height:480px; overflow:hidden; cursor:ew-resize; user-select:none; border-top:0.5px solid #d8d4cc; border-bottom:0.5px solid #d8d4cc; }
+.home-ba-strip img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block; pointer-events:none; }
+.home-ba-before { position:absolute; inset:0; }
+.home-ba-after { position:absolute; inset:0; clip-path:inset(0 50% 0 0); }
+.home-ba-line { position:absolute; top:0; bottom:0; left:50%; width:0.5px; background:rgba(240,236,229,0.7); z-index:5; pointer-events:none; }
+.home-ba-knob { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:32px; height:32px; background:#f5f3ef; border-radius:50%; display:flex; align-items:center; justify-content:center; z-index:6; pointer-events:none; box-shadow:0 1px 8px rgba(0,0,0,0.15); }
+.home-ba-knob svg { width:13px; height:13px; }
+.home-ba-label { position:absolute; bottom:28px; left:50%; transform:translateX(-50%); z-index:7; pointer-events:none; display:flex; align-items:center; gap:16px; white-space:nowrap; }
+.home-ba-label span { font-size:8px; letter-spacing:2.5px; text-transform:uppercase; color:rgba(240,236,229,0.7); }
+.home-ba-label a { font-size:8px; letter-spacing:2.5px; text-transform:uppercase; color:#f0ece5; text-decoration:none; border-bottom:0.5px solid rgba(240,236,229,0.5); padding-bottom:1px; pointer-events:all; transition:opacity 0.2s; }
+.home-ba-label a:hover { opacity:0.65; }
+.home-ba-label .dot { width:2px; height:2px; border-radius:50%; background:rgba(240,236,229,0.4); }
+@media (max-width:768px) { .home-ba-strip { height:300px; } }
+
 @media (max-width:1024px) {
   .services-strip { grid-template-columns:repeat(2,1fr); }
   .projects-grid { grid-template-columns:repeat(2,1fr); }
@@ -295,6 +335,27 @@ footer { background:#322f2c; border-top:0.5px solid rgba(255,255,255,0.07); padd
     <p class="architect-title">Fundadora C | Estudio · Arquitecta</p>
   </div>
 </section>
+
+<div class="home-ba-strip" id="homeBA">
+  <div class="home-ba-before">
+    <img src="https://raw.githubusercontent.com/sutherlandian88/curcuma/main/imgs/sz-01A-cocina-antes.jpg" alt="Antes de remodelar"/>
+  </div>
+  <div class="home-ba-after" id="homeBaAfter">
+    <img src="https://raw.githubusercontent.com/sutherlandian88/curcuma/main/imgs/sz-01B-cocina-despues.jpg" alt="Después de remodelar"/>
+  </div>
+  <div class="home-ba-line" id="homeBaLine"></div>
+  <div class="home-ba-knob" id="homeBaKnob">
+    <svg fill="none" stroke="#3a3632" stroke-width="2" viewBox="0 0 24 24"><path d="M8 4l-4 8 4 8M16 4l4 8-4 8"/></svg>
+  </div>
+  <div class="home-ba-label">
+    <span>Antes</span>
+    <span class="dot"></span>
+    <span>Después</span>
+    <span class="dot"></span>
+    <a href="/propiedades">Ver propiedades con potencial →</a>
+  </div>
+</div>
+
 <section class="projects">
   <div class="projects-header">
     <h2 class="projects-title">Proyectos recientes</h2>
