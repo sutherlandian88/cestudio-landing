@@ -187,9 +187,9 @@ footer { background:#322f2c; border-top:0.5px solid rgba(255,255,255,0.07); padd
 .hero-ba { position:relative; width:100%; height:100%; min-height:440px; cursor:ew-resize; user-select:none; overflow:hidden; }
 .hero-ba-before, .hero-ba-after { position:absolute; inset:0; width:100%; height:100%; overflow:hidden; }
 .hero-ba-before img, .hero-ba-after img { width:100%; height:100%; object-fit:cover; display:block; pointer-events:none; }
-.hero-ba-after { clip-path:inset(0 50% 0 0); }
-.hero-ba-line { position:absolute; top:0; bottom:0; left:50%; width:1px; background:rgba(255,255,255,0.8); z-index:5; pointer-events:none; }
-.hero-ba-knob { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:34px; height:34px; background:#fff; border-radius:50%; display:flex; align-items:center; justify-content:center; z-index:6; pointer-events:none; box-shadow:0 2px 12px rgba(0,0,0,0.18); }
+.hero-ba-after { clip-path:inset(0 65% 0 0); }
+.hero-ba-line { position:absolute; top:0; bottom:0; left:35%; width:1px; background:rgba(255,255,255,0.8); z-index:5; pointer-events:none; }
+.hero-ba-knob { position:absolute; top:50%; left:35%; transform:translate(-50%,-50%); width:34px; height:34px; background:#fff; border-radius:50%; display:flex; align-items:center; justify-content:center; z-index:6; pointer-events:none; box-shadow:0 2px 12px rgba(0,0,0,0.18); }
 .hero-ba-tag { position:absolute; bottom:20px; padding:4px 10px; font-size:8px; letter-spacing:2px; text-transform:uppercase; font-weight:500; z-index:4; pointer-events:none; }
 .tag-b { left:16px; background:rgba(58,54,50,0.75); color:#f0ece5; }
 .tag-center { left:50%; transform:translateX(-50%); background:rgba(245,243,239,0.92); color:#3a3632; font-family:'Cormorant Garamond',serif; font-size:11px; letter-spacing:2px; white-space:nowrap; }
@@ -331,7 +331,7 @@ footer { background:#322f2c; border-top:0.5px solid rgba(255,255,255,0.07); padd
       <img src="https://raw.githubusercontent.com/sutherlandian88/curcuma/main/imgs/sz-01A-cocina-antes.jpg" alt="Antes de remodelar" draggable="false"/>
     </div>
     <div class="hero-ba-after" id="heroBaAfter">
-      <img id="hero-ba-after-img" src="" alt="Después de remodelar" draggable="false"/>
+      <img id="hero-ba-after-img" src="https://raw.githubusercontent.com/sutherlandian88/curcuma/main/imgs/sz-01B-cocina-despues.jpg" alt="Después de remodelar" draggable="false"/>
     </div>
     <div class="hero-ba-line" id="heroBaLine"></div>
     <div class="hero-ba-knob" id="heroBaKnob">
@@ -659,8 +659,6 @@ footer { background:#322f2c; border-top:0.5px solid rgba(255,255,255,0.07); padd
   // ── Hero Before/After Slider ──
   (function(){
     // populate after image from carousel
-    var afterImg = document.getElementById('hero-ba-after-img');
-    if(afterImg) afterImg.src = 'https://raw.githubusercontent.com/sutherlandian88/curcuma/main/imgs/sz-01B-cocina-despues.jpg';
 
     var strip = document.getElementById('heroBA');
     if(!strip) return;
@@ -675,6 +673,7 @@ footer { background:#322f2c; border-top:0.5px solid rgba(255,255,255,0.07); padd
       line.style.left = (pct*100).toFixed(1)+'%';
       knob.style.left = (pct*100).toFixed(1)+'%';
     }
+    setPos(strip.getBoundingClientRect().left + strip.getBoundingClientRect().width * 0.35);
     strip.addEventListener('mousedown',function(e){dragging=true;setPos(e.clientX);e.preventDefault();});
     strip.addEventListener('touchstart',function(e){dragging=true;setPos(e.touches[0].clientX);e.preventDefault();},{passive:false});
     window.addEventListener('mousemove',function(e){if(dragging)setPos(e.clientX);});
