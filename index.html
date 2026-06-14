@@ -194,6 +194,59 @@ footer { background:#322f2c; border-top:0.5px solid rgba(255,255,255,0.07); padd
 .tag-b { left:16px; background:rgba(58,54,50,0.75); color:#f0ece5; }
 .tag-a { right:16px; background:rgba(90,130,90,0.85); color:#fff; }
 
+
+/* ── CÚRCUMA LISTINGS SECTION ── */
+.listings-section { background:#f5f3ef; padding:64px 40px; border-top:0.5px solid #d8d4cc; }
+.listings-header { display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:40px; }
+.listings-eyebrow { font-size:9px; letter-spacing:3px; text-transform:uppercase; color:#b0aaa4; margin-bottom:10px; }
+.listings-title { font-family:'Cormorant Garamond',serif; font-size:38px; font-weight:300; color:#3a3632; line-height:1.1; }
+.listings-title em { font-style:italic; color:#b08a5a; }
+.listings-ver-todas { font-size:9px; letter-spacing:2px; text-transform:uppercase; color:#3a3632; text-decoration:none; border-bottom:0.5px solid #3a3632; padding-bottom:1px; white-space:nowrap; transition:opacity 0.2s; }
+.listings-ver-todas:hover { opacity:0.5; }
+.listings-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:24px; }
+
+/* Card */
+.listing-card { background:#fff; border:0.5px solid #ece9e3; overflow:hidden; transition:transform 0.3s,box-shadow 0.3s; }
+.listing-card:hover { transform:translateY(-4px); box-shadow:0 20px 56px rgba(26,24,21,0.1); }
+
+/* Card image / slider */
+.lcard-img { position:relative; aspect-ratio:4/3; overflow:hidden; cursor:ew-resize; user-select:none; }
+.lcard-img img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block; pointer-events:none; }
+.lcard-after-wrap { position:absolute; inset:0; overflow:hidden; clip-path:inset(0 50% 0 0); }
+.lcard-after-wrap img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
+.lcard-div { position:absolute; top:0; bottom:0; left:50%; width:1px; background:rgba(255,255,255,0.85); z-index:5; pointer-events:none; }
+.lcard-knob { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:26px; height:26px; background:#fff; border-radius:50%; display:flex; align-items:center; justify-content:center; z-index:6; pointer-events:none; box-shadow:0 1px 8px rgba(0,0,0,0.2); }
+.lcard-tag { position:absolute; bottom:10px; padding:3px 8px; font-size:8px; letter-spacing:1.5px; text-transform:uppercase; z-index:4; pointer-events:none; font-weight:500; }
+.lcard-tag.b { left:10px; background:rgba(58,54,50,0.78); color:#f0ece5; }
+.lcard-tag.a { right:10px; background:#3d6b50; color:#fff; }
+.lcard-commune { position:absolute; top:12px; left:12px; background:#3d6b50; color:#fff; font-size:8px; letter-spacing:1.5px; text-transform:uppercase; padding:3px 8px; z-index:4; pointer-events:none; }
+
+/* Card body */
+.lcard-body { padding:20px 22px 22px; }
+.lcard-title { font-family:'Cormorant Garamond',serif; font-size:22px; font-weight:300; color:#3a3632; margin-bottom:10px; line-height:1.2; }
+.lcard-velocity { display:flex; align-items:center; gap:8px; margin-bottom:12px; padding-bottom:12px; border-bottom:0.5px solid #ece9e3; }
+.lcard-vel-dot { width:6px; height:6px; border-radius:50%; background:#b08a5a; flex-shrink:0; }
+.lcard-vel-text { font-size:8px; letter-spacing:2px; text-transform:uppercase; color:#b08a5a; }
+.lcard-vel-line { flex:1; height:0.5px; background:#ece9e3; }
+.lcard-specs { display:flex; gap:6px; flex-wrap:wrap; font-size:10px; color:#9a948e; margin-bottom:14px; }
+.lcard-specs span { display:flex; align-items:center; gap:4px; }
+.lcard-specs .sep { color:#d8d4cc; }
+.lcard-price-label { font-size:9px; letter-spacing:1.5px; text-transform:uppercase; color:#b0aaa4; margin-bottom:4px; }
+.lcard-price { font-family:'Cormorant Garamond',serif; font-size:26px; color:#3a3632; font-weight:300; }
+.lcard-price-proj { font-size:10px; color:#5a8a6a; margin-top:3px; }
+.lcard-actions { display:flex; gap:8px; margin-top:14px; align-items:center; }
+.lcard-btn { font-size:8px; letter-spacing:2px; text-transform:uppercase; padding:9px 14px; border:0.5px solid #3a3632; background:#3a3632; color:#f0ece5; text-decoration:none; cursor:pointer; transition:opacity 0.2s; }
+.lcard-btn:hover { opacity:0.75; }
+.lcard-btn-ghost { background:transparent; color:#3a3632; }
+.lcard-wa { width:34px; height:34px; background:#25d366; border-radius:50%; display:flex; align-items:center; justify-content:center; text-decoration:none; margin-left:auto; flex-shrink:0; }
+.lcard-wa svg { width:18px; height:18px; fill:#fff; }
+
+/* CE logo watermark */
+.lcard-ce-logo { position:absolute; bottom:10px; left:50%; transform:translateX(-50%); background:rgba(245,243,239,0.92); padding:3px 10px; font-family:'Cormorant Garamond',serif; font-size:10px; letter-spacing:2px; color:#3a3632; z-index:4; pointer-events:none; white-space:nowrap; }
+
+@media (max-width:1024px) { .listings-grid { grid-template-columns:repeat(2,1fr); } }
+@media (max-width:768px) { .listings-section { padding:40px 20px; } .listings-header { flex-direction:column; align-items:flex-start; gap:12px; } .listings-grid { grid-template-columns:1fr; } }
+
 @media (max-width:1024px) {
   .services-strip { grid-template-columns:repeat(2,1fr); }
   .projects-grid { grid-template-columns:repeat(2,1fr); }
@@ -309,6 +362,134 @@ footer { background:#322f2c; border-top:0.5px solid rgba(255,255,255,0.07); padd
   <div class="service-item"><p class="service-name">Asesorías</p><p class="service-subtitle">¿No sabes por dónde partir?</p><p class="service-desc">Evaluamos tu proyecto y te decimos qué hacer.</p></div>
 </div>
 
+
+
+<section class="listings-section">
+  <div class="listings-header">
+    <div>
+      <p class="listings-eyebrow">Propiedades en venta</p>
+      <h2 class="listings-title">Tu próximo hogar <em>está aquí</em></h2>
+    </div>
+    <a href="/propiedades" class="listings-ver-todas">Ver todas →</a>
+  </div>
+
+  <div class="listings-grid">
+
+    <!-- Card 1: Los Trapenses -->
+    <div class="listing-card">
+      <div class="lcard-img" data-slider>
+        <img src="https://raw.githubusercontent.com/sutherlandian88/curcuma/main/imgs/sz-05A-living-antes.jpg" alt="Living antes"/>
+        <div class="lcard-after-wrap">
+          <img src="https://raw.githubusercontent.com/sutherlandian88/curcuma/main/imgs/sz-05B-living-despues.jpg" alt="Living después"/>
+        </div>
+        <div class="lcard-div"></div>
+        <div class="lcard-knob"><svg width="11" height="11" fill="none" stroke="#3a3632" stroke-width="2" viewBox="0 0 24 24"><path d="M8 4l-4 8 4 8M16 4l4 8-4 8"/></svg></div>
+        <span class="lcard-tag b">Antes</span>
+        <span class="lcard-tag a">Con C | Estudio</span>
+        <span class="lcard-commune">Lo Barnechea</span>
+        <span class="lcard-ce-logo">C | Estudio</span>
+      </div>
+      <div class="lcard-body">
+        <h3 class="lcard-title">Casa sector Los Trapenses</h3>
+        <div class="lcard-velocity">
+          <span class="lcard-vel-dot"></span>
+          <span class="lcard-vel-text">Alta demanda</span>
+          <span class="lcard-vel-line"></span>
+        </div>
+        <div class="lcard-specs">
+          <span>2.207 m² ter.</span><span class="sep">·</span>
+          <span>419 m² cons.</span><span class="sep">·</span>
+          <span>2 dorm.</span><span class="sep">·</span>
+          <span>3 baños</span>
+        </div>
+        <p class="lcard-price-label">Precio</p>
+        <p class="lcard-price">UF 52.000</p>
+        <div class="lcard-actions">
+          <a href="https://wa.me/56998182936?text=Hola, me interesa Casa Los Trapenses (UF 52.000)" class="lcard-btn" target="_blank">Ver más</a>
+          <a href="https://vimeo.com/1192098322" class="lcard-btn lcard-btn-ghost" target="_blank">Ver video</a>
+          <a href="https://wa.me/56998182936" class="lcard-wa" target="_blank" aria-label="WhatsApp"><svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><path d="M16 3C9.373 3 4 8.373 4 15c0 2.385.832 4.584 2.218 6.332L4.1 28.1l6.91-2.09A11.93 11.93 0 0016 27c6.627 0 12-5.373 12-12S22.627 3 16 3zm0 2c5.523 0 10 4.477 10 10s-4.477 10-10 10a9.93 9.93 0 01-4.9-1.28l-.35-.2-4.1 1.24 1.26-4-.23-.37A9.93 9.93 0 016 15c0-5.523 4.477-10 10-10zm-3.5 5c-.25 0-.65.1-.95.45-.3.35-1.15 1.12-1.15 2.73s1.18 3.17 1.34 3.39c.17.22 2.3 3.72 5.67 5.07.79.34 1.41.54 1.89.7.79.25 1.51.21 2.08.13.64-.1 1.96-.8 2.23-1.57.28-.77.28-1.43.2-1.57-.08-.14-.3-.22-.63-.38s-1.96-.97-2.27-1.08c-.3-.1-.52-.15-.74.15s-.85 1.08-1.04 1.3-.38.23-.7.08a8.81 8.81 0 01-2.58-1.59 9.7 9.7 0 01-1.79-2.22c-.18-.32 0-.5.14-.66.14-.15.3-.38.46-.57.15-.19.2-.32.3-.54.1-.22.05-.41-.03-.57-.07-.16-.74-1.77-1.02-2.43-.27-.64-.54-.55-.74-.56l-.63-.01z"/></svg></a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 2: El Tranque -->
+    <div class="listing-card">
+      <div class="lcard-img" data-slider>
+        <img src="https://raw.githubusercontent.com/sutherlandian88/curcuma/main/imgs/rb-01A-hall-antes.jpg" alt="Hall antes"/>
+        <div class="lcard-after-wrap">
+          <img src="https://raw.githubusercontent.com/sutherlandian88/curcuma/main/imgs/rb-01B-hall-despues.jpg" alt="Hall después"/>
+        </div>
+        <div class="lcard-div"></div>
+        <div class="lcard-knob"><svg width="11" height="11" fill="none" stroke="#3a3632" stroke-width="2" viewBox="0 0 24 24"><path d="M8 4l-4 8 4 8M16 4l4 8-4 8"/></svg></div>
+        <span class="lcard-tag b">Antes</span>
+        <span class="lcard-tag a">Con C | Estudio</span>
+        <span class="lcard-commune">Lo Barnechea</span>
+        <span class="lcard-ce-logo">C | Estudio</span>
+      </div>
+      <div class="lcard-body">
+        <h3 class="lcard-title">Casa sector El Tranque</h3>
+        <div class="lcard-velocity">
+          <span class="lcard-vel-dot"></span>
+          <span class="lcard-vel-text">Alta demanda</span>
+          <span class="lcard-vel-line"></span>
+        </div>
+        <div class="lcard-specs">
+          <span>961 m² ter.</span><span class="sep">·</span>
+          <span>601 m² cons.</span><span class="sep">·</span>
+          <span>5 dorm.</span><span class="sep">·</span>
+          <span>6 baños</span><span class="sep">·</span>
+          <span>4 estac.</span>
+        </div>
+        <p class="lcard-price-label">Precio</p>
+        <p class="lcard-price">UF 30.000</p>
+        <div class="lcard-actions">
+          <a href="https://wa.me/56998182936?text=Hola, me interesa Casa El Tranque (UF 30.000)" class="lcard-btn" target="_blank">Ver más</a>
+          <a href="https://vimeo.com/1192844197" class="lcard-btn lcard-btn-ghost" target="_blank">Ver video</a>
+          <a href="https://wa.me/56998182936" class="lcard-wa" target="_blank" aria-label="WhatsApp"><svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><path d="M16 3C9.373 3 4 8.373 4 15c0 2.385.832 4.584 2.218 6.332L4.1 28.1l6.91-2.09A11.93 11.93 0 0016 27c6.627 0 12-5.373 12-12S22.627 3 16 3zm0 2c5.523 0 10 4.477 10 10s-4.477 10-10 10a9.93 9.93 0 01-4.9-1.28l-.35-.2-4.1 1.24 1.26-4-.23-.37A9.93 9.93 0 016 15c0-5.523 4.477-10 10-10zm-3.5 5c-.25 0-.65.1-.95.45-.3.35-1.15 1.12-1.15 2.73s1.18 3.17 1.34 3.39c.17.22 2.3 3.72 5.67 5.07.79.34 1.41.54 1.89.7.79.25 1.51.21 2.08.13.64-.1 1.96-.8 2.23-1.57.28-.77.28-1.43.2-1.57-.08-.14-.3-.22-.63-.38s-1.96-.97-2.27-1.08c-.3-.1-.52-.15-.74.15s-.85 1.08-1.04 1.3-.38.23-.7.08a8.81 8.81 0 01-2.58-1.59 9.7 9.7 0 01-1.79-2.22c-.18-.32 0-.5.14-.66.14-.15.3-.38.46-.57.15-.19.2-.32.3-.54.1-.22.05-.41-.03-.57-.07-.16-.74-1.77-1.02-2.43-.27-.64-.54-.55-.74-.56l-.63-.01z"/></svg></a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 3: Santuario del Valle -->
+    <div class="listing-card">
+      <div class="lcard-img" data-slider>
+        <img src="https://raw.githubusercontent.com/sutherlandian88/curcuma/main/imgs/qt-01A-fachada-antes.jpg" alt="Fachada antes"/>
+        <div class="lcard-after-wrap">
+          <img src="https://raw.githubusercontent.com/sutherlandian88/curcuma/main/imgs/qt-01B-fachada-despues.jpg" alt="Fachada después"/>
+        </div>
+        <div class="lcard-div"></div>
+        <div class="lcard-knob"><svg width="11" height="11" fill="none" stroke="#3a3632" stroke-width="2" viewBox="0 0 24 24"><path d="M8 4l-4 8 4 8M16 4l4 8-4 8"/></svg></div>
+        <span class="lcard-tag b">Antes</span>
+        <span class="lcard-tag a">Con C | Estudio</span>
+        <span class="lcard-commune">Lo Barnechea</span>
+        <span class="lcard-ce-logo">C | Estudio</span>
+      </div>
+      <div class="lcard-body">
+        <h3 class="lcard-title">Casa Santuario del Valle</h3>
+        <div class="lcard-velocity">
+          <span class="lcard-vel-dot"></span>
+          <span class="lcard-vel-text">Alta demanda</span>
+          <span class="lcard-vel-line"></span>
+        </div>
+        <div class="lcard-specs">
+          <span>932 m² ter.</span><span class="sep">·</span>
+          <span>416 m² cons.</span><span class="sep">·</span>
+          <span>6 dorm.</span><span class="sep">·</span>
+          <span>6 baños</span><span class="sep">·</span>
+          <span>4 estac.</span>
+        </div>
+        <p class="lcard-price-label">Precio</p>
+        <p class="lcard-price">UF 31.489</p>
+        <div class="lcard-actions">
+          <a href="https://wa.me/56998182936?text=Hola, me interesa Casa Santuario del Valle (UF 31.489)" class="lcard-btn" target="_blank">Ver más</a>
+          <a href="https://vimeo.com/1192836439" class="lcard-btn lcard-btn-ghost" target="_blank">Ver video</a>
+          <a href="https://wa.me/56998182936" class="lcard-wa" target="_blank" aria-label="WhatsApp"><svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><path d="M16 3C9.373 3 4 8.373 4 15c0 2.385.832 4.584 2.218 6.332L4.1 28.1l6.91-2.09A11.93 11.93 0 0016 27c6.627 0 12-5.373 12-12S22.627 3 16 3zm0 2c5.523 0 10 4.477 10 10s-4.477 10-10 10a9.93 9.93 0 01-4.9-1.28l-.35-.2-4.1 1.24 1.26-4-.23-.37A9.93 9.93 0 016 15c0-5.523 4.477-10 10-10zm-3.5 5c-.25 0-.65.1-.95.45-.3.35-1.15 1.12-1.15 2.73s1.18 3.17 1.34 3.39c.17.22 2.3 3.72 5.67 5.07.79.34 1.41.54 1.89.7.79.25 1.51.21 2.08.13.64-.1 1.96-.8 2.23-1.57.28-.77.28-1.43.2-1.57-.08-.14-.3-.22-.63-.38s-1.96-.97-2.27-1.08c-.3-.1-.52-.15-.74.15s-.85 1.08-1.04 1.3-.38.23-.7.08a8.81 8.81 0 01-2.58-1.59 9.7 9.7 0 01-1.79-2.22c-.18-.32 0-.5.14-.66.14-.15.3-.38.46-.57.15-.19.2-.32.3-.54.1-.22.05-.41-.03-.57-.07-.16-.74-1.77-1.02-2.43-.27-.64-.54-.55-.74-.56l-.63-.01z"/></svg></a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
 
 <section class="about" id="quienes-somos">
   <div class="about-img"><span class="about-img-caption">C Estudio — Santiago, Chile</span></div>
@@ -564,6 +745,27 @@ footer { background:#322f2c; border-top:0.5px solid rgba(255,255,255,0.07); padd
     window.addEventListener('mouseup',function(){dragging=false;});
     window.addEventListener('touchend',function(){dragging=false;});
   })();
+
+  // ── Listing card sliders ──
+  document.querySelectorAll('.lcard-img[data-slider]').forEach(function(card){
+    var wrap = card.querySelector('.lcard-after-wrap');
+    var div  = card.querySelector('.lcard-div');
+    var knob = card.querySelector('.lcard-knob');
+    var dragging = false;
+    function setPos(x){
+      var r = card.getBoundingClientRect();
+      var pct = Math.min(Math.max((x-r.left)/r.width,0.02),0.98);
+      wrap.style.clipPath='inset(0 '+((1-pct)*100).toFixed(1)+'% 0 0)';
+      div.style.left=(pct*100).toFixed(1)+'%';
+      knob.style.left=(pct*100).toFixed(1)+'%';
+    }
+    card.addEventListener('mousedown',function(e){dragging=true;setPos(e.clientX);e.preventDefault();});
+    card.addEventListener('touchstart',function(e){dragging=true;setPos(e.touches[0].clientX);e.preventDefault();},{passive:false});
+    window.addEventListener('mousemove',function(e){if(dragging)setPos(e.clientX);});
+    window.addEventListener('touchmove',function(e){if(dragging)setPos(e.touches[0].clientX);e.preventDefault();},{passive:false});
+    window.addEventListener('mouseup',function(){dragging=false;});
+    window.addEventListener('touchend',function(){dragging=false;});
+  });
 </script>
 <a href="https://wa.me/56998182936" class="whatsapp-float" target="_blank" rel="noopener" aria-label="Contactar por WhatsApp">
   <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><path d="M16 0C7.163 0 0 7.163 0 16c0 2.822.736 5.469 2.027 7.77L0 32l8.469-2.004A15.938 15.938 0 0016 32c8.837 0 16-7.163 16-16S24.837 0 16 0zm0 29.333a13.27 13.27 0 01-6.771-1.854l-.485-.29-5.025 1.189 1.214-4.896-.318-.503A13.267 13.267 0 012.667 16C2.667 8.636 8.636 2.667 16 2.667S29.333 8.636 29.333 16 23.364 29.333 16 29.333zm7.261-9.928c-.398-.199-2.356-1.162-2.72-1.295-.364-.133-.629-.199-.894.199-.265.398-1.029 1.295-1.261 1.561-.232.265-.465.298-.863.1-.398-.199-1.681-.619-3.202-1.976-1.183-1.056-1.981-2.36-2.214-2.758-.232-.398-.025-.614.175-.812.179-.178.398-.465.597-.697.199-.232.265-.398.398-.664.133-.265.067-.497-.033-.696-.1-.199-.894-2.155-1.225-2.95-.322-.775-.649-.67-.894-.682l-.762-.013c-.265 0-.696.1-1.061.497-.364.398-1.393 1.362-1.393 3.318s1.427 3.847 1.626 4.113c.199.265 2.807 4.285 6.801 5.998.951.41 1.693.655 2.271.839.954.304 1.823.261 2.509.158.766-.114 2.356-.963 2.688-1.893.332-.93.332-1.727.232-1.893-.099-.166-.364-.265-.762-.464z"/></svg>
