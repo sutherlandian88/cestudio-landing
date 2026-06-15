@@ -86,11 +86,12 @@ nav{display:flex;justify-content:space-between;align-items:center;padding:0 32px
 .cta-whatsapp:hover{opacity:0.88;}
 /* Responsive */
 @media(max-width:900px){
-  .prop-layout{grid-template-columns:1fr;height:auto;overflow:visible;}
-  html,body{height:100%;overflow:hidden;overflow:auto;}
-  .photo-panel{height:60vw;min-height:280px;}
-  .details-panel{height:auto;}
-  .details-scroll{overflow:visible;}
+  html,body{height:auto;min-height:100%;overflow-x:hidden;overflow-y:auto;}
+  .prop-layout{display:block;height:auto;}
+  .photo-panel{height:62vw;min-height:280px;}
+  .details-panel{height:auto;overflow:visible;}
+  .details-scroll{overflow:visible;padding-bottom:40px;}
+  .details-cta-bar{position:static;}
   .nav-arrow{opacity:1;}
 }
 </style>
