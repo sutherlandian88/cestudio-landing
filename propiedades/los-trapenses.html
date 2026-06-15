@@ -87,14 +87,25 @@ nav{display:flex;justify-content:space-between;align-items:center;padding:0 32px
 /* Responsive */
 @media(max-width:900px){
   html,body{height:auto;min-height:100%;overflow-x:hidden;overflow-y:auto;}
+  nav{justify-content:center;padding:0 20px;}
+  .nav-links{display:none;}
   .prop-layout{display:block;height:auto;}
-  .photo-panel{height:58vw;min-height:240px;overflow:hidden;}
-  .thumb-strip{height:90px;}
-  .thumb-item{width:130px;height:82px;}
+  .photo-panel{height:auto;overflow:hidden;}
+  .main-photo-wrap{height:62vw;min-height:220px;}
+  .thumb-strip{display:none;}
+  .photo-bottom-bar{height:52px;}
+  .photo-brand{font-size:13px;letter-spacing:2px;}
+  .remo-btn{font-size:8.5px;letter-spacing:1.5px;}
   .details-panel{height:auto;overflow:visible;}
-  .details-scroll{overflow:visible;padding:24px 24px 48px;}
-  .details-cta-bar{position:static;}
+  .details-scroll{overflow:visible;padding:20px 20px 88px;}
+  .prop-title{font-size:28px;margin-bottom:12px;}
+  .details-cta-bar{position:fixed;bottom:0;left:0;right:0;z-index:200;margin:0;box-shadow:0 -2px 16px rgba(0,0,0,0.12);}
+  .cta-video{font-size:8px;letter-spacing:1.5px;padding:18px 10px;flex:1;}
+  .cta-whatsapp{font-size:7.5px;letter-spacing:1px;padding:18px 10px;flex:1.6;white-space:nowrap;}
   .nav-arrow{opacity:1;}
+  .details-nav-actions{gap:12px;}
+  .desc-title{font-size:18px;}
+  .desc-text{font-size:13px;line-height:1.9;}
 }
 </style>
 </head>
