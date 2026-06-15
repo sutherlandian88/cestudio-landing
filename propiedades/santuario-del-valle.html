@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Casa Santuario del Valle — C Estudio</title>
+<meta name="description" content="Remodelación de gran escala desde la fachada hasta los interiores. La vivienda se transforma en cada rincón preservando su carácter original y sumando contempor"/>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%233a3632'/><text y='.9em' font-size='72' font-family='serif' fill='%23f0ece5' x='14'>C</text></svg>"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Jost:wght@300;400&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:'Jost',sans-serif;font-weight:300;background:#f5f3ef;color:#3a3632;}
+nav{display:flex;justify-content:space-between;align-items:center;padding:20px 40px;background:#f5f3ef;border-bottom:0.5px solid #d8d4cc;position:sticky;top:0;z-index:100;}
+.nav-logo{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:300;letter-spacing:3px;color:#3a3632;text-decoration:none;}
+.nav-links{display:flex;gap:32px;list-style:none;}
+.nav-links a{font-size:10px;letter-spacing:2.5px;text-transform:uppercase;color:#3a3632;text-decoration:none;transition:opacity 0.2s;}
+.nav-links a:hover{opacity:0.5;}
+.detail-back{padding:24px 40px 0;}
+.detail-back a{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#9a948e;text-decoration:none;transition:color 0.2s;}
+.detail-back a:hover{color:#3a3632;}
+/* Hero BA */
+.det-hero-ba{position:relative;width:100%;height:580px;overflow:hidden;cursor:ew-resize;user-select:none;margin-top:24px;}
+.det-hero-ba .h-before,.det-hero-ba .h-after{position:absolute;inset:0;width:100%;height:100%;overflow:hidden;}
+.det-hero-ba img{width:100%;height:100%;object-fit:cover;display:block;pointer-events:none;}
+.det-hero-ba .h-after{clip-path:inset(0 50% 0 0);}
+.det-hero-ba .h-line{position:absolute;top:0;bottom:0;left:50%;width:1px;background:rgba(255,255,255,0.85);z-index:5;pointer-events:none;}
+.det-hero-ba .h-knob{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:40px;height:40px;background:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;z-index:6;pointer-events:none;box-shadow:0 2px 16px rgba(0,0,0,0.22);}
+.h-tag{position:absolute;bottom:20px;padding:5px 14px;font-size:9px;letter-spacing:2px;text-transform:uppercase;z-index:7;pointer-events:none;}
+.h-tag-b{left:20px;background:rgba(58,54,50,0.78);color:#f0ece5;}
+.h-tag-a{right:20px;background:#3d6b50;color:#fff;}
+.h-caption{position:absolute;top:20px;left:50%;transform:translateX(-50%);background:rgba(245,243,239,0.92);padding:6px 20px;font-family:'Cormorant Garamond',serif;font-size:13px;color:#3a3632;letter-spacing:3px;z-index:7;pointer-events:none;white-space:nowrap;text-transform:uppercase;}
+/* Info */
+.detail-info{display:grid;grid-template-columns:1fr 1fr;gap:48px;padding:56px 40px;border-bottom:0.5px solid #d8d4cc;}
+.detail-title{font-family:'Cormorant Garamond',serif;font-size:44px;font-weight:300;line-height:1.1;margin-bottom:16px;}
+.detail-desc{font-size:14px;line-height:1.9;color:#6a6460;max-width:520px;}
+.detail-meta{display:flex;flex-direction:column;justify-content:space-between;}
+.detail-location{font-size:10px;letter-spacing:2.5px;text-transform:uppercase;color:#9a948e;margin-bottom:12px;}
+.detail-tags-list{display:flex;flex-wrap:wrap;gap:8px;}
+.detail-tag{font-size:9px;letter-spacing:1.5px;text-transform:uppercase;padding:5px 12px;border:0.5px solid #d8d4cc;color:#6a6460;}
+.detail-cta-btn{display:inline-block;background:#3a3632;color:#f0ece5;font-size:9px;letter-spacing:2px;text-transform:uppercase;padding:13px 26px;text-decoration:none;margin-top:32px;transition:opacity 0.2s;}
+.detail-cta-btn:hover{opacity:0.75;}
+/* Section */
+.section-label{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#b0aaa4;margin-bottom:32px;}
+/* Pairs */
+.detail-pairs-section{padding:56px 40px;}
+.pairs-grid{display:grid;grid-template-columns:1fr 1fr;gap:32px;}
+.pair-item{display:flex;flex-direction:column;gap:10px;}
+.pair-caption{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#9a948e;}
+/* Pair BA slider */
+.det-ba{position:relative;height:320px;overflow:hidden;cursor:ew-resize;user-select:none;background:#1a1815;}
+.det-ba .p-before,.det-ba .p-after{position:absolute;inset:0;width:100%;height:100%;overflow:hidden;}
+.det-ba img{width:100%;height:100%;object-fit:cover;display:block;pointer-events:none;}
+.det-ba .p-after{clip-path:inset(0 50% 0 0);}
+.det-ba .p-line{position:absolute;top:0;bottom:0;left:50%;width:1px;background:rgba(255,255,255,0.8);z-index:5;pointer-events:none;}
+.det-ba .p-knob{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:28px;height:28px;background:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;z-index:6;pointer-events:none;box-shadow:0 1px 10px rgba(0,0,0,0.2);}
+.p-tag{position:absolute;bottom:10px;padding:3px 9px;font-size:8px;letter-spacing:1.5px;text-transform:uppercase;z-index:7;pointer-events:none;}
+.p-tag-b{left:10px;background:rgba(58,54,50,0.75);color:#f0ece5;}
+.p-tag-a{right:10px;background:#3d6b50;color:#fff;}
+/* Singles */
+.detail-singles-section{padding:0 40px 56px;border-bottom:0.5px solid #d8d4cc;}
+.singles-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+.single-item{position:relative;aspect-ratio:4/3;overflow:hidden;}
+.single-item img{width:100%;height:100%;object-fit:cover;display:block;transition:transform 0.4s;}
+.single-item:hover img{transform:scale(1.04);}
+.single-label{position:absolute;bottom:0;left:0;right:0;padding:8px 12px;background:linear-gradient(transparent,rgba(26,24,21,0.6));font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:#f0ece5;}
+/* Video */
+.detail-video-section{padding:56px 40px;border-bottom:0.5px solid #d8d4cc;}
+.video-wrap{position:relative;width:100%;max-width:960px;margin:0 auto;padding-bottom:min(540px,56.25%);}
+.video-wrap iframe{position:absolute;inset:0;width:100%;height:100%;border:none;}
+/* CTA */
+.detail-cta-section{background:#3a3632;padding:80px 40px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:32px;}
+.detail-cta-section h2{font-family:'Cormorant Garamond',serif;font-size:42px;font-weight:300;color:#f0ece5;line-height:1.15;}
+.detail-cta-section h2 em{font-style:italic;color:#c8a87a;}
+.cta-btns{display:flex;gap:16px;flex-wrap:wrap;}
+.btn-light{display:inline-block;background:#f0ece5;color:#3a3632;font-size:9px;letter-spacing:2.5px;text-transform:uppercase;padding:14px 28px;text-decoration:none;transition:opacity 0.2s;}
+.btn-light:hover{opacity:0.85;}
+.btn-outline-l{display:inline-block;border:0.5px solid rgba(240,236,229,0.4);color:#f0ece5;font-size:9px;letter-spacing:2.5px;text-transform:uppercase;padding:14px 28px;text-decoration:none;transition:opacity 0.2s;}
+.btn-outline-l:hover{opacity:0.65;}
+/* Footer */
+footer{display:flex;justify-content:space-between;align-items:center;padding:20px 40px;border-top:0.5px solid #d8d4cc;background:#f5f3ef;font-size:10px;color:#b0aaa4;letter-spacing:1px;flex-wrap:wrap;gap:12px;}
+.footer-back{color:#9a948e;text-decoration:none;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;transition:color 0.2s;}
+.footer-back:hover{color:#3a3632;}
+/* WhatsApp */
+.wa-float{position:fixed;bottom:28px;right:28px;z-index:1000;width:56px;height:56px;background:#25d366;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(0,0,0,0.22);transition:transform 0.2s;text-decoration:none;}
+.wa-float:hover{transform:scale(1.08);}
+.wa-float svg{width:32px;height:32px;fill:#fff;}
+/* Responsive */
+@media(max-width:768px){
+  nav{padding:16px 20px;}
+  .nav-links{gap:16px;}
+  .detail-back{padding:16px 20px 0;}
+  .det-hero-ba{height:260px;margin-top:16px;}
+  .detail-info{grid-template-columns:1fr;gap:24px;padding:40px 20px;}
+  .detail-title{font-size:30px;}
+  .detail-pairs-section{padding:40px 20px;}
+  .pairs-grid{grid-template-columns:1fr;}
+  .det-ba{height:240px;}
+  .detail-singles-section{padding:0 20px 40px;}
+  .singles-grid{grid-template-columns:repeat(2,1fr);}
+  .detail-video-section{padding:40px 20px;}
+  .detail-cta-section{padding:56px 20px;flex-direction:column;}
+  .detail-cta-section h2{font-size:28px;}
+  footer{padding:16px 20px;}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="/" class="nav-logo">C | ESTUDIO</a>
+  <ul class="nav-links">
+    <li><a href="/#quienes">Quiénes somos</a></li>
+    <li><a href="/#servicios">Servicios</a></li>
+    <li><a href="/#contacto">Contacto</a></li>
+  </ul>
+</nav>
+
+<div class="detail-back">
+  <a href="/propiedades">← Proyectos en curso</a>
+</div>
+
+<div class="det-hero-ba" id="detHero">
+  <div class="h-before"><img src="https://raw.githubusercontent.com/sutherlandian88/curcuma/main/imgs/qt-01A-fachada-antes.jpg" alt="Fachada — antes" draggable="false"/></div>
+  <div class="h-after"><img src="https://raw.githubusercontent.com/sutherlandian88/curcuma/main/imgs/qt-01B-fachada-despues.jpg" alt="Fachada — después" draggable="false"/></div>
+  <div class="h-line"></div>
+  <div class="h-knob"><svg width="14" height="14" fill="none" stroke="#3a3632" stroke-width="2" viewBox="0 0 24 24"><path d="M8 4l-4 8 4 8M16 4l4 8-4 8"/></svg></div>
+  <span class="h-tag h-tag-b">Antes</span>
+  <span class="h-tag h-tag-a">Con C | Estudio</span>
+  <span class="h-caption">C | ESTUDIO</span>
+</div>
+
+<section class="detail-info">
+  <div>
+    <h1 class="detail-title">Casa Santuario del Valle</h1>
+    <p class="detail-desc">Remodelación de gran escala desde la fachada hasta los interiores. La vivienda se transforma en cada rincón preservando su carácter original y sumando contemporaneidad. Un proceso integral que redefine cada espacio habitado.</p>
+  </div>
+  <div class="detail-meta">
+    <div>
+      <p class="detail-location">Santuario del Valle · Santiago</p>
+      <div class="detail-tags-list"><span class="detail-tag">Remodelación Integral</span><span class="detail-tag">Diseño Interior</span><span class="detail-tag">Arquitectura</span></div>
+    </div>
+    <a href="/#contacto" class="detail-cta-btn">Hablemos de tu proyecto →</a>
+  </div>
+</section>
+
+<section class="detail-pairs-section">
+  <p class="section-label">La transformación</p>
+  <div class="pairs-grid">
+    <div class="pair-item">
+      <div class="det-ba">
+        <div class="p-before"><img src="https://raw.githubusercontent.com/sutherlandian88/curcuma/main/imgs/qt-02A-hall-antes.jpg" alt="Hall — antes" draggable="false" loading="lazy"/></div>
+        <div class="p-after"><img src="https://raw.githubusercontent.com/sutherlandian88/curcuma/main/imgs/qt-02B-hall-despues.jpg" alt="Hall — después" draggable="false" loading="lazy"/></div>
+        <div class="p-line"></div>
+        <div class="p-knob"><svg width="12" height="12" fill="none" stroke="#3a3632" stroke-width="2" viewBox="0 0 24 24"><path d="M8 4l-4 8 4 8M16 4l4 8-4 8"/></svg></div>
+        <span class="p-tag p-tag-b">Antes</span>
+        <span class="p-tag p-tag-a">Después</span>
+      </div>
+      <p class="pair-caption">Hall</p>
+    </div>
+    <div class="pair-item">
+      <div class="det-ba">
+        <div class="p-before"><img src="https://raw.githubusercontent.com/sutherlandian88/curcuma/main/imgs/qt-03A-cocina-antes.jpg" alt="Cocina — antes" draggable="false" loading="lazy"/></div>
+        <div class="p-after"><img src="https://raw.githubusercontent.com/sutherlandian88/curcuma/main/imgs/qt-03B-cocina-despues.jpg" alt="Cocina — después" draggable="false" loading="lazy"/></div>
+        <div class="p-line"></div>
+        <div class="p-knob"><svg width="12" height="12" fill="none" stroke="#3a3632" stroke-width="2" viewBox="0 0 24 24"><path d="M8 4l-4 8 4 8M16 4l4 8-4 8"/></svg></div>
+        <span class="p-tag p-tag-b">Antes</span>
+        <span class="p-tag p-tag-a">Después</span>
+      </div>
+      <p class="pair-caption">Cocina</p>
+    </div>
+    <div class="pair-item">
+      <div class="det-ba">
+        <div class="p-before"><img src="https://raw.githubusercontent.com/sutherlandian88/curcuma/main/imgs/qt-04A-logia-antes.jpg" alt="Logia — antes" draggable="false" loading="lazy"/></div>
+        <div class="p-after"><img src="https://raw.githubusercontent.com/sutherlandian88/curcuma/main/imgs/qt-04B-logia-despues.jpg" alt="Logia — después" draggable="false" loading="lazy"/></div>
+        <div class="p-line"></div>
+        <div class="p-knob"><svg width="12" height="12" fill="none" stroke="#3a3632" stroke-width="2" viewBox="0 0 24 24"><path d="M8 4l-4 8 4 8M16 4l4 8-4 8"/></svg></div>
+        <span class="p-tag p-tag-b">Antes</span>
+        <span class="p-tag p-tag-a">Después</span>
+      </div>
+      <p class="pair-caption">Logia</p>
+    </div>
+    <div class="pair-item">
+      <div class="det-ba">
+        <div class="p-before"><img src="https://raw.githubusercontent.com/sutherlandian88/curcuma/main/imgs/qt-05A-fachada-trasera-antes.jpg" alt="Fachada trasera — antes" draggable="false" loading="lazy"/></div>
+        <div class="p-after"><img src="https://raw.githubusercontent.com/sutherlandian88/curcuma/main/imgs/qt-05B-fachada-trasera-despues.jpg" alt="Fachada trasera — después" draggable="false" loading="lazy"/></div>
+        <div class="p-line"></div>
+        <div class="p-knob"><svg width="12" height="12" fill="none" stroke="#3a3632" stroke-width="2" viewBox="0 0 24 24"><path d="M8 4l-4 8 4 8M16 4l4 8-4 8"/></svg></div>
+        <span class="p-tag p-tag-b">Antes</span>
+        <span class="p-tag p-tag-a">Después</span>
+      </div>
+      <p class="pair-caption">Fachada trasera</p>
+    </div>
+    <div class="pair-item">
+      <div class="det-ba">
+        <div class="p-before"><img src="https://raw.githubusercontent.com/sutherlandian88/curcuma/main/imgs/qt-07A-bano-pp-antes.jpg" alt="Baño principal — antes" draggable="false" loading="lazy"/></div>
+        <div class="p-after"><img src="https://raw.githubusercontent.com/sutherlandian88/curcuma/main/imgs/qt-07B-bano-pp-despues.jpg" alt="Baño principal — después" draggable="false" loading="lazy"/></div>
+        <div class="p-line"></div>
+        <div class="p-knob"><svg width="12" height="12" fill="none" stroke="#3a3632" stroke-width="2" viewBox="0 0 24 24"><path d="M8 4l-4 8 4 8M16 4l4 8-4 8"/></svg></div>
+        <span class="p-tag p-tag-b">Antes</span>
+        <span class="p-tag p-tag-a">Después</span>
+      </div>
+      <p class="pair-caption">Baño principal</p>
+    </div>
+    <div class="pair-item">
+      <div class="det-ba">
+        <div class="p-before"><img src="https://raw.githubusercontent.com/sutherlandian88/curcuma/main/imgs/qt-08A-dorm-pp-antes.jpg" alt="Dormitorio principal — antes" draggable="false" loading="lazy"/></div>
+        <div class="p-after"><img src="https://raw.githubusercontent.com/sutherlandian88/curcuma/main/imgs/qt-08B-dorm-pp-despues.jpg" alt="Dormitorio principal — después" draggable="false" loading="lazy"/></div>
+        <div class="p-line"></div>
+        <div class="p-knob"><svg width="12" height="12" fill="none" stroke="#3a3632" stroke-width="2" viewBox="0 0 24 24"><path d="M8 4l-4 8 4 8M16 4l4 8-4 8"/></svg></div>
+        <span class="p-tag p-tag-b">Antes</span>
+        <span class="p-tag p-tag-a">Después</span>
+      </div>
+      <p class="pair-caption">Dormitorio principal</p>
+    </div>
+    <div class="pair-item">
+      <div class="det-ba">
+        <div class="p-before"><img src="https://raw.githubusercontent.com/sutherlandian88/curcuma/main/imgs/qt-10A-sala-juegos-antes.jpg" alt="Sala de juegos — antes" draggable="false" loading="lazy"/></div>
+        <div class="p-after"><img src="https://raw.githubusercontent.com/sutherlandian88/curcuma/main/imgs/qt-10B-sala-juegos-despues.jpg" alt="Sala de juegos — después" draggable="false" loading="lazy"/></div>
+        <div class="p-line"></div>
+        <div class="p-knob"><svg width="12" height="12" fill="none" stroke="#3a3632" stroke-width="2" viewBox="0 0 24 24"><path d="M8 4l-4 8 4 8M16 4l4 8-4 8"/></svg></div>
+        <span class="p-tag p-tag-b">Antes</span>
+        <span class="p-tag p-tag-a">Después</span>
+      </div>
+      <p class="pair-caption">Sala de juegos</p>
+    </div>
+    <div class="pair-item">
+      <div class="det-ba">
+        <div class="p-before"><img src="https://raw.githubusercontent.com/sutherlandian88/curcuma/main/imgs/qt-11A-living-antes.jpg" alt="Living — antes" draggable="false" loading="lazy"/></div>
+        <div class="p-after"><img src="https://raw.githubusercontent.com/sutherlandian88/curcuma/main/imgs/qt-11B-living-despues.jpg" alt="Living — después" draggable="false" loading="lazy"/></div>
+        <div class="p-line"></div>
+        <div class="p-knob"><svg width="12" height="12" fill="none" stroke="#3a3632" stroke-width="2" viewBox="0 0 24 24"><path d="M8 4l-4 8 4 8M16 4l4 8-4 8"/></svg></div>
+        <span class="p-tag p-tag-b">Antes</span>
+        <span class="p-tag p-tag-a">Después</span>
+      </div>
+      <p class="pair-caption">Living</p>
+    </div>
+  </div>
+</section>
+
+<section class="detail-singles-section">
+  <p class="section-label">El espacio</p>
+  <div class="singles-grid">
+      <div class="single-item">
+        <img src="https://raw.githubusercontent.com/sutherlandian88/curcuma/main/imgs/qt-06-comedor.jpg" alt="Comedor" loading="lazy"/>
+        <span class="single-label">Comedor</span>
+      </div>
+      <div class="single-item">
+        <img src="https://raw.githubusercontent.com/sutherlandian88/curcuma/main/imgs/qt-09-salita.jpg" alt="Salita" loading="lazy"/>
+        <span class="single-label">Salita</span>
+      </div>
+      <div class="single-item">
+        <img src="https://raw.githubusercontent.com/sutherlandian88/curcuma/main/imgs/qt-12-sala-2piso.jpg" alt="Sala 2° piso" loading="lazy"/>
+        <span class="single-label">Sala 2° piso</span>
+      </div>
+      <div class="single-item">
+        <img src="https://raw.githubusercontent.com/sutherlandian88/curcuma/main/imgs/qt-13-terraza-2piso.jpg" alt="Terraza 2° piso" loading="lazy"/>
+        <span class="single-label">Terraza 2° piso</span>
+      </div>
+      <div class="single-item">
+        <img src="https://raw.githubusercontent.com/sutherlandian88/curcuma/main/imgs/qt-14-logia-ext.jpg" alt="Logia exterior" loading="lazy"/>
+        <span class="single-label">Logia exterior</span>
+      </div>
+  </div>
+</section>
+<section class="detail-video-section">
+  <p class="section-label">Recorrido en video</p>
+  <div class="video-wrap">
+    <iframe src="https://player.vimeo.com/video/1192836439?badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479" allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media" title="Casa Santuario del Valle"></iframe>
+  </div>
+</section>
+
+<section class="detail-cta-section">
+  <h2>¿Tu espacio<br>merece <em>esto</em>?</h2>
+  <div class="cta-btns">
+    <a href="/#contacto" class="btn-light">Hablemos de tu proyecto</a>
+    <a href="/propiedades" class="btn-outline-l">Ver más proyectos</a>
+  </div>
+</section>
+
+<footer>
+  <span>© 2025 C Estudio · Arquitectura y Remodelaciones</span>
+  <a href="/propiedades" class="footer-back">← Proyectos en curso</a>
+</footer>
+
+<a href="https://wa.me/56998182936?text=Hola%2C%20me%20interesa%20conocer%20m%C3%A1s%20sobre%20Casa%20Santuario%20del%20Valle" class="wa-float" target="_blank" rel="noopener">
+  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+</a>
+
+<script>
+
+(function(){
+  // Hero
+  var hero = document.getElementById('detHero');
+  if(hero){
+    var hAfter = hero.querySelector('.h-after');
+    var hLine  = hero.querySelector('.h-line');
+    var hKnob  = hero.querySelector('.h-knob');
+    var hDrag  = false;
+    function setH(x){
+      var r=hero.getBoundingClientRect();
+      var p=Math.max(0,Math.min(1,(x-r.left)/r.width));
+      hAfter.style.clipPath='inset(0 '+(1-p)*100+'% 0 0)';
+      hLine.style.left=p*100+'%';
+      hKnob.style.left=p*100+'%';
+    }
+    hero.addEventListener('mousedown',function(e){hDrag=true;setH(e.clientX);e.preventDefault();});
+    document.addEventListener('mousemove',function(e){if(hDrag)setH(e.clientX);});
+    document.addEventListener('mouseup',function(){hDrag=false;});
+    hero.addEventListener('touchstart',function(e){hDrag=true;setH(e.touches[0].clientX);},{passive:true});
+    document.addEventListener('touchmove',function(e){if(hDrag)setH(e.touches[0].clientX);},{passive:true});
+    document.addEventListener('touchend',function(){hDrag=false;});
+    window.addEventListener('load',function(){
+      var r=hero.getBoundingClientRect();
+      setH(r.left+r.width*0.55);
+    });
+  }
+  // Pair sliders
+  document.querySelectorAll('.det-ba').forEach(function(strip){
+    var after=strip.querySelector('.p-after');
+    var line=strip.querySelector('.p-line');
+    var knob=strip.querySelector('.p-knob');
+    var drag=false;
+    function setP(x){
+      var r=strip.getBoundingClientRect();
+      var p=Math.max(0,Math.min(1,(x-r.left)/r.width));
+      after.style.clipPath='inset(0 '+(1-p)*100+'% 0 0)';
+      line.style.left=p*100+'%';
+      knob.style.left=p*100+'%';
+    }
+    strip.addEventListener('mousedown',function(e){drag=true;setP(e.clientX);e.preventDefault();e.stopPropagation();});
+    document.addEventListener('mousemove',function(e){if(drag)setP(e.clientX);});
+    document.addEventListener('mouseup',function(){drag=false;});
+    strip.addEventListener('touchstart',function(e){drag=true;setP(e.touches[0].clientX);},{passive:true});
+    document.addEventListener('touchmove',function(e){if(drag)setP(e.touches[0].clientX);},{passive:true});
+    document.addEventListener('touchend',function(){drag=false;});
+    window.addEventListener('load',function(){
+      var r=strip.getBoundingClientRect();
+      setP(r.left+r.width*0.5);
+    });
+  });
+})();
+
+</script>
+</body>
+</html>
