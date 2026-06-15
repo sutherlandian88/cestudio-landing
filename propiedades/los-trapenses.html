@@ -88,9 +88,11 @@ nav{display:flex;justify-content:space-between;align-items:center;padding:0 32px
 @media(max-width:900px){
   html,body{height:auto;min-height:100%;overflow-x:hidden;overflow-y:auto;}
   .prop-layout{display:block;height:auto;}
-  .photo-panel{height:62vw;min-height:280px;}
+  .photo-panel{height:58vw;min-height:240px;overflow:hidden;}
+  .thumb-strip{height:90px;}
+  .thumb-item{width:130px;height:82px;}
   .details-panel{height:auto;overflow:visible;}
-  .details-scroll{overflow:visible;padding-bottom:40px;}
+  .details-scroll{overflow:visible;padding:24px 24px 48px;}
   .details-cta-bar{position:static;}
   .nav-arrow{opacity:1;}
 }
@@ -143,8 +145,6 @@ nav{display:flex;justify-content:space-between;align-items:center;padding:0 32px
       </div>
 
       <h1 class="prop-title">Casa sector Los Trapenses</h1>
-
-      </div>
 
       <div class="details-cta-bar">
         <button class="cta-video" onclick="window.open('https://vimeo.com/1192098322','_blank')">
