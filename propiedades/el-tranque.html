@@ -36,8 +36,8 @@ nav{display:flex;justify-content:space-between;align-items:center;padding:0 32px
 .photo-label-bar{position:absolute;bottom:0;left:0;right:0;padding:10px 16px;background:rgba(26,24,21,0.65);text-align:center;}
 .photo-label-bar span{font-size:9px;letter-spacing:2.5px;text-transform:uppercase;color:#f0ece5;}
 /* Bottom bar */
-.photo-bottom-bar{display:flex;justify-content:space-between;align-items:center;padding:0 20px;height:48px;background:#111;border-top:0.5px solid #2a2825;flex-shrink:0;}
-.photo-brand{font-family:'Cormorant Garamond',serif;font-size:14px;letter-spacing:2px;color:#c8b89a;}
+.photo-bottom-bar{display:flex;justify-content:center;align-items:center;gap:0;height:48px;background:#111;border-top:0.5px solid #2a2825;flex-shrink:0;}
+.bar-sep{color:#3a3632;font-size:14px;}.photo-brand{font-family:'Cormorant Garamond',serif;font-size:14px;letter-spacing:2px;color:#c8b89a;}
 .remo-btn{background:none;border:none;cursor:pointer;font-family:'Jost',sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#9a948e;display:flex;align-items:center;gap:8px;transition:color 0.2s;padding:0;}
 .remo-btn:hover{color:#f0ece5;}
 .remo-btn.active{color:#f0ece5;}
@@ -117,9 +117,8 @@ nav{display:flex;justify-content:space-between;align-items:center;padding:0 32px
     </div>
     <div class="photo-bottom-bar">
       <span class="photo-brand">C | Estudio</span>
-      <button class="remo-btn" id="remoBtn">
-        VER CON REMODELACIÓN&nbsp;&nbsp;<span class="remo-dot" id="remoDot">●</span>
-      </button>
+      <span class="bar-sep"> &nbsp;|&nbsp; </span>
+      <button class="remo-btn" id="remoBtn">VER CON REMODELACIÓN &nbsp;<span class="remo-dot" id="remoDot">●</span></button>
     </div>
     <div class="thumb-strip" id="thumbStrip"></div>
   </div>
