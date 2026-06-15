@@ -4,106 +4,92 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Casa sector Los Trapenses — C Estudio</title>
-<meta name="description" content="Remodelación integral de vivienda unifamiliar en el sector oriente de Santiago. Cada espacio fue intervenido con criterio contemporáneo: cocinas renovadas, livi"/>
+<meta name="description" content="Casa estilo tradicional con gran terreno en sector Los Trapenses, Lo Barnechea. Con 2.207 m² de terreno y 419 m² construidos, esta vivienda tiene un enorme"/>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%233a3632'/><text y='.9em' font-size='72' font-family='serif' fill='%23f0ece5' x='14'>C</text></svg>"/>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Jost:wght@300;400&display=swap" rel="stylesheet"/>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-html{scroll-behavior:smooth;}
-body{font-family:'Jost',sans-serif;font-weight:300;background:#f5f3ef;color:#3a3632;}
-nav{display:flex;justify-content:space-between;align-items:center;padding:20px 40px;background:#f5f3ef;border-bottom:0.5px solid #d8d4cc;position:sticky;top:0;z-index:100;}
-.nav-logo{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:300;letter-spacing:3px;color:#3a3632;text-decoration:none;}
-.nav-links{display:flex;gap:32px;list-style:none;}
+html,body{height:100%;overflow:hidden;font-family:'Jost',sans-serif;font-weight:300;color:#3a3632;}
+/* NAV */
+nav{display:flex;justify-content:space-between;align-items:center;padding:0 32px;height:56px;background:#f5f3ef;border-bottom:0.5px solid #d8d4cc;position:relative;z-index:50;}
+.nav-logo{font-family:'Cormorant Garamond',serif;font-size:17px;font-weight:300;letter-spacing:3px;color:#3a3632;text-decoration:none;}
+.nav-links{display:flex;gap:28px;list-style:none;}
 .nav-links a{font-size:10px;letter-spacing:2.5px;text-transform:uppercase;color:#3a3632;text-decoration:none;transition:opacity 0.2s;}
 .nav-links a:hover{opacity:0.5;}
-.detail-back{padding:24px 40px 0;}
-.detail-back a{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#9a948e;text-decoration:none;transition:color 0.2s;}
-.detail-back a:hover{color:#3a3632;}
-/* Hero BA */
-.det-hero-ba{position:relative;width:100%;height:580px;overflow:hidden;cursor:ew-resize;user-select:none;margin-top:24px;}
-.det-hero-ba .h-before,.det-hero-ba .h-after{position:absolute;inset:0;width:100%;height:100%;overflow:hidden;}
-.det-hero-ba img{width:100%;height:100%;object-fit:cover;display:block;pointer-events:none;}
-.det-hero-ba .h-after{clip-path:inset(0 50% 0 0);}
-.det-hero-ba .h-line{position:absolute;top:0;bottom:0;left:50%;width:1px;background:rgba(255,255,255,0.85);z-index:5;pointer-events:none;}
-.det-hero-ba .h-knob{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:40px;height:40px;background:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;z-index:6;pointer-events:none;box-shadow:0 2px 16px rgba(0,0,0,0.22);}
-.h-tag{position:absolute;bottom:20px;padding:5px 14px;font-size:9px;letter-spacing:2px;text-transform:uppercase;z-index:7;pointer-events:none;}
-.h-tag-b{left:20px;background:rgba(58,54,50,0.78);color:#f0ece5;}
-.h-tag-a{right:20px;background:#3d6b50;color:#fff;}
-.h-caption{position:absolute;top:20px;left:50%;transform:translateX(-50%);background:rgba(245,243,239,0.92);padding:6px 20px;font-family:'Cormorant Garamond',serif;font-size:13px;color:#3a3632;letter-spacing:3px;z-index:7;pointer-events:none;white-space:nowrap;text-transform:uppercase;}
-/* Info */
-.detail-info{display:grid;grid-template-columns:1fr 1fr;gap:48px;padding:56px 40px;border-bottom:0.5px solid #d8d4cc;}
-.detail-title{font-family:'Cormorant Garamond',serif;font-size:44px;font-weight:300;line-height:1.1;margin-bottom:16px;}
-.detail-desc{font-size:14px;line-height:1.9;color:#6a6460;max-width:520px;}
-.detail-meta{display:flex;flex-direction:column;justify-content:space-between;}
-.detail-location{font-size:10px;letter-spacing:2.5px;text-transform:uppercase;color:#9a948e;margin-bottom:12px;}
-.detail-tags-list{display:flex;flex-wrap:wrap;gap:8px;}
-.detail-tag{font-size:9px;letter-spacing:1.5px;text-transform:uppercase;padding:5px 12px;border:0.5px solid #d8d4cc;color:#6a6460;}
-.detail-cta-btn{display:inline-block;background:#3a3632;color:#f0ece5;font-size:9px;letter-spacing:2px;text-transform:uppercase;padding:13px 26px;text-decoration:none;margin-top:32px;transition:opacity 0.2s;}
-.detail-cta-btn:hover{opacity:0.75;}
-/* Section */
-.section-label{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#b0aaa4;margin-bottom:32px;}
-/* Pairs */
-.detail-pairs-section{padding:56px 40px;}
-.pairs-grid{display:grid;grid-template-columns:1fr 1fr;gap:32px;}
-.pair-item{display:flex;flex-direction:column;gap:10px;}
-.pair-caption{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#9a948e;}
-/* Pair BA slider */
-.det-ba{position:relative;height:320px;overflow:hidden;cursor:ew-resize;user-select:none;background:#1a1815;}
-.det-ba .p-before,.det-ba .p-after{position:absolute;inset:0;width:100%;height:100%;overflow:hidden;}
-.det-ba img{width:100%;height:100%;object-fit:cover;display:block;pointer-events:none;}
-.det-ba .p-after{clip-path:inset(0 50% 0 0);}
-.det-ba .p-line{position:absolute;top:0;bottom:0;left:50%;width:1px;background:rgba(255,255,255,0.8);z-index:5;pointer-events:none;}
-.det-ba .p-knob{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:28px;height:28px;background:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;z-index:6;pointer-events:none;box-shadow:0 1px 10px rgba(0,0,0,0.2);}
-.p-tag{position:absolute;bottom:10px;padding:3px 9px;font-size:8px;letter-spacing:1.5px;text-transform:uppercase;z-index:7;pointer-events:none;}
-.p-tag-b{left:10px;background:rgba(58,54,50,0.75);color:#f0ece5;}
-.p-tag-a{right:10px;background:#3d6b50;color:#fff;}
-/* Singles */
-.detail-singles-section{padding:0 40px 56px;border-bottom:0.5px solid #d8d4cc;}
-.singles-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
-.single-item{position:relative;aspect-ratio:4/3;overflow:hidden;}
-.single-item img{width:100%;height:100%;object-fit:cover;display:block;transition:transform 0.4s;}
-.single-item:hover img{transform:scale(1.04);}
-.single-label{position:absolute;bottom:0;left:0;right:0;padding:8px 12px;background:linear-gradient(transparent,rgba(26,24,21,0.6));font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:#f0ece5;}
-/* Video */
-.detail-video-section{padding:56px 40px;border-bottom:0.5px solid #d8d4cc;}
-.video-wrap{position:relative;width:100%;max-width:960px;margin:0 auto;padding-bottom:min(540px,56.25%);}
-.video-wrap iframe{position:absolute;inset:0;width:100%;height:100%;border:none;}
-/* CTA */
-.detail-cta-section{background:#3a3632;padding:80px 40px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:32px;}
-.detail-cta-section h2{font-family:'Cormorant Garamond',serif;font-size:42px;font-weight:300;color:#f0ece5;line-height:1.15;}
-.detail-cta-section h2 em{font-style:italic;color:#c8a87a;}
-.cta-btns{display:flex;gap:16px;flex-wrap:wrap;}
-.btn-light{display:inline-block;background:#f0ece5;color:#3a3632;font-size:9px;letter-spacing:2.5px;text-transform:uppercase;padding:14px 28px;text-decoration:none;transition:opacity 0.2s;}
-.btn-light:hover{opacity:0.85;}
-.btn-outline-l{display:inline-block;border:0.5px solid rgba(240,236,229,0.4);color:#f0ece5;font-size:9px;letter-spacing:2.5px;text-transform:uppercase;padding:14px 28px;text-decoration:none;transition:opacity 0.2s;}
-.btn-outline-l:hover{opacity:0.65;}
-/* Footer */
-footer{display:flex;justify-content:space-between;align-items:center;padding:20px 40px;border-top:0.5px solid #d8d4cc;background:#f5f3ef;font-size:10px;color:#b0aaa4;letter-spacing:1px;flex-wrap:wrap;gap:12px;}
-.footer-back{color:#9a948e;text-decoration:none;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;transition:color 0.2s;}
-.footer-back:hover{color:#3a3632;}
-/* WhatsApp */
-.wa-float{position:fixed;bottom:28px;right:28px;z-index:1000;width:56px;height:56px;background:#25d366;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(0,0,0,0.22);transition:transform 0.2s;text-decoration:none;}
-.wa-float:hover{transform:scale(1.08);}
-.wa-float svg{width:32px;height:32px;fill:#fff;}
+/* LAYOUT */
+.prop-layout{display:grid;grid-template-columns:1fr 460px;height:calc(100vh - 56px);}
+/* PHOTO PANEL */
+.photo-panel{background:#1a1815;display:flex;flex-direction:column;position:relative;overflow:hidden;}
+.photo-close{position:absolute;top:16px;left:16px;z-index:20;width:36px;height:36px;background:rgba(26,24,21,0.7);border:none;border-radius:50%;color:#f0ece5;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;text-decoration:none;transition:background 0.2s;}
+.photo-close:hover{background:rgba(26,24,21,0.95);}
+.main-photo-wrap{flex:1;position:relative;overflow:hidden;}
+.main-photo-wrap img{width:100%;height:100%;object-fit:cover;display:block;transition:opacity 0.25s;}
+.main-photo-wrap img.fading{opacity:0;}
+.nav-arrow{position:absolute;top:50%;transform:translateY(-50%);background:rgba(26,24,21,0.55);border:none;color:#f0ece5;font-size:32px;width:44px;height:64px;cursor:pointer;z-index:10;display:flex;align-items:center;justify-content:center;transition:background 0.2s;opacity:0;transition:opacity 0.2s;}
+.photo-panel:hover .nav-arrow{opacity:1;}
+.nav-prev{left:0;border-radius:0 4px 4px 0;}
+.nav-next{right:0;border-radius:4px 0 0 4px;}
+.nav-arrow:hover{background:rgba(26,24,21,0.85);}
+.nav-arrow:disabled{opacity:0.2 !important;cursor:default;}
+.photo-label-bar{position:absolute;bottom:0;left:0;right:0;padding:10px 16px;background:rgba(26,24,21,0.65);text-align:center;}
+.photo-label-bar span{font-size:9px;letter-spacing:2.5px;text-transform:uppercase;color:#f0ece5;}
+/* Bottom bar */
+.photo-bottom-bar{display:flex;justify-content:space-between;align-items:center;padding:0 20px;height:48px;background:#111;border-top:0.5px solid #2a2825;flex-shrink:0;}
+.photo-brand{font-family:'Cormorant Garamond',serif;font-size:14px;letter-spacing:2px;color:#c8b89a;}
+.remo-btn{background:none;border:none;cursor:pointer;font-family:'Jost',sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#9a948e;display:flex;align-items:center;gap:8px;transition:color 0.2s;padding:0;}
+.remo-btn:hover{color:#f0ece5;}
+.remo-btn.active{color:#f0ece5;}
+.remo-dot{font-size:10px;color:#3d6b50;transition:color 0.2s;}
+.remo-btn:not(.active) .remo-dot{color:#444;}
+/* Thumbnails */
+.thumb-strip{height:80px;display:flex;gap:4px;overflow-x:auto;padding:4px 8px;background:#0f0e0c;flex-shrink:0;scrollbar-width:none;}
+.thumb-strip::-webkit-scrollbar{display:none;}
+.thumb-item{flex-shrink:0;width:110px;height:72px;overflow:hidden;cursor:pointer;opacity:0.5;transition:opacity 0.2s;border:1.5px solid transparent;}
+.thumb-item:hover{opacity:0.8;}
+.thumb-item.active{opacity:1;border-color:#c8b89a;}
+.thumb-item img{width:100%;height:100%;object-fit:cover;display:block;pointer-events:none;}
+/* DETAILS PANEL */
+.details-panel{display:flex;flex-direction:column;background:#f5f3ef;height:100%;overflow:hidden;}
+.details-scroll{flex:1;overflow-y:auto;padding:24px 28px 0;}
+.details-nav{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;}
+.back-link{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#9a948e;text-decoration:none;transition:color 0.2s;}
+.back-link:hover{color:#3a3632;}
+.details-nav-actions{display:flex;gap:16px;align-items:center;}
+.action-btn{background:none;border:none;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:#9a948e;cursor:pointer;display:flex;align-items:center;gap:6px;padding:0;}
+.action-btn:hover{color:#3a3632;}
+.prop-crumb{display:flex;align-items:center;gap:10px;margin-bottom:12px;}
+.crumb-loc{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#9a948e;}
+.crumb-badge{font-size:8px;letter-spacing:1.5px;text-transform:uppercase;padding:3px 9px;background:#3d6b50;color:#fff;}
+.prop-title{font-family:'Cormorant Garamond',serif;font-size:34px;font-weight:300;line-height:1.15;margin-bottom:20px;color:#3a3632;}
+.price-box{background:#fff;border:0.5px solid #e8e4de;padding:16px 20px;margin-bottom:24px;}
+.price-label{font-size:8px;letter-spacing:2px;text-transform:uppercase;color:#9a948e;display:block;margin-bottom:6px;}
+.price-value{font-family:'Cormorant Garamond',serif;font-size:30px;font-weight:300;color:#3a3632;}
+.ficha-section{margin-bottom:24px;}
+.ficha-title{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:300;color:#3a3632;margin-bottom:16px;}
+.ficha-row-full{padding:12px 0;border-bottom:0.5px solid #e8e4de;}
+.ficha-grid-2{display:grid;grid-template-columns:1fr 1fr;}
+.ficha-cell{padding:12px 0;border-bottom:0.5px solid #e8e4de;}
+.ficha-lbl{font-size:8px;letter-spacing:1.5px;text-transform:uppercase;color:#9a948e;display:block;margin-bottom:5px;}
+.ficha-val{font-size:14px;color:#3a3632;}
+.desc-section{margin-bottom:28px;}
+.desc-title{font-size:8px;letter-spacing:2px;text-transform:uppercase;color:#9a948e;margin-bottom:12px;}
+.desc-text{font-size:13px;line-height:1.85;color:#5a5450;}
+/* CTA Bar */
+.details-cta-bar{display:flex;gap:0;border-top:0.5px solid #d8d4cc;flex-shrink:0;}
+.cta-video{flex:1;padding:16px 12px;background:#fff;border:none;font-family:'Jost',sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#3a3632;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;border-right:0.5px solid #d8d4cc;transition:background 0.2s;}
+.cta-video:hover{background:#f0ece5;}
+.cta-whatsapp{flex:1.4;padding:16px 12px;background:#3d6b50;border:none;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#fff;text-decoration:none;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:opacity 0.2s;}
+.cta-whatsapp:hover{opacity:0.88;}
 /* Responsive */
-@media(max-width:768px){
-  nav{padding:16px 20px;}
-  .nav-links{gap:16px;}
-  .detail-back{padding:16px 20px 0;}
-  .det-hero-ba{height:260px;margin-top:16px;}
-  .detail-info{grid-template-columns:1fr;gap:24px;padding:40px 20px;}
-  .detail-title{font-size:30px;}
-  .detail-pairs-section{padding:40px 20px;}
-  .pairs-grid{grid-template-columns:1fr;}
-  .det-ba{height:240px;}
-  .detail-singles-section{padding:0 20px 40px;}
-  .singles-grid{grid-template-columns:repeat(2,1fr);}
-  .detail-video-section{padding:40px 20px;}
-  .detail-cta-section{padding:56px 20px;flex-direction:column;}
-  .detail-cta-section h2{font-size:28px;}
-  footer{padding:16px 20px;}
+@media(max-width:900px){
+  .prop-layout{grid-template-columns:1fr;height:auto;overflow:visible;}
+  html,body{overflow:auto;}
+  .photo-panel{height:60vw;min-height:280px;}
+  .details-panel{height:auto;}
+  .details-scroll{overflow:visible;}
+  .nav-arrow{opacity:1;}
 }
 </style>
 </head>
@@ -118,207 +104,160 @@ footer{display:flex;justify-content:space-between;align-items:center;padding:20p
   </ul>
 </nav>
 
-<div class="detail-back">
-  <a href="/propiedades">← Proyectos en curso</a>
+<div class="prop-layout">
+
+  <!-- LEFT: Photo Gallery -->
+  <div class="photo-panel">
+    <a href="/propiedades" class="photo-close">×</a>
+    <div class="main-photo-wrap">
+      <img id="mainImg" src="https://raw.githubusercontent.com/sutherlandian88/curcuma/main/imgs/sz-01A-cocina-antes.jpg" alt="COCINA" draggable="false"/>
+      <button class="nav-arrow nav-prev" id="prevBtn" disabled>&#8249;</button>
+      <button class="nav-arrow nav-next" id="nextBtn">&#8250;</button>
+      <div class="photo-label-bar"><span id="photoLabel">COCINA</span></div>
+    </div>
+    <div class="photo-bottom-bar">
+      <span class="photo-brand">C | Estudio</span>
+      <button class="remo-btn" id="remoBtn">
+        VER CON REMODELACIÓN&nbsp;&nbsp;<span class="remo-dot" id="remoDot">●</span>
+      </button>
+    </div>
+    <div class="thumb-strip" id="thumbStrip"></div>
+  </div>
+
+  <!-- RIGHT: Details -->
+  <div class="details-panel">
+    <div class="details-scroll">
+
+      <div class="details-nav">
+        <a href="/propiedades" class="back-link">← PROPIEDADES</a>
+        <div class="details-nav-actions">
+          <button class="action-btn">♡ Guardar</button>
+          <button class="action-btn">↗ Compartir</button>
+        </div>
+      </div>
+
+      <div class="prop-crumb">
+        <span class="crumb-loc">LOS TRAPENSES · LO BARNECHEA</span>
+        <span class="crumb-badge">Venta</span>
+      </div>
+
+      <h1 class="prop-title">Casa sector Los Trapenses</h1>
+
+      <div class="price-box">
+        <span class="price-label">Precio</span>
+        <div class="price-value">UF 52.000</div>
+      </div>
+
+      <div class="ficha-section">
+        <h3 class="ficha-title">Ficha de la propiedad</h3>
+        <div>
+          <div class="ficha-row-full"><span class="ficha-lbl">UBICACIÓN</span><span class="ficha-val">Los Alazanes, Los Trapenses · Lo Barnechea</span></div><div class="ficha-cell"><span class="ficha-lbl">MTS² TERRENO</span><span class="ficha-val">2.207 m²</span></div><div class="ficha-cell"><span class="ficha-lbl">MTS² CONSTRUIDOS</span><span class="ficha-val">419 m²</span></div><div class="ficha-cell"><span class="ficha-lbl">DORMITORIOS</span><span class="ficha-val">2</span></div><div class="ficha-cell"><span class="ficha-lbl">BAÑOS</span><span class="ficha-val">3</span></div><div class="ficha-cell"><span class="ficha-lbl">PIEZA DE SERVICIO</span><span class="ficha-val">Sí</span></div><div class="ficha-cell"><span class="ficha-lbl">ESTACIONAMIENTO</span><span class="ficha-val">—</span></div><div class="ficha-cell"><span class="ficha-lbl">PISCINA</span><span class="ficha-val">Sí</span></div><div class="ficha-cell"><span class="ficha-lbl">AÑO CONSTRUCCIÓN</span><span class="ficha-val">—</span></div>
+        </div>
+      </div>
+
+      <div class="desc-section">
+        <p class="desc-title">Descripción</p>
+        <p class="desc-text">Casa estilo tradicional con gran terreno en sector Los Trapenses, Lo Barnechea. Con 2.207 m² de terreno y 419 m² construidos, esta vivienda tiene un enorme potencial de transformación. C | Estudio puede renovar cocina, baños, living y zonas exteriores. Primer piso: hall de entrada, baño de visitas, living con terraza techada y jardín, amplio dormitorio principal con walk-in closet, otra pieza en suite, cocina con mesa isla, logia y escalera que conecta con 4 piezas de servicio.</p>
+      </div>
+
+    </div>
+
+    <div class="details-cta-bar">
+      <button class="cta-video" onclick="window.open('https://vimeo.com/1192098322','_blank')">
+        ▶&nbsp; VER VIDEO
+      </button>
+      <a href="https://wa.me/56998182936?text=Hola%2C%20me%20interesa%20Casa%20sector%20Los%20Trapenses" class="cta-whatsapp" target="_blank" rel="noopener">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        &nbsp;CONSULTAR POR WHATSAPP
+      </a>
+    </div>
+  </div>
+
 </div>
-
-<div class="det-hero-ba" id="detHero">
-  <div class="h-before"><img src="https://raw.githubusercontent.com/sutherlandian88/curcuma/main/imgs/sz-05A-living-antes.jpg" alt="Living — antes" draggable="false"/></div>
-  <div class="h-after"><img src="https://raw.githubusercontent.com/sutherlandian88/curcuma/main/imgs/sz-05B-living-despues.jpg" alt="Living — después" draggable="false"/></div>
-  <div class="h-line"></div>
-  <div class="h-knob"><svg width="14" height="14" fill="none" stroke="#3a3632" stroke-width="2" viewBox="0 0 24 24"><path d="M8 4l-4 8 4 8M16 4l4 8-4 8"/></svg></div>
-  <span class="h-tag h-tag-b">Antes</span>
-  <span class="h-tag h-tag-a">Con C | Estudio</span>
-  <span class="h-caption">C | ESTUDIO</span>
-</div>
-
-<section class="detail-info">
-  <div>
-    <h1 class="detail-title">Casa sector Los Trapenses</h1>
-    <p class="detail-desc">Remodelación integral de vivienda unifamiliar en el sector oriente de Santiago. Cada espacio fue intervenido con criterio contemporáneo: cocinas renovadas, livings con nueva materialidad, dormitorios y baños completamente actualizados para redefinir la manera de habitar.</p>
-  </div>
-  <div class="detail-meta">
-    <div>
-      <p class="detail-location">Lo Barnechea · Santiago</p>
-      <div class="detail-tags-list"><span class="detail-tag">Remodelación Integral</span><span class="detail-tag">Diseño Interior</span><span class="detail-tag">Arquitectura</span></div>
-    </div>
-    <a href="/#contacto" class="detail-cta-btn">Hablemos de tu proyecto →</a>
-  </div>
-</section>
-
-<section class="detail-pairs-section">
-  <p class="section-label">La transformación</p>
-  <div class="pairs-grid">
-    <div class="pair-item">
-      <div class="det-ba">
-        <div class="p-before"><img src="https://raw.githubusercontent.com/sutherlandian88/curcuma/main/imgs/sz-01A-cocina-antes.jpg" alt="Cocina — antes" draggable="false" loading="lazy"/></div>
-        <div class="p-after"><img src="https://raw.githubusercontent.com/sutherlandian88/curcuma/main/imgs/sz-01B-cocina-despues.jpg" alt="Cocina — después" draggable="false" loading="lazy"/></div>
-        <div class="p-line"></div>
-        <div class="p-knob"><svg width="12" height="12" fill="none" stroke="#3a3632" stroke-width="2" viewBox="0 0 24 24"><path d="M8 4l-4 8 4 8M16 4l4 8-4 8"/></svg></div>
-        <span class="p-tag p-tag-b">Antes</span>
-        <span class="p-tag p-tag-a">Después</span>
-      </div>
-      <p class="pair-caption">Cocina</p>
-    </div>
-    <div class="pair-item">
-      <div class="det-ba">
-        <div class="p-before"><img src="https://raw.githubusercontent.com/sutherlandian88/curcuma/main/imgs/sz-02A-cocina2-antes.jpg" alt="Cocina 2 — antes" draggable="false" loading="lazy"/></div>
-        <div class="p-after"><img src="https://raw.githubusercontent.com/sutherlandian88/curcuma/main/imgs/sz-02B-cocina2-despues.jpg" alt="Cocina 2 — después" draggable="false" loading="lazy"/></div>
-        <div class="p-line"></div>
-        <div class="p-knob"><svg width="12" height="12" fill="none" stroke="#3a3632" stroke-width="2" viewBox="0 0 24 24"><path d="M8 4l-4 8 4 8M16 4l4 8-4 8"/></svg></div>
-        <span class="p-tag p-tag-b">Antes</span>
-        <span class="p-tag p-tag-a">Después</span>
-      </div>
-      <p class="pair-caption">Cocina 2</p>
-    </div>
-    <div class="pair-item">
-      <div class="det-ba">
-        <div class="p-before"><img src="https://raw.githubusercontent.com/sutherlandian88/curcuma/main/imgs/sz-03A-logia-antes.jpg" alt="Logia — antes" draggable="false" loading="lazy"/></div>
-        <div class="p-after"><img src="https://raw.githubusercontent.com/sutherlandian88/curcuma/main/imgs/sz-03B-logia-despues.jpg" alt="Logia — después" draggable="false" loading="lazy"/></div>
-        <div class="p-line"></div>
-        <div class="p-knob"><svg width="12" height="12" fill="none" stroke="#3a3632" stroke-width="2" viewBox="0 0 24 24"><path d="M8 4l-4 8 4 8M16 4l4 8-4 8"/></svg></div>
-        <span class="p-tag p-tag-b">Antes</span>
-        <span class="p-tag p-tag-a">Después</span>
-      </div>
-      <p class="pair-caption">Logia</p>
-    </div>
-    <div class="pair-item">
-      <div class="det-ba">
-        <div class="p-before"><img src="https://raw.githubusercontent.com/sutherlandian88/curcuma/main/imgs/sz-11A-dorm-pp-antes.jpg" alt="Dormitorio principal — antes" draggable="false" loading="lazy"/></div>
-        <div class="p-after"><img src="https://raw.githubusercontent.com/sutherlandian88/curcuma/main/imgs/sz-11B-dorm1-despues.jpg" alt="Dormitorio principal — después" draggable="false" loading="lazy"/></div>
-        <div class="p-line"></div>
-        <div class="p-knob"><svg width="12" height="12" fill="none" stroke="#3a3632" stroke-width="2" viewBox="0 0 24 24"><path d="M8 4l-4 8 4 8M16 4l4 8-4 8"/></svg></div>
-        <span class="p-tag p-tag-b">Antes</span>
-        <span class="p-tag p-tag-a">Después</span>
-      </div>
-      <p class="pair-caption">Dormitorio principal</p>
-    </div>
-    <div class="pair-item">
-      <div class="det-ba">
-        <div class="p-before"><img src="https://raw.githubusercontent.com/sutherlandian88/curcuma/main/imgs/sz-12A-bano-pp-antes.jpg" alt="Baño principal — antes" draggable="false" loading="lazy"/></div>
-        <div class="p-after"><img src="https://raw.githubusercontent.com/sutherlandian88/curcuma/main/imgs/sz-12B-bano-pp-despues.jpg" alt="Baño principal — después" draggable="false" loading="lazy"/></div>
-        <div class="p-line"></div>
-        <div class="p-knob"><svg width="12" height="12" fill="none" stroke="#3a3632" stroke-width="2" viewBox="0 0 24 24"><path d="M8 4l-4 8 4 8M16 4l4 8-4 8"/></svg></div>
-        <span class="p-tag p-tag-b">Antes</span>
-        <span class="p-tag p-tag-a">Después</span>
-      </div>
-      <p class="pair-caption">Baño principal</p>
-    </div>
-    <div class="pair-item">
-      <div class="det-ba">
-        <div class="p-before"><img src="https://raw.githubusercontent.com/sutherlandian88/curcuma/main/imgs/sz-13A-sala-juegos-antes.jpg" alt="Sala de juegos — antes" draggable="false" loading="lazy"/></div>
-        <div class="p-after"><img src="https://raw.githubusercontent.com/sutherlandian88/curcuma/main/imgs/sz-13B-sala-juegos-despues.jpg" alt="Sala de juegos — después" draggable="false" loading="lazy"/></div>
-        <div class="p-line"></div>
-        <div class="p-knob"><svg width="12" height="12" fill="none" stroke="#3a3632" stroke-width="2" viewBox="0 0 24 24"><path d="M8 4l-4 8 4 8M16 4l4 8-4 8"/></svg></div>
-        <span class="p-tag p-tag-b">Antes</span>
-        <span class="p-tag p-tag-a">Después</span>
-      </div>
-      <p class="pair-caption">Sala de juegos</p>
-    </div>
-  </div>
-</section>
-
-<section class="detail-singles-section">
-  <p class="section-label">El espacio</p>
-  <div class="singles-grid">
-      <div class="single-item">
-        <img src="https://raw.githubusercontent.com/sutherlandian88/curcuma/main/imgs/sz-04-hall.jpg" alt="Hall" loading="lazy"/>
-        <span class="single-label">Hall</span>
-      </div>
-      <div class="single-item">
-        <img src="https://raw.githubusercontent.com/sutherlandian88/curcuma/main/imgs/sz-06-terraza.jpg" alt="Terraza" loading="lazy"/>
-        <span class="single-label">Terraza</span>
-      </div>
-      <div class="single-item">
-        <img src="https://raw.githubusercontent.com/sutherlandian88/curcuma/main/imgs/sz-07-piscina.jpg" alt="Piscina" loading="lazy"/>
-        <span class="single-label">Piscina</span>
-      </div>
-      <div class="single-item">
-        <img src="https://raw.githubusercontent.com/sutherlandian88/curcuma/main/imgs/sz-08-pasillo.jpg" alt="Pasillo" loading="lazy"/>
-        <span class="single-label">Pasillo</span>
-      </div>
-      <div class="single-item">
-        <img src="https://raw.githubusercontent.com/sutherlandian88/curcuma/main/imgs/sz-14-estacionamiento.jpg" alt="Estacionamiento" loading="lazy"/>
-        <span class="single-label">Estacionamiento</span>
-      </div>
-  </div>
-</section>
-<section class="detail-video-section">
-  <p class="section-label">Recorrido en video</p>
-  <div class="video-wrap">
-    <iframe src="https://player.vimeo.com/video/1192098322?badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479" allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media" title="Casa sector Los Trapenses"></iframe>
-  </div>
-</section>
-
-<section class="detail-cta-section">
-  <h2>¿Tu espacio<br>merece <em>esto</em>?</h2>
-  <div class="cta-btns">
-    <a href="/#contacto" class="btn-light">Hablemos de tu proyecto</a>
-    <a href="/propiedades" class="btn-outline-l">Ver más proyectos</a>
-  </div>
-</section>
-
-<footer>
-  <span>© 2025 C Estudio · Arquitectura y Remodelaciones</span>
-  <a href="/propiedades" class="footer-back">← Proyectos en curso</a>
-</footer>
-
-<a href="https://wa.me/56998182936?text=Hola%2C%20me%20interesa%20conocer%20m%C3%A1s%20sobre%20Casa%20sector%20Los%20Trapenses" class="wa-float" target="_blank" rel="noopener">
-  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-</a>
 
 <script>
+var PHOTOS_DATA = [{"label": "Cocina", "before": "https://raw.githubusercontent.com/sutherlandian88/curcuma/main/imgs/sz-01A-cocina-antes.jpg", "after": "https://raw.githubusercontent.com/sutherlandian88/curcuma/main/imgs/sz-01B-cocina-despues.jpg"}, {"label": "Cocina 2", "before": "https://raw.githubusercontent.com/sutherlandian88/curcuma/main/imgs/sz-02A-cocina2-antes.jpg", "after": "https://raw.githubusercontent.com/sutherlandian88/curcuma/main/imgs/sz-02B-cocina2-despues.jpg"}, {"label": "Logia", "before": "https://raw.githubusercontent.com/sutherlandian88/curcuma/main/imgs/sz-03A-logia-antes.jpg", "after": "https://raw.githubusercontent.com/sutherlandian88/curcuma/main/imgs/sz-03B-logia-despues.jpg"}, {"label": "Hall", "before": "https://raw.githubusercontent.com/sutherlandian88/curcuma/main/imgs/sz-04-hall.jpg"}, {"label": "Living", "before": "https://raw.githubusercontent.com/sutherlandian88/curcuma/main/imgs/sz-05A-living-antes.jpg", "after": "https://raw.githubusercontent.com/sutherlandian88/curcuma/main/imgs/sz-05B-living-despues.jpg"}, {"label": "Terraza", "before": "https://raw.githubusercontent.com/sutherlandian88/curcuma/main/imgs/sz-06-terraza.jpg"}, {"label": "Piscina", "before": "https://raw.githubusercontent.com/sutherlandian88/curcuma/main/imgs/sz-07-piscina.jpg"}, {"label": "Pasillo", "before": "https://raw.githubusercontent.com/sutherlandian88/curcuma/main/imgs/sz-08-pasillo.jpg"}, {"label": "Dormitorio 1", "before": "https://raw.githubusercontent.com/sutherlandian88/curcuma/main/imgs/sz-09A-dorm1-antes.jpg"}, {"label": "Baño 1", "before": "https://raw.githubusercontent.com/sutherlandian88/curcuma/main/imgs/sz-10A-bano1-antes.jpg"}, {"label": "Dormitorio principal", "before": "https://raw.githubusercontent.com/sutherlandian88/curcuma/main/imgs/sz-11A-dorm-pp-antes.jpg", "after": "https://raw.githubusercontent.com/sutherlandian88/curcuma/main/imgs/sz-11B-dorm1-despues.jpg"}, {"label": "Baño principal", "before": "https://raw.githubusercontent.com/sutherlandian88/curcuma/main/imgs/sz-12A-bano-pp-antes.jpg", "after": "https://raw.githubusercontent.com/sutherlandian88/curcuma/main/imgs/sz-12B-bano-pp-despues.jpg"}, {"label": "Sala de juegos", "before": "https://raw.githubusercontent.com/sutherlandian88/curcuma/main/imgs/sz-13A-sala-juegos-antes.jpg", "after": "https://raw.githubusercontent.com/sutherlandian88/curcuma/main/imgs/sz-13B-sala-juegos-despues.jpg"}, {"label": "Estacionamiento", "before": "https://raw.githubusercontent.com/sutherlandian88/curcuma/main/imgs/sz-14-estacionamiento.jpg"}];
 
 (function(){
-  // Hero
-  var hero = document.getElementById('detHero');
-  if(hero){
-    var hAfter = hero.querySelector('.h-after');
-    var hLine  = hero.querySelector('.h-line');
-    var hKnob  = hero.querySelector('.h-knob');
-    var hDrag  = false;
-    function setH(x){
-      var r=hero.getBoundingClientRect();
-      var p=Math.max(0,Math.min(1,(x-r.left)/r.width));
-      hAfter.style.clipPath='inset(0 '+(1-p)*100+'% 0 0)';
-      hLine.style.left=p*100+'%';
-      hKnob.style.left=p*100+'%';
-    }
-    hero.addEventListener('mousedown',function(e){hDrag=true;setH(e.clientX);e.preventDefault();});
-    document.addEventListener('mousemove',function(e){if(hDrag)setH(e.clientX);});
-    document.addEventListener('mouseup',function(){hDrag=false;});
-    hero.addEventListener('touchstart',function(e){hDrag=true;setH(e.touches[0].clientX);},{passive:true});
-    document.addEventListener('touchmove',function(e){if(hDrag)setH(e.touches[0].clientX);},{passive:true});
-    document.addEventListener('touchend',function(){hDrag=false;});
-    window.addEventListener('load',function(){
-      var r=hero.getBoundingClientRect();
-      setH(r.left+r.width*0.55);
-    });
-  }
-  // Pair sliders
-  document.querySelectorAll('.det-ba').forEach(function(strip){
-    var after=strip.querySelector('.p-after');
-    var line=strip.querySelector('.p-line');
-    var knob=strip.querySelector('.p-knob');
-    var drag=false;
-    function setP(x){
-      var r=strip.getBoundingClientRect();
-      var p=Math.max(0,Math.min(1,(x-r.left)/r.width));
-      after.style.clipPath='inset(0 '+(1-p)*100+'% 0 0)';
-      line.style.left=p*100+'%';
-      knob.style.left=p*100+'%';
-    }
-    strip.addEventListener('mousedown',function(e){drag=true;setP(e.clientX);e.preventDefault();e.stopPropagation();});
-    document.addEventListener('mousemove',function(e){if(drag)setP(e.clientX);});
-    document.addEventListener('mouseup',function(){drag=false;});
-    strip.addEventListener('touchstart',function(e){drag=true;setP(e.touches[0].clientX);},{passive:true});
-    document.addEventListener('touchmove',function(e){if(drag)setP(e.touches[0].clientX);},{passive:true});
-    document.addEventListener('touchend',function(){drag=false;});
-    window.addEventListener('load',function(){
-      var r=strip.getBoundingClientRect();
-      setP(r.left+r.width*0.5);
-    });
+  var photos = PHOTOS_DATA;
+  var idx = 0;
+  var remo = false;
+
+  var mainImg  = document.getElementById('mainImg');
+  var label    = document.getElementById('photoLabel');
+  var remoBtn  = document.getElementById('remoBtn');
+  var remoDot  = document.getElementById('remoDot');
+  var prevBtn  = document.getElementById('prevBtn');
+  var nextBtn  = document.getElementById('nextBtn');
+  var strip    = document.getElementById('thumbStrip');
+
+  // Build thumbnails
+  photos.forEach(function(p, i){
+    var wrap = document.createElement('div');
+    wrap.className = 'thumb-item' + (i===0?' active':'');
+    var img = document.createElement('img');
+    img.src = p.before;
+    img.loading = 'lazy';
+    wrap.appendChild(img);
+    wrap.addEventListener('click', function(){ go(i); });
+    strip.appendChild(wrap);
   });
+
+  function go(i){
+    idx = i;
+    var p = photos[idx];
+    var src = (remo && p.after) ? p.after : p.before;
+    mainImg.classList.add('fading');
+    setTimeout(function(){
+      mainImg.src = src;
+      mainImg.classList.remove('fading');
+    }, 200);
+    label.textContent = p.label.toUpperCase();
+    prevBtn.disabled = idx === 0;
+    nextBtn.disabled = idx === photos.length - 1;
+    // Remo button state
+    var hasAfter = !!p.after;
+    remoBtn.style.opacity = hasAfter ? '1' : '0.35';
+    remoBtn.style.cursor = hasAfter ? 'pointer' : 'default';
+    remoBtn.classList.toggle('active', remo && hasAfter);
+    remoDot.style.color = (remo && hasAfter) ? '#3d6b50' : '#444';
+    // Thumbnails
+    strip.querySelectorAll('.thumb-item').forEach(function(t,j){
+      t.classList.toggle('active', j===idx);
+    });
+    // Scroll thumb into view
+    var thumbs = strip.querySelectorAll('.thumb-item');
+    if(thumbs[idx]) thumbs[idx].scrollIntoView({behavior:'smooth',block:'nearest',inline:'center'});
+  }
+
+  prevBtn.addEventListener('click', function(){ if(idx>0) go(idx-1); });
+  nextBtn.addEventListener('click', function(){ if(idx<photos.length-1) go(idx+1); });
+
+  remoBtn.addEventListener('click', function(){
+    if(!photos[idx].after) return;
+    remo = !remo;
+    go(idx);
+  });
+
+  // Keyboard
+  document.addEventListener('keydown', function(e){
+    if(e.key==='ArrowLeft' && idx>0) go(idx-1);
+    if(e.key==='ArrowRight' && idx<photos.length-1) go(idx+1);
+  });
+
+  // Touch swipe
+  var tx0 = 0;
+  var mw = document.querySelector('.main-photo-wrap');
+  mw.addEventListener('touchstart', function(e){ tx0=e.touches[0].clientX; },{passive:true});
+  mw.addEventListener('touchend', function(e){
+    var dx = e.changedTouches[0].clientX - tx0;
+    if(Math.abs(dx)>40){
+      if(dx<0 && idx<photos.length-1) go(idx+1);
+      if(dx>0 && idx>0) go(idx-1);
+    }
+  });
+
+  go(0);
 })();
 
 </script>
