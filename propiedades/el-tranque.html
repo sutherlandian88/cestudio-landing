@@ -74,6 +74,8 @@ nav{display:flex;justify-content:space-between;align-items:center;padding:0 32px
 .ficha-lbl{font-size:8px;letter-spacing:1.5px;text-transform:uppercase;color:#9a948e;display:block;margin-bottom:5px;}
 .ficha-val{font-size:14px;color:#3a3632;}
 .desc-section{margin-bottom:28px;}
+.prop-desc-full{background:#f5f3ef;padding:48px 40px 64px;border-top:0.5px solid #d8d4cc;}
+.prop-desc-inner{max-width:720px;}
 .desc-title{font-size:8px;letter-spacing:2px;text-transform:uppercase;color:#9a948e;margin-bottom:12px;}
 .desc-text{font-size:13px;line-height:1.85;color:#5a5450;}
 /* CTA Bar */
@@ -85,7 +87,7 @@ nav{display:flex;justify-content:space-between;align-items:center;padding:0 32px
 /* Responsive */
 @media(max-width:900px){
   .prop-layout{grid-template-columns:1fr;height:auto;overflow:visible;}
-  html,body{overflow:auto;}
+  html,body{height:100%;overflow:hidden;overflow:auto;}
   .photo-panel{height:60vw;min-height:280px;}
   .details-panel{height:auto;}
   .details-scroll{overflow:visible;}
@@ -145,8 +147,6 @@ nav{display:flex;justify-content:space-between;align-items:center;padding:0 32px
       <div class="price-box">
         <span class="price-label">Precio</span>
         <div class="price-value">UF 30.000</div>
-      </div>
-        </div>
       </div>
 
       <div class="desc-section">
