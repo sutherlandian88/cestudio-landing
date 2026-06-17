@@ -114,6 +114,11 @@ nav { display:flex; justify-content:space-between; align-items:center; padding:1
 .about-body p { margin-bottom:14px; }
 .architect-name { font-family:'Cormorant Garamond',serif; font-size:19px; color:#3a3632; margin-bottom:3px; }
 .architect-title { font-size:9px; letter-spacing:2px; text-transform:uppercase; color:#b0aaa4; }
+.about-quote { margin-top:36px; padding-top:28px; border-top:0.5px solid #d8d4cc; }
+.about-quote-text { font-family:'Cormorant Garamond',serif; font-size:19px; font-style:italic; font-weight:300; color:#3a3632; line-height:1.55; margin-bottom:14px; }
+.about-quote-author { font-size:9px; letter-spacing:2px; text-transform:uppercase; color:#b0aaa4; margin-bottom:16px; }
+.about-quote-link { font-size:9px; letter-spacing:2px; text-transform:uppercase; color:#3a3632; text-decoration:none; border-bottom:0.5px solid #3a3632; padding-bottom:2px; cursor:pointer; font-family:'Jost',sans-serif; background:none; border-top:none; border-left:none; border-right:none; }
+.about-quote-link:hover { opacity:0.6; }
 .projects { padding:52px 40px; }
 .projects-header { display:flex; justify-content:space-between; align-items:baseline; margin-bottom:28px; border-bottom:0.5px solid #d8d4cc; padding-bottom:16px; }
 .projects-title { font-family:'Cormorant Garamond',serif; font-size:28px; font-weight:300; color:#3a3632; }
@@ -484,6 +489,11 @@ footer { background:#322f2c; border-top:0.5px solid rgba(255,255,255,0.07); padd
     </div>
     <p class="architect-name">Camila Barros L.</p>
     <p class="architect-title">Fundadora C | Estudio · Arquitecta</p>
+    <div class="about-quote">
+      <p class="about-quote-text">"Nos escuchaste y nos entendiste."</p>
+      <p class="about-quote-author">— Hiru Chang</p>
+      <button class="about-quote-link" id="testimonialTrigger2">Ver testimonio completo →</button>
+    </div>
   </div>
 </section>
 
@@ -755,6 +765,8 @@ footer { background:#322f2c; border-top:0.5px solid rgba(255,255,255,0.07); padd
     function openModal(){ iframe.src = src; modal.classList.add('open'); document.body.style.overflow='hidden'; }
     function closeModal(){ iframe.src = ''; modal.classList.remove('open'); document.body.style.overflow=''; }
     if(trigger) trigger.addEventListener('click', openModal);
+    var trigger2 = document.getElementById('testimonialTrigger2');
+    if(trigger2) trigger2.addEventListener('click', openModal);
     if(closeBtn) closeBtn.addEventListener('click', closeModal);
     if(modal) modal.addEventListener('click', function(e){ if(e.target===modal) closeModal(); });
   })();
