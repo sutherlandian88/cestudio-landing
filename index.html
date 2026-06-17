@@ -199,6 +199,9 @@ footer { background:#322f2c; border-top:0.5px solid rgba(255,255,255,0.07); padd
 .tag-b { left:16px; background:rgba(58,54,50,0.75); color:#f0ece5; }
 .tag-center { left:50%; transform:translateX(-50%); background:rgba(245,243,239,0.92); color:#3a3632; font-family:'Cormorant Garamond',serif; font-size:11px; letter-spacing:2px; white-space:nowrap; }
 .tag-a { right:16px; background:#3d6b50; color:#fff; }
+.hero-dots { position:absolute; bottom:12px; left:50%; transform:translateX(-50%); display:flex; gap:9px; z-index:9; pointer-events:auto; }
+.hero-dot { width:7px; height:7px; border-radius:50%; background:rgba(255,255,255,0.4); border:1.5px solid rgba(255,255,255,0.7); cursor:pointer; padding:0; transition:background 0.35s; }
+.hero-dot.active { background:#fff; }
 
 
 /* ── CÚRCUMA LISTINGS SECTION ── */
@@ -355,6 +358,11 @@ footer { background:#322f2c; border-top:0.5px solid rgba(255,255,255,0.07); padd
     <span class="hero-ba-tag tag-b">Antes</span>
     <span class="hero-ba-tag tag-center">C | Estudio</span>
     <span class="hero-ba-tag tag-a">Con C | Estudio</span>
+    <div class="hero-dots" id="heroDots">
+      <button class="hero-dot active" data-slide="0"></button>
+      <button class="hero-dot" data-slide="1"></button>
+      <button class="hero-dot" data-slide="2"></button>
+    </div>
   </div>
 </div>
 </section>
@@ -683,28 +691,60 @@ footer { background:#322f2c; border-top:0.5px solid rgba(255,255,255,0.07); padd
 
 
 
-  // ── Hero Before/After Slider ──
+  // ── Hero Before/After Slider + Carousel ──
   (function(){
-    // populate after image from carousel
+    var BASE = 'https://raw.githubusercontent.com/sutherlandian88/curcuma/main/imgs/';
+    var slides = [
+      {before:BASE+'sz-01A-cocina-antes.jpg', after:BASE+'sz-01B-cocina-despues.jpg'},
+      {before:BASE+'sz-12A-bano-pp-antes.jpg', after:BASE+'sz-12B-bano-pp-despues.jpg'},
+      {before:BASE+'qt-11A-living-antes.jpg', after:BASE+'qt-11B-living-despues.jpg'}
+    ];
+    var current = 0;
 
     var strip = document.getElementById('heroBA');
     if(!strip) return;
-    var after = document.getElementById('heroBaAfter');
+    var afterWrap = document.getElementById('heroBaAfter');
+    var beforeImg = strip.querySelector('.hero-ba-before img');
+    var afterImg = document.getElementById('hero-ba-after-img');
     var line = document.getElementById('heroBaLine');
     var knob = document.getElementById('heroBaKnob');
+    var dots = document.querySelectorAll('.hero-dot');
+
     var dragging = false;
     function setPos(x){
       var r = strip.getBoundingClientRect();
       var pct = Math.min(Math.max((x - r.left)/r.width, 0.02), 0.98);
-      after.style.clipPath = 'inset(0 '+((1-pct)*100).toFixed(1)+'% 0 0)';
+      afterWrap.style.clipPath = 'inset(0 '+((1-pct)*100).toFixed(1)+'% 0 0)';
       line.style.left = (pct*100).toFixed(1)+'%';
       knob.style.left = (pct*100).toFixed(1)+'%';
     }
-    setPos(strip.getBoundingClientRect().left + strip.getBoundingClientRect().width * 0.65);
+    function resetPos(){
+      setPos(strip.getBoundingClientRect().left + strip.getBoundingClientRect().width * 0.65);
+    }
+    resetPos();
+
+    function goToSlide(n){
+      current = ((n % slides.length) + slides.length) % slides.length;
+      beforeImg.src = slides[current].before;
+      afterImg.src = slides[current].after;
+      resetPos();
+      dots.forEach(function(d,i){ d.classList.toggle('active', i===current); });
+    }
+
+    var timer = setInterval(function(){ goToSlide(current+1); }, 5000);
+
+    dots.forEach(function(dot, i){
+      dot.addEventListener('click', function(){
+        clearInterval(timer);
+        goToSlide(i);
+        timer = setInterval(function(){ goToSlide(current+1); }, 5000);
+      });
+    });
+
     var hint = document.getElementById('heroHint');
     function hideHint(){ if(hint){hint.style.opacity='0';setTimeout(function(){if(hint)hint.style.display='none';},500);hint=null;} }
-    strip.addEventListener('mousedown',function(e){dragging=true;setPos(e.clientX);hideHint();e.preventDefault();});
-    strip.addEventListener('touchstart',function(e){dragging=true;setPos(e.touches[0].clientX);hideHint();e.preventDefault();},{passive:false});
+    strip.addEventListener('mousedown',function(e){if(e.target.classList.contains('hero-dot'))return;dragging=true;setPos(e.clientX);hideHint();e.preventDefault();});
+    strip.addEventListener('touchstart',function(e){if(e.target.classList.contains('hero-dot'))return;dragging=true;setPos(e.touches[0].clientX);hideHint();e.preventDefault();},{passive:false});
     window.addEventListener('mousemove',function(e){if(dragging)setPos(e.clientX);});
     window.addEventListener('touchmove',function(e){if(dragging)setPos(e.touches[0].clientX);e.preventDefault();},{passive:false});
     window.addEventListener('mouseup',function(){dragging=false;});
