@@ -746,7 +746,7 @@ footer { background:#322f2c; border-top:0.5px solid rgba(255,255,255,0.07); padd
     strip.addEventListener('mousedown',function(e){if(e.target.classList.contains('hero-dot'))return;dragging=true;setPos(e.clientX);hideHint();e.preventDefault();});
     strip.addEventListener('touchstart',function(e){if(e.target.classList.contains('hero-dot'))return;dragging=true;setPos(e.touches[0].clientX);hideHint();e.preventDefault();},{passive:false});
     window.addEventListener('mousemove',function(e){if(dragging)setPos(e.clientX);});
-    window.addEventListener('touchmove',function(e){if(dragging)setPos(e.touches[0].clientX);e.preventDefault();},{passive:false});
+    window.addEventListener('touchmove',function(e){if(dragging){setPos(e.touches[0].clientX);e.preventDefault();}},{passive:false});
     window.addEventListener('mouseup',function(){dragging=false;});
     window.addEventListener('touchend',function(){dragging=false;});
   })();
@@ -767,7 +767,7 @@ footer { background:#322f2c; border-top:0.5px solid rgba(255,255,255,0.07); padd
     card.addEventListener('mousedown',function(e){dragging=true;setPos(e.clientX);e.preventDefault();});
     card.addEventListener('touchstart',function(e){dragging=true;setPos(e.touches[0].clientX);e.preventDefault();},{passive:false});
     window.addEventListener('mousemove',function(e){if(dragging)setPos(e.clientX);});
-    window.addEventListener('touchmove',function(e){if(dragging)setPos(e.touches[0].clientX);e.preventDefault();},{passive:false});
+    window.addEventListener('touchmove',function(e){if(dragging){setPos(e.touches[0].clientX);e.preventDefault();}},{passive:false});
     window.addEventListener('mouseup',function(){dragging=false;});
     window.addEventListener('touchend',function(){dragging=false;});
   });
