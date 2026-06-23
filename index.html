@@ -150,14 +150,13 @@ footer { background:#322f2c; border-top:0.5px solid rgba(255,255,255,0.07); padd
 /* Flujo de trabajo */
 .flujo-section { padding:64px 40px; background:#f5f3ef; border-top:0.5px solid #d8d4cc; }
 .flujo-label { font-family:'Cormorant Garamond',serif; font-size:28px; font-weight:300; color:#3a3632; margin-bottom:32px; }
-.flujo-steps { display:flex; align-items:stretch; gap:0; overflow-x:auto; scroll-snap-type:x mandatory; -webkit-overflow-scrolling:touch; scrollbar-width:none; padding-bottom:4px; }
-.flujo-steps::-webkit-scrollbar { display:none; }
-.flujo-arrow { display:none; }
-.flujo-step { background:#fff; border:0.5px solid #e8e4de; border-radius:6px; padding:28px 24px; min-width:280px; flex-shrink:0; scroll-snap-align:start; display:flex; flex-direction:column; gap:16px; margin-right:12px; }
-.flujo-num { width:36px; height:36px; border-radius:50%; background:#3a3632; color:#f5f3ef; font-family:'Cormorant Garamond',serif; font-size:17px; font-weight:300; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
-.flujo-title { font-family:'Jost',sans-serif; font-size:13px; font-weight:400; color:#3a3632; line-height:1.4; }
-.flujo-desc { font-size:12px; color:#8a847e; line-height:1.8; }
-@media(max-width:768px){ .flujo-section { padding:48px 20px; } .flujo-step { min-width:240px; } }
+.flujo-steps { display:flex; align-items:flex-start; gap:0; overflow-x:auto; padding-bottom:8px; }
+.flujo-arrow { font-size:18px; color:#c8c4be; padding:0 10px; margin-top:14px; flex-shrink:0; }
+.flujo-step { background:#fff; border:0.5px solid #e8e4de; border-radius:6px; padding:18px 16px; min-width:170px; max-width:190px; flex-shrink:0; display:flex; align-items:flex-start; gap:12px; }
+.flujo-num { width:26px; height:26px; border-radius:50%; background:#3a3632; color:#f5f3ef; font-family:'Jost',sans-serif; font-size:11px; font-weight:400; display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:1px; }
+.flujo-title { font-family:'Jost',sans-serif; font-size:12px; font-weight:400; color:#3a3632; margin-bottom:6px; line-height:1.3; }
+.flujo-desc { font-size:11px; color:#8a847e; line-height:1.6; }
+@media(max-width:768px){ .flujo-section { padding:48px 20px; } .flujo-steps { gap:0; } .flujo-step { min-width:150px; } }
 /* Comparison table */
 .compare-section { padding:72px 40px; background:#f5f3ef; border-top:0.5px solid #d8d4cc; }
 .compare-label { font-size:9px; letter-spacing:2.5px; text-transform:uppercase; color:#b0aaa4; margin-bottom:16px; }
