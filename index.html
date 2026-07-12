@@ -848,13 +848,13 @@ footer { background:#322f2c; border-top:0.5px solid rgba(255,255,255,0.07); padd
       dots.forEach(function(d,i){ d.classList.toggle('active', i===current); });
     }
 
-    var timer = setInterval(function(){ goToSlide(current+1); }, 5000);
+    var timer = setInterval(function(){ goToSlide(current+1); }, 3500);
 
     dots.forEach(function(dot, i){
       dot.addEventListener('click', function(){
         clearInterval(timer);
         goToSlide(i);
-        timer = setInterval(function(){ goToSlide(current+1); }, 5000);
+        timer = setInterval(function(){ goToSlide(current+1); }, 3500);
       });
     });
 
