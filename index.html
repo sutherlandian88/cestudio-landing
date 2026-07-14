@@ -233,16 +233,20 @@ footer { background:#322f2c; border-top:0.5px solid rgba(255,255,255,0.07); padd
 .compare-heading { font-family:'Cormorant Garamond',serif; font-size:36px; font-weight:300; color:#3a3632; margin-bottom:10px; line-height:1.2; }
 .compare-heading em { font-style:italic; color:#a09890; font-weight:300; }
 .compare-sub { font-family:'Jost',sans-serif; font-size:12px; color:#a09890; margin-bottom:52px; line-height:1.8; letter-spacing:0.3px; }
-.compare-table { width:100%; border-collapse:collapse; }
-.compare-table th { font-family:'Jost',sans-serif; font-size:9px; letter-spacing:2.5px; text-transform:uppercase; padding:16px 24px; text-align:center; font-weight:400; color:#a09890; border-bottom:0.5px solid #d8d4cc; }
-.compare-table th.col-service { text-align:left; color:#c0bab4; }
-.compare-table th.col-cestudio { background:#3a3632; color:#ede9e3; letter-spacing:3px; }
-.compare-table td { padding:20px 24px; font-family:'Jost',sans-serif; font-size:12px; color:#3a3632; border-bottom:0.5px solid #e8e4de; text-align:center; vertical-align:middle; }
-.compare-table td.col-service { text-align:left; font-family:'Cormorant Garamond',serif; font-size:18px; font-weight:400; color:#7a7470; letter-spacing:0; }
-.compare-table td.col-cestudio { background:rgba(240,237,232,0.6); }
+.compare-table { width:100%; border-collapse:separate; border-spacing:0; }
+.compare-table th { font-family:'Jost',sans-serif; font-size:10px; letter-spacing:2.5px; text-transform:uppercase; padding:18px 24px; text-align:center; font-weight:400; color:#a09890; border-bottom:0.5px solid #d8d4cc; }
+.compare-table th.col-service { text-align:left; color:#c0bab4; width:34%; }
+.compare-table th.col-cestudio { background:#3a3632; color:#f0ece5; letter-spacing:3px; border-bottom:none; position:relative; }
+.compare-table td { padding:22px 24px; font-family:'Jost',sans-serif; font-size:12px; color:#3a3632; border-bottom:0.5px solid #e8e4de; text-align:center; vertical-align:middle; transition:background 0.25s; }
+.compare-table td.col-service { text-align:left; font-family:'Cormorant Garamond',serif; font-size:18px; font-weight:400; color:#5f5952; letter-spacing:0; }
+.compare-table td.col-cestudio { background:#eeeae3; border-left:0.5px solid #d8d4cc; border-right:0.5px solid #d8d4cc; border-bottom:0.5px solid #dcd7cf; }
+.compare-table tbody tr:hover td { background:rgba(61,107,80,0.04); }
+.compare-table tbody tr:hover td.col-cestudio { background:#e9e4dc; }
 .compare-table tr:last-child td { border-bottom:none; }
-.compare-check { color:#3d6b50; font-size:15px; }
-.compare-cross { color:#d0ccc6; font-size:13px; }
+.compare-table tr:last-child td.col-cestudio { border-bottom:0.5px solid #d8d4cc; }
+.compare-check { display:inline-flex; align-items:center; justify-content:center; width:26px; height:26px; border-radius:50%; border:1px solid rgba(61,107,80,0.35); color:#3d6b50; font-size:13px; line-height:1; }
+.col-cestudio .compare-check { background:#3d6b50; border-color:#3d6b50; color:#f5f3ef; }
+.compare-cross { color:#cfc9c2; font-size:14px; font-weight:300; }
 .compare-sometimes { font-family:'Cormorant Garamond',serif; font-size:16px; font-style:italic; color:#a09890; letter-spacing:0; }
 .compare-footer { font-family:'Cormorant Garamond',serif; font-size:16px; color:#a09890; margin-top:36px; line-height:1.8; border-top:0.5px solid #d8d4cc; padding-top:24px; font-style:italic; }
 .compare-footer strong { color:#6b6560; font-weight:400; font-style:normal; }
@@ -651,38 +655,38 @@ footer { background:#322f2c; border-top:0.5px solid rgba(255,255,255,0.07); padd
       <tr>
         <td class="col-service">Diseño + proyecto de arquitectura</td>
         <td class="col-cestudio"><span class="compare-check">✓</span></td>
-        <td><span class="compare-cross">×</span></td>
+        <td><span class="compare-cross">—</span></td>
         <td><span class="compare-check">✓</span></td>
       </tr>
       <tr>
         <td class="col-service">Planimetría + Especificaciones Técnicas</td>
         <td class="col-cestudio"><span class="compare-check">✓</span></td>
-        <td><span class="compare-cross">×</span></td>
+        <td><span class="compare-cross">—</span></td>
         <td><span class="compare-sometimes">A veces</span></td>
       </tr>
       <tr>
         <td class="col-service">Elección de materiales + cotizaciones</td>
         <td class="col-cestudio"><span class="compare-check">✓</span></td>
-        <td><span class="compare-cross">×</span></td>
+        <td><span class="compare-cross">—</span></td>
         <td><span class="compare-sometimes">Raro</span></td>
       </tr>
       <tr>
         <td class="col-service">Gestión y coordinación de contratistas</td>
         <td class="col-cestudio"><span class="compare-check">✓</span></td>
-        <td><span class="compare-cross">×</span></td>
-        <td><span class="compare-cross">×</span></td>
+        <td><span class="compare-cross">—</span></td>
+        <td><span class="compare-cross">—</span></td>
       </tr>
       <tr>
         <td class="col-service">Supervisión activa de obra</td>
         <td class="col-cestudio"><span class="compare-check">✓</span></td>
-        <td><span class="compare-cross">×</span></td>
-        <td><span class="compare-cross">×</span></td>
+        <td><span class="compare-cross">—</span></td>
+        <td><span class="compare-cross">—</span></td>
       </tr>
       <tr>
         <td class="col-service">Interlocutor único cliente–obra</td>
         <td class="col-cestudio"><span class="compare-check">✓</span></td>
         <td><span class="compare-sometimes">Parcial</span></td>
-        <td><span class="compare-cross">×</span></td>
+        <td><span class="compare-cross">—</span></td>
       </tr>
 
     </tbody>
